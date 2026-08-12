@@ -86,7 +86,9 @@
   .contact-box p { color: var(--grey-500); margin-bottom: 28px; max-width: 480px; margin-left: auto; margin-right: auto; }
   .contact-methods { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
   .contact-item { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 999px; font-size: 14px; color: var(--white); }
-  .contact-item svg { width: 16px; height: 16px; stroke: var(--lime); }
+  .contact-item svg { width: 16px; height: 16px; stroke: var(--lime); flex-shrink: 0; }
+  a.contact-item { transition: all 0.2s; }
+  a.contact-item:hover { color: var(--white); border-color: var(--lime); background: rgba(155,234,32,0.06); transform: translateY(-1px); }
 
   /* FOOTER */
   footer { padding: 40px 0; border-top: 1px solid rgba(255,255,255,0.06); text-align: center; color: var(--grey-500); font-size: 13px; }
@@ -251,9 +253,17 @@
       <h2>جاهز تخلي مطعمك يشتغل أذكى؟</h2>
       <p>مطعمك من ضمن أول العملاء اللي بنشتغل معاهم بأسعار خاصة. تواصل معانا لمناقشة تفاصيل الإعداد.</p>
       <div class="contact-methods">
-        <span class="contact-item">
+        <a class="contact-item" href="https://wa.me/201093672023?text=%D8%A7%D9%84%D8%B3%D9%84%D8%A7%D9%85%20%D8%B9%D9%84%D9%8A%D9%83%D9%85%D8%8C%20%D8%B9%D8%A7%D9%88%D8%B2%20%D8%A3%D8%B9%D8%B1%D9%81%20%D8%A3%D9%83%D8%AA%D8%B1%20%D8%B9%D9%86%20NOVA" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          <span class="en">+20 109 367 2023</span>
+        </a>
+        <a class="contact-item" href="mailto:alialaa9012@gmail.com">
           <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
           <span class="en">alialaa9012@gmail.com</span>
+        </a>
+        <span class="contact-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          <span>كفر حمزة، الخانكة، القليوبية 13931، مصر</span>
         </span>
       </div>
     </div>
@@ -268,6 +278,8 @@
       <a href="#features">المميزات</a>
       <a href="#how">إزاي يشتغل</a>
       <a href="#contact">تواصل</a>
+      <a href="./privacy.html">سياسة الخصوصية</a>
+      <a href="./terms.html">شروط الاستخدام</a>
     </div>
   </div>
 </footer>
