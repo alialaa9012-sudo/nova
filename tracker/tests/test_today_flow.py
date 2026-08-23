@@ -75,7 +75,7 @@ async def test_today_keyboard_has_one_button_per_task(wired):
     send = next(c for c in recorder.calls if type(c).__name__ == "SendMessage")
     rows = send.reply_markup.inline_keyboard
     assert rows[0][0].text == "⬜ مهمة أولى"
-    assert [b.text for b in rows[-1]] == ["➕ إضافة مهمة", "🔄 تحديث"]
+    assert [b.text for b in rows[-1]] == ["➕ إضافة مهمة", "📝 ملخص", "🔄 تحديث"]
 
 
 async def test_tapping_a_task_marks_it_done_and_edits_in_place(wired):

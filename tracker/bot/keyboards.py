@@ -32,6 +32,14 @@ class ScheduleCB(CallbackData, prefix="s"):
     slot: str    # morning | midday | review | all
 
 
+class ReviewCB(CallbackData, prefix="r"):
+    """نداء يخصّ المراجعة الليلية."""
+
+    action: str  # carry | skip | mood
+    day: str     # ISO date — المراجعة قد تُفتح بعد منتصف الليل
+    value: int = 0
+
+
 class DayCB(CallbackData, prefix="d"):
     """نداء يخصّ رسالة اليوم ككل."""
 
@@ -99,6 +107,10 @@ def today_keyboard(
         InlineKeyboardButton(
             text="➕ إضافة مهمة",
             callback_data=DayCB(action="add_task").pack(),
+        ),
+        InlineKeyboardButton(
+            text="📝 ملخص",
+            callback_data=DayCB(action="note").pack(),
         ),
         InlineKeyboardButton(
             text="🔄 تحديث",

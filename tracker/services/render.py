@@ -171,3 +171,49 @@ def render_schedule(morning: time, midday: time | None, review: time) -> str:
         f"🌙 المراجعة الليلية — <b>{format_time(review)}</b>",
     ]
     return "\n".join(lines)
+
+
+def render_review(summary) -> str:
+    """رسالة المراجعة الليلية — الرقمان منفصلان هنا أيضاً."""
+    lines = [
+        f"🌙 <b>مراجعة {format_arabic_date(summary.day)}</b>",
+        "",
+        f"📋 <b>المهام</b> — {summary.task_done} من {summary.task_total}",
+    ]
+
+    if summary.task_total:
+        lines.append(progress_line(summary.tasks_pct))
+        lines += [f"✅ {title}" for title in summary.done_titles[:6]]
+        lines += [f"⬜ {title}" for title in summary.missed_titles[:6]]
+    else:
+        lines.append("<i>لم تكن هناك مهام اليوم.</i>")
+
+    if summary.habit_total:
+        chips = " · ".join(
+            habit_label(habit, log) for habit, log in summary.habit_state
+        )
+        lines += [
+            "",
+            f"⚡ <b>العادات</b> — {summary.habit_done} من {summary.habit_total}",
+            progress_line(summary.habits_pct),
+            chips,
+        ]
+
+    if summary.streaks:
+        streaks = " · ".join(
+            f"{habit.emoji} {count} أيام" for habit, count in summary.streaks
+        )
+        lines += ["", f"🔥 <b>سلاسل</b>: {streaks}"]
+
+    if summary.note:
+        lines += ["", "📝 <b>ملخص اليوم</b>", summary.note]
+
+    if summary.carryable:
+        word = "مهمة" if summary.carryable == 1 else "مهام"
+        lines += ["", f"عندك {summary.carryable} {word} مش خالصة."]
+
+    return "\n".join(lines)
+
+
+def render_note_saved(content: str) -> str:
+    return f"📝 اتسجّل ملخص اليوم:\n<i>{content}</i>"

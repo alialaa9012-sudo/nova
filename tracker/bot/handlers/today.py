@@ -17,6 +17,7 @@ from tracker.db.models import Recurrence, User
 from tracker.services import habits as habit_service
 from tracker.services import tasks as task_service
 from tracker.bot.handlers.habits import consume_pending_vocab
+from tracker.bot.handlers.review import consume_pending_note, handle_note_command
 from tracker.bot.handlers.schedule import consume_pending_time
 from tracker.services import notes as note_service
 from tracker.services.parsing import parse_task
@@ -121,6 +122,13 @@ async def handle_add_task_prompt(query: CallbackQuery) -> None:
     await query.message.answer(ADD_TASK_HINT)
 
 
+async def handle_note_prompt(
+    query: CallbackQuery, session: AsyncSession, user: User
+) -> None:
+    await query.answer()
+    await handle_note_command(query.message, session, user)
+
+
 def _recurrence_note(recurrence: Recurrence, custom_days: list[int] | None) -> str | None:
     if recurrence is Recurrence.DAILY:
         return "كل يوم"
@@ -139,6 +147,8 @@ async def handle_free_text(
     if await consume_pending_time(message, session, user, today):
         return
     if await consume_pending_vocab(message, session, user, today):
+        return
+    if await consume_pending_note(message, session, user, today):
         return
 
     parsed = parse_task(message.text or "")
@@ -175,6 +185,7 @@ def build_router() -> Router:
     router.callback_query.register(
         handle_add_task_prompt, DayCB.filter(F.action == "add_task")
     )
+    router.callback_query.register(handle_note_prompt, DayCB.filter(F.action == "note"))
     # آخر ما يُسجَّل: أي نص عادي غير مطابق لأمر يُعامَل كمهمة جديدة
     router.message.register(handle_free_text, F.text & ~F.text.startswith("/"))
 

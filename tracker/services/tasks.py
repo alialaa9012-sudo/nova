@@ -161,6 +161,11 @@ async def add_task(
     return task, instance
 
 
+def is_carryable(task: Task) -> bool:
+    """المتكررة لا تُرحَّل — ستظهر بنفسها غداً، والترحيل يُنشئ ازدواجاً."""
+    return task.recurrence is Recurrence.NONE
+
+
 async def carry_unfinished(
     session: AsyncSession, user: User, *, from_day: date, to_day: date
 ) -> list[TaskInstance]:
@@ -172,7 +177,7 @@ async def carry_unfinished(
     carried: list[TaskInstance] = []
 
     for task, instance in pairs:
-        if instance.is_done or task.recurrence is not Recurrence.NONE:
+        if instance.is_done or not is_carryable(task):
             continue
 
         already = await session.scalar(

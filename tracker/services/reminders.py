@@ -128,11 +128,17 @@ async def _dispatch(
     if reminder.kind is ReminderKind.MIDDAY:
         return await _send_midday(bot, session, user, day, now)
 
+    if reminder.kind is ReminderKind.REVIEW:
+        from tracker.bot.handlers.review import send_review
+
+        await send_review(bot, session, user, day)
+        return True
+
     if reminder.kind is ReminderKind.SCHEDULE_ASK:
         await _send_schedule_ask(bot, session, user, day)
         return True
 
-    # المراجعة والتقارير تُنفَّذ في المرحلتين التاليتين
+    # التقارير الأسبوعية والشهرية تُنفَّذ في المرحلة التالية
     logger.info("نوع تذكير لم يُنفَّذ بعد: %s", reminder.kind)
     return False
 
