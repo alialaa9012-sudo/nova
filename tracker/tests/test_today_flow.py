@@ -2,40 +2,14 @@
 
 from __future__ import annotations
 
-import pytest
-import pytest_asyncio
 from sqlalchemy import select
-from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
-from sqlalchemy.pool import StaticPool
 
 from tracker.bot.keyboards import DayCB, TaskCB
 from tracker.db import session as session_module
-from tracker.db.models import Base, Recurrence, Task, TaskInstance, User
-from tracker.tests.fake_telegram import callback_update, make_bot, text_update
+from tracker.db.models import Recurrence, Task, TaskInstance, User
+from tracker.tests.fake_telegram import callback_update, text_update
 
 ALLOWED_ID = 6493959847
-
-
-@pytest_asyncio.fixture
-async def wired(monkeypatch):
-    engine = create_async_engine(
-        "sqlite+aiosqlite:///:memory:",
-        poolclass=StaticPool,
-        connect_args={"check_same_thread": False},
-    )
-    async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
-
-    monkeypatch.setattr(session_module, "_engine", engine)
-    monkeypatch.setattr(
-        session_module, "_sessionmaker", async_sessionmaker(engine, expire_on_commit=False)
-    )
-
-    from tracker.bot.setup import build_dispatcher
-
-    bot, recorder = make_bot()
-    yield build_dispatcher(), bot, recorder
-    await engine.dispose()
 
 
 async def _first_instance_id() -> int:

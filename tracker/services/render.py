@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from datetime import date, datetime, time
 
-from tracker.db.models import Task, TaskInstance
+from tracker.db.models import Habit, HabitKind, HabitLog, Task, TaskInstance
 from tracker.services.timeutil import format_arabic_date, format_time
 
 FILLED = "█"
@@ -32,8 +32,26 @@ def rating(pct: float) -> str:
     return "ضعيف"
 
 
-def progress_line(label: str, pct: float) -> str:
-    return f"<code>{progress_bar(pct)}</code> {pct:.0f}% — {label} {rating(pct)}"
+def progress_line(pct: float) -> str:
+    return f"<code>{progress_bar(pct)}</code> {pct:.0f}% · {rating(pct)}"
+
+
+def format_value(value: float) -> str:
+    """1.0 ← «1» و1.5 ← «1.5» — لا أصفار عشرية بلا داعٍ."""
+    return f"{value:g}"
+
+
+def habit_label(habit: Habit, log: HabitLog | None, *, max_len: int = 18) -> str:
+    """نص زر العادة: الإيموجي، ثم الحالة أو القيمة مقابل الهدف."""
+    value = log.value if log else 0.0
+    done = bool(log and log.is_done)
+
+    if habit.kind is HabitKind.BOOLEAN:
+        return f"{habit.emoji} {'✅' if done else '⬜'}"
+
+    mark = "⭐" if (log and log.is_stretch) else ("✅" if done else "")
+    body = f"{format_value(value)}/{format_value(habit.target_value)}"
+    return f"{habit.emoji} {body}{(' ' + mark) if mark else ''}"
 
 
 def greeting(now: datetime) -> str:
@@ -63,33 +81,48 @@ def render_today(
     task_done: int,
     task_total: int,
     tasks_pct: float,
+    habit_done: int = 0,
+    habit_total: int = 0,
+    habits_pct: float = 0.0,
     carried_count: int = 0,
+    note: str | None = None,
 ) -> str:
-    """نص رسالة اليوم. المهام نفسها تظهر كأزرار تحت هذا النص."""
+    """نص رسالة اليوم.
+
+    التقدّم يُعرض كرقمين منفصلين — المهام والعادات — ولا يُدمجان في نسبة
+    واحدة في أي مكان، كما طُلب في مرحلة الاكتشاف.
+    """
     lines = [
         f"<b>{greeting(now)}، {name}</b> 👋",
         format_arabic_date(day),
-        "",
     ]
 
-    if task_total == 0:
+    if task_total:
         lines += [
-            "📋 <b>مهام اليوم</b>",
-            "لا توجد مهام بعد — أضف أول مهمة وابدأ يومك.",
+            "",
+            f"📋 <b>المهام</b> — {task_done} من {task_total}",
+            progress_line(tasks_pct),
         ]
-        return "\n".join(lines)
+        if carried_count:
+            word = "مهمة مرحّلة" if carried_count == 1 else "مهام مرحّلة"
+            lines.append(f"↩️ {carried_count} {word} من أمس")
+    else:
+        lines += ["", "📋 <b>المهام</b>", "لا توجد مهام بعد — اكتب أول مهمة."]
 
-    lines += [
-        f"📋 <b>مهام اليوم</b> — {task_done} من {task_total}",
-        progress_line("المهام", tasks_pct),
-    ]
+    if habit_total:
+        lines += [
+            "",
+            f"⚡ <b>العادات</b> — {habit_done} من {habit_total}",
+            progress_line(habits_pct),
+        ]
 
-    if carried_count:
-        word = "مهمة مرحّلة" if carried_count == 1 else "مهام مرحّلة"
-        lines += ["", f"↩️ {carried_count} {word} من أمس"]
+    if note:
+        lines += ["", "📝 <b>ملخص سريع</b>", note]
 
-    if task_done == task_total:
-        lines += ["", "🎉 خلّصت كل مهام اليوم. أحسنت!"]
+    if task_total and task_done == task_total and habit_done == habit_total and habit_total:
+        lines += ["", "🎉 يوم كامل. أحسنت يا بطل!"]
+    elif task_total and task_done == task_total:
+        lines += ["", "🎉 خلّصت كل مهام اليوم."]
 
     return "\n".join(lines)
 

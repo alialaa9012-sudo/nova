@@ -14,7 +14,10 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from tracker.bot.keyboards import DayCB, TaskCB, today_keyboard
 from tracker.config import get_settings
 from tracker.db.models import Recurrence, User
+from tracker.services import habits as habit_service
 from tracker.services import tasks as task_service
+from tracker.bot.handlers.habits import consume_pending_vocab
+from tracker.services import notes as note_service
 from tracker.services.parsing import parse_task
 from tracker.services.render import render_task_added, render_today
 from tracker.services.timeutil import ARABIC_WEEKDAYS, now_in
@@ -33,19 +36,28 @@ ADD_TASK_HINT = (
 async def _today_view(session: AsyncSession, user: User, day: date) -> tuple[str, object]:
     """النص واللوحة معاً — مصدر واحد لكل مكان يعرض رسالة اليوم."""
     pairs = await task_service.day_pairs(session, user, day)
-    done, total, pct = task_service.completion(pairs)
+    task_done, task_total, tasks_pct = task_service.completion(pairs)
     carried = sum(1 for _, inst in pairs if inst.carried_from_date)
+
+    habit_state = await habit_service.day_state(session, user, day)
+    habit_done, habit_total, habits_pct = habit_service.completion(habit_state)
+
+    note = await note_service.text_for(session, user, day)
 
     text = render_today(
         name=user.first_name or "صديقي",
         now=now_in(get_settings().tz),
         day=day,
-        task_done=done,
-        task_total=total,
-        tasks_pct=pct,
+        task_done=task_done,
+        task_total=task_total,
+        tasks_pct=tasks_pct,
+        habit_done=habit_done,
+        habit_total=habit_total,
+        habits_pct=habits_pct,
         carried_count=carried,
+        note=note,
     )
-    return text, today_keyboard(pairs)
+    return text, today_keyboard(pairs, habit_state)
 
 
 async def show_today(
@@ -122,7 +134,10 @@ def _recurrence_note(recurrence: Recurrence, custom_days: list[int] | None) -> s
 async def handle_free_text(
     message: Message, session: AsyncSession, user: User, today: date
 ) -> None:
-    """أي نص ليس أمراً يُقرأ كمهمة جديدة."""
+    """أي نص ليس أمراً: إما جملة ينتظرها البوت، وإلا فمهمة جديدة."""
+    if await consume_pending_vocab(message, session, user, today):
+        return
+
     parsed = parse_task(message.text or "")
     if parsed is None:
         await message.answer("لم أفهم المهمة. جرّب مثلاً: <code>قراءة 20 صفحة</code>")

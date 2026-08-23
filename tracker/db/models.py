@@ -82,6 +82,10 @@ class User(Base):
     day_boundary_hour: Mapped[int] = mapped_column(Integer, default=4)
 
     is_paused: Mapped[bool] = mapped_column(Boolean, default=False)
+    # ما ينتظره البوت من رسالتك التالية (مثل كتابة جملة إنجليزية).
+    # يعيش في القاعدة لا في الذاكرة، فينجو من نوم الخدمة وإعادة النشر.
+    pending_action: Mapped[str | None] = mapped_column(String(32))
+    pending_ref: Mapped[int | None] = mapped_column(Integer)
     # معرّف رسالة "اليوم" الحالية حتى نُحرّرها في مكانها بدل إرسال رسالة جديدة
     today_message_id: Mapped[int | None] = mapped_column(BigInteger)
     today_message_date: Mapped[date | None] = mapped_column(Date)
