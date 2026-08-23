@@ -14,14 +14,16 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from tracker.bot.keyboards import DayCB, TaskCB, today_keyboard
 from tracker.config import get_settings
 from tracker.db.models import Recurrence, User
+from tracker.services import events as event_service
 from tracker.services import habits as habit_service
 from tracker.services import tasks as task_service
+from tracker.bot.handlers.events import consume_pending_event, handle_event_prompt
 from tracker.bot.handlers.habits import consume_pending_vocab
 from tracker.bot.handlers.review import consume_pending_note, handle_note_command
 from tracker.bot.handlers.schedule import consume_pending_time
 from tracker.services import notes as note_service
 from tracker.services.parsing import parse_task
-from tracker.services.render import render_task_added, render_today
+from tracker.services.render import render_events, render_task_added, render_today
 from tracker.services.timeutil import ARABIC_WEEKDAYS, now_in
 
 logger = logging.getLogger(__name__)
@@ -58,6 +60,9 @@ async def _today_view(session: AsyncSession, user: User, day: date) -> tuple[str
         habits_pct=habits_pct,
         carried_count=carried,
         note=note,
+        event_lines=render_events(
+            await event_service.upcoming(session, user, day), day
+        ),
     )
     return text, today_keyboard(pairs, habit_state)
 
@@ -150,6 +155,8 @@ async def handle_free_text(
         return
     if await consume_pending_note(message, session, user, today):
         return
+    if await consume_pending_event(message, session, user, today):
+        return
 
     parsed = parse_task(message.text or "")
     if parsed is None:
@@ -186,6 +193,9 @@ def build_router() -> Router:
         handle_add_task_prompt, DayCB.filter(F.action == "add_task")
     )
     router.callback_query.register(handle_note_prompt, DayCB.filter(F.action == "note"))
+    router.callback_query.register(
+        handle_event_prompt, DayCB.filter(F.action == "add_event")
+    )
     # آخر ما يُسجَّل: أي نص عادي غير مطابق لأمر يُعامَل كمهمة جديدة
     router.message.register(handle_free_text, F.text & ~F.text.startswith("/"))
 

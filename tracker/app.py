@@ -8,7 +8,7 @@ from contextlib import asynccontextmanager
 from aiogram.types import Update
 from fastapi import FastAPI, Header, HTTPException, Request
 
-from tracker.bot.setup import build_bot, build_dispatcher
+from tracker.bot.setup import BOT_COMMANDS, build_bot, build_dispatcher
 from tracker.config import get_settings
 from tracker.db.session import dispose_engine, session_scope
 from tracker.services.reminders import run_tick
@@ -34,6 +34,12 @@ async def lifespan(app: FastAPI):
             drop_pending_updates=True,
         )
         logger.info("تم ضبط الـwebhook على %s", settings.webhook_url)
+
+    try:
+        await bot.set_my_commands(BOT_COMMANDS)
+    except Exception:
+        # قائمة الأوامر تحسين للواجهة — فشلها لا يمنع تشغيل البوت
+        logger.warning("تعذّر تسجيل قائمة الأوامر", exc_info=True)
     else:
         logger.warning("PUBLIC_URL غير مضبوط — لم يُضبط أي webhook.")
 

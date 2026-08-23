@@ -20,7 +20,12 @@ from tracker.services import habits as habit_service
 from tracker.services import notes as note_service
 from tracker.services import scheduling
 from tracker.services import tasks as task_service
-from tracker.services.render import render_midday, render_schedule, render_today
+from tracker.services.render import (
+    render_event_reminder,
+    render_midday,
+    render_schedule,
+    render_today,
+)
 from tracker.services.timeutil import logical_date
 
 logger = logging.getLogger(__name__)
@@ -94,6 +99,29 @@ async def _send_midday(
     return True
 
 
+async def _send_event(
+    bot: Bot, session: AsyncSession, user: User, reminder: Reminder
+) -> bool:
+    """تذكير قبل حدث. الحدث المحذوف لا يُذكَّر به."""
+    from tracker.db.models import Event
+
+    event_id = (reminder.payload or {}).get("event_id")
+    if event_id is None:
+        return False
+
+    event = await session.get(Event, event_id)
+    if event is None or event.user_id != user.id:
+        return False
+
+    await bot.send_message(
+        user.telegram_id,
+        render_event_reminder(
+            event.title, event.event_time, event.reminder_minutes_before
+        ),
+    )
+    return True
+
+
 async def _send_schedule_ask(
     bot: Bot, session: AsyncSession, user: User, day: date
 ) -> None:
@@ -127,6 +155,9 @@ async def _dispatch(
 
     if reminder.kind is ReminderKind.MIDDAY:
         return await _send_midday(bot, session, user, day, now)
+
+    if reminder.kind is ReminderKind.EVENT:
+        return await _send_event(bot, session, user, reminder)
 
     if reminder.kind is ReminderKind.REVIEW:
         from tracker.bot.handlers.review import send_review

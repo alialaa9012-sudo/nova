@@ -40,6 +40,14 @@ class ReviewCB(CallbackData, prefix="r"):
     value: int = 0
 
 
+class EventCB(CallbackData, prefix="e"):
+    """نداء يخصّ حدثاً."""
+
+    action: str  # lead | delete
+    event_id: int
+    value: int = 0
+
+
 class DayCB(CallbackData, prefix="d"):
     """نداء يخصّ رسالة اليوم ككل."""
 
@@ -107,6 +115,10 @@ def today_keyboard(
         InlineKeyboardButton(
             text="➕ إضافة مهمة",
             callback_data=DayCB(action="add_task").pack(),
+        ),
+        InlineKeyboardButton(
+            text="📅 حدث",
+            callback_data=DayCB(action="add_event").pack(),
         ),
         InlineKeyboardButton(
             text="📝 ملخص",

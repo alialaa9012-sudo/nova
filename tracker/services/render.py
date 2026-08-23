@@ -2,10 +2,15 @@
 
 from __future__ import annotations
 
-from datetime import date, datetime, time
+from datetime import date, datetime, time, timedelta
 
 from tracker.db.models import Habit, HabitKind, HabitLog, Task, TaskInstance
-from tracker.services.timeutil import ARABIC_MONTHS, format_arabic_date, format_time
+from tracker.services.timeutil import (
+    ARABIC_MONTHS,
+    ARABIC_WEEKDAYS,
+    format_arabic_date,
+    format_time,
+)
 
 FILLED = "█"
 EMPTY = "░"
@@ -86,6 +91,7 @@ def render_today(
     habits_pct: float = 0.0,
     carried_count: int = 0,
     note: str | None = None,
+    event_lines: list[str] | None = None,
 ) -> str:
     """نص رسالة اليوم.
 
@@ -118,6 +124,9 @@ def render_today(
 
     if note:
         lines += ["", "📝 <b>ملخص سريع</b>", note]
+
+    if event_lines:
+        lines += ["", "📅 <b>الأحداث القادمة</b>"] + event_lines
 
     if task_total and task_done == task_total and habit_done == habit_total and habit_total:
         lines += ["", "🎉 يوم كامل. أحسنت يا بطل!"]
@@ -284,3 +293,35 @@ def render_period(
             lines.append(f"<i>و{len(sentences) - 15} غيرها في /dict</i>")
 
     return "\n".join(lines)
+
+
+def render_events(events, today: date) -> list[str]:
+    """أسطر الأحداث القادمة، بتسمية نسبية لليوم والغد."""
+    lines: list[str] = []
+    for event in events:
+        if event.event_date == today:
+            when = "النهاردة"
+        elif event.event_date == today + timedelta(days=1):
+            when = "بكرة"
+        else:
+            when = f"{ARABIC_WEEKDAYS[event.event_date.weekday()]} {event.event_date.day}"
+
+        at = f" {format_time(event.event_time)}" if event.event_time else ""
+        lines.append(f"• {when}{at} — {event.title}")
+    return lines
+
+
+def render_event_added(title: str, when: date, at: time | None, lead: int) -> str:
+    body = [f"📅 اتسجّل: <b>{title}</b>", format_arabic_date(when)]
+    if at is not None:
+        body.append(f"⏰ {format_time(at)} · تذكير قبلها بـ{lead} دقيقة")
+    else:
+        body.append("<i>بلا وقت محدد — مفيش تذكير.</i>")
+    return "\n".join(body)
+
+
+def render_event_reminder(title: str, at: time | None, minutes: int) -> str:
+    head = f"⏰ <b>{title}</b>"
+    if at is not None:
+        return f"{head}\nبعد {minutes} دقيقة — الساعة {format_time(at)}"
+    return head
