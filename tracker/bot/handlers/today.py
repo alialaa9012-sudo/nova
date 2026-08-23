@@ -17,6 +17,7 @@ from tracker.db.models import Recurrence, User
 from tracker.services import habits as habit_service
 from tracker.services import tasks as task_service
 from tracker.bot.handlers.habits import consume_pending_vocab
+from tracker.bot.handlers.schedule import consume_pending_time
 from tracker.services import notes as note_service
 from tracker.services.parsing import parse_task
 from tracker.services.render import render_task_added, render_today
@@ -135,6 +136,8 @@ async def handle_free_text(
     message: Message, session: AsyncSession, user: User, today: date
 ) -> None:
     """أي نص ليس أمراً: إما جملة ينتظرها البوت، وإلا فمهمة جديدة."""
+    if await consume_pending_time(message, session, user, today):
+        return
     if await consume_pending_vocab(message, session, user, today):
         return
 

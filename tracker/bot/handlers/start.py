@@ -16,13 +16,17 @@ from tracker.services.timeutil import format_arabic_date, format_time
 HELP_TEXT = """<b>الأوامر المتاحة</b>
 
 /today — رسالة اليوم
-/مواعيد — تغيير مواعيد الرسائل
+/times — تغيير مواعيد الرسائل (أو اكتب «مواعيد»)
 /dict — قاموس الجمل الإنجليزية
 /week — تقرير الأسبوع
 /month — تقرير الشهر
 /pause — إيقاف الإشعارات مؤقتاً
+/resume — تشغيلها من جديد
 /export — تصدير كل بياناتك
-/help — هذه القائمة"""
+/cancel — إلغاء ما ينتظره البوت منك
+/help — هذه القائمة
+
+<i>أي نص عادي يتحوّل إلى مهمة: «كل سبت جيم 6م»</i>"""
 
 
 async def handle_start(
@@ -53,7 +57,7 @@ async def handle_start(
                 else "• تذكير بالناقص — متوقّف",
                 f"• المراجعة الليلية — {format_time(schedule.review_time)}",
                 "",
-                "تقدر تغيّرها في أي وقت بأمر /مواعيد.",
+                "تقدر تغيّرها في أي وقت بأمر /times.",
             ]
         lines += ["", "اكتب /help لكل الأوامر."]
     else:

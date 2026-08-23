@@ -117,3 +117,25 @@ def parse_task(text: str) -> ParsedTask | None:
         recurrence=recurrence,
         custom_days=custom_days,
     )
+
+
+def parse_time_of_day(text: str) -> time | None:
+    """يقرأ وقتاً وحده من نصٍّ قصير: «9 ص» أو «14:30» أو «١١».
+
+    هنا — على عكس قراءة المهام — رقمٌ مجرّد يُقبل كساعة، لأن المستخدم
+    سُئل عن وقت صراحةً فلا مجال للالتباس.
+    """
+    working = _normalize(text)
+    if not working:
+        return None
+
+    _, parsed = _extract_time(working)
+    if parsed is not None:
+        return parsed
+
+    bare = re.fullmatch(r"(\d{1,2})", working)
+    if bare:
+        hour = int(bare.group(1))
+        if 0 <= hour <= 23:
+            return time(hour, 0)
+    return None

@@ -137,3 +137,37 @@ def render_task_added(title: str, at: time | None, recurrence_note: str | None) 
     if details:
         parts.append(" · ".join(details))
     return "\n".join(parts)
+
+
+def render_midday(pending_tasks: list[str], pending_habits: list[str]) -> str:
+    """تذكير منتصف اليوم: الناقص فقط، بلا تكرار لما أُنجز."""
+    lines = ["⏰ <b>باقي معاك</b>"]
+
+    if pending_tasks:
+        lines.append("")
+        lines.append("📋 <b>مهام</b>")
+        lines += [f"• {title}" for title in pending_tasks[:8]]
+        if len(pending_tasks) > 8:
+            lines.append(f"<i>و{len(pending_tasks) - 8} غيرها</i>")
+
+    if pending_habits:
+        lines.append("")
+        lines.append("⚡ <b>عادات</b>")
+        lines += [f"• {name}" for name in pending_habits]
+
+    lines += ["", "افتح /today وخلّصها."]
+    return "\n".join(lines)
+
+
+def render_schedule(morning: time, midday: time | None, review: time) -> str:
+    """عرض المواعيد الحالية."""
+    lines = [
+        "🕰 <b>مواعيدك الحالية</b>",
+        "",
+        f"☀️ رسالة اليوم — <b>{format_time(morning)}</b>",
+        f"⏰ تذكير بالناقص — <b>{format_time(midday)}</b>"
+        if midday
+        else "⏰ تذكير بالناقص — <b>متوقّف</b>",
+        f"🌙 المراجعة الليلية — <b>{format_time(review)}</b>",
+    ]
+    return "\n".join(lines)

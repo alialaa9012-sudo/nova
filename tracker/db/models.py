@@ -354,6 +354,8 @@ class Reminder(Base):
         Enum(ReminderKind, native_enum=False, length=20)
     )
     due_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), index=True)
+    # اليوم المنطقي الذي يخصّه هذا التذكير — يجعل إعادة الجدولة والبحث دقيقين
+    for_day: Mapped[date | None] = mapped_column(Date, index=True)
     payload: Mapped[dict | None] = mapped_column(JSON)
 
     is_sent: Mapped[bool] = mapped_column(Boolean, default=False, index=True)

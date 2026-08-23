@@ -27,7 +27,7 @@ async def test_first_start_shows_default_schedule(wired):
     assert "11:00 ص" in reply   # رسالة اليوم
     assert "3:00 م" in reply    # تذكير بالناقص
     assert "12:00 ص" in reply   # المراجعة الليلية
-    assert "/مواعيد" in reply
+    assert "/times" in reply
 
 
 async def test_stranger_is_ignored_completely(wired):
@@ -54,7 +54,7 @@ async def test_help_lists_commands(wired):
     await dispatcher.feed_update(bot, text_update("/help", ALLOWED_ID))
 
     reply = recorder.sent_texts[0]
-    for command in ("/today", "/مواعيد", "/dict", "/week", "/month", "/pause", "/export"):
+    for command in ("/today", "/times", "/dict", "/week", "/month", "/pause", "/export"):
         assert command in reply
 
 

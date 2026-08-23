@@ -100,3 +100,35 @@ class TestRecurrence:
 
     def test_no_recurrence_keyword(self):
         assert parse_task("مشروع العميل").recurrence is Recurrence.NONE
+
+
+class TestParseTimeOfDay:
+    def test_bare_hour_is_accepted_here(self):
+        from tracker.services.parsing import parse_time_of_day
+
+        assert parse_time_of_day("9") == time(9, 0)
+        assert parse_time_of_day("23") == time(23, 0)
+
+    def test_with_meridiem(self):
+        from tracker.services.parsing import parse_time_of_day
+
+        assert parse_time_of_day("9 م") == time(21, 0)
+        assert parse_time_of_day("11 ص") == time(11, 0)
+
+    def test_with_colon(self):
+        from tracker.services.parsing import parse_time_of_day
+
+        assert parse_time_of_day("14:30") == time(14, 30)
+        assert parse_time_of_day("10:15 ص") == time(10, 15)
+
+    def test_arabic_digits(self):
+        from tracker.services.parsing import parse_time_of_day
+
+        assert parse_time_of_day("١٢ ص") == time(0, 0)
+
+    def test_rejects_nonsense(self):
+        from tracker.services.parsing import parse_time_of_day
+
+        assert parse_time_of_day("بكرة") is None
+        assert parse_time_of_day("") is None
+        assert parse_time_of_day("99") is None

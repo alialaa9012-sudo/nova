@@ -25,6 +25,13 @@ class HabitCB(CallbackData, prefix="h"):
     step: float = 0.0
 
 
+class ScheduleCB(CallbackData, prefix="s"):
+    """نداء يخصّ مواعيد الرسائل."""
+
+    action: str  # edit | off | keep | open
+    slot: str    # morning | midday | review | all
+
+
 class DayCB(CallbackData, prefix="d"):
     """نداء يخصّ رسالة اليوم ككل."""
 

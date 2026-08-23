@@ -10,7 +10,9 @@ from fastapi import FastAPI, Header, HTTPException, Request
 
 from tracker.bot.setup import build_bot, build_dispatcher
 from tracker.config import get_settings
-from tracker.db.session import dispose_engine
+from tracker.db.session import dispose_engine, session_scope
+from tracker.services.reminders import run_tick
+from tracker.services.timeutil import now_in
 
 logging.basicConfig(
     level=logging.INFO,
@@ -68,10 +70,14 @@ async def telegram_webhook(
 async def cron_tick(key: str = "") -> dict[str, object]:
     """نبضة خارجية كل دقيقة: توقظ الخدمة وتُنفّذ التذكيرات المستحقة.
 
-    تُنفَّذ التذكيرات في M3؛ حتى ذلك الحين تحافظ النبضة على الخدمة مستيقظة.
+    آمنة للاستدعاء المتكرر: ما أُرسل يُعلَّم فلا يُرسل مرتين، وتوليد
+    تذكيرات الأفق عملية idempotent.
     """
     settings = get_settings()
     if key != settings.cron_secret:
         raise HTTPException(status_code=403, detail="bad cron key")
 
-    return {"ok": True, "sent": 0}
+    async with session_scope() as session:
+        result = await run_tick(bot, session, now_in(settings.tz))
+
+    return {"ok": True, **result.as_dict()}
