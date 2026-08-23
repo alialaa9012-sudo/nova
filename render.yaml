@@ -1,0 +1,26 @@
+# نشر Daily Tracker على Render — الطبقة المجانية.
+# الأسرار تُضبط يدوياً من لوحة Render ولا تُكتب هنا أبداً.
+services:
+  - type: web
+    name: daily-tracker
+    runtime: docker
+    plan: free
+    region: frankfurt
+    dockerfilePath: ./tracker/Dockerfile
+    dockerContext: .
+    healthCheckPath: /health
+    envVars:
+      - key: BOT_TOKEN
+        sync: false
+      - key: ALLOWED_USER_ID
+        sync: false
+      - key: DATABASE_URL
+        sync: false
+      - key: PUBLIC_URL
+        sync: false
+      - key: WEBHOOK_SECRET
+        generateValue: true
+      - key: CRON_SECRET
+        generateValue: true
+      - key: TIMEZONE
+        value: Africa/Cairo

@@ -1,0 +1,9 @@
+aiogram>=3.13,<4
+fastapi>=0.115
+uvicorn[standard]>=0.32
+SQLAlchemy[asyncio]>=2.0.30
+asyncpg>=0.29
+aiosqlite>=0.20
+alembic>=1.13
+pydantic-settings>=2.5
+tzdata>=2024.1
