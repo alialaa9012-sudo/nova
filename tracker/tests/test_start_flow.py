@@ -14,8 +14,6 @@ from tracker.tests.fake_telegram import make_bot, text_update
 ALLOWED_ID = 6493959847
 STRANGER_ID = 111222333
 
-pytestmark = pytest.mark.asyncio
-
 
 @pytest_asyncio.fixture
 async def wired(monkeypatch):

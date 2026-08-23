@@ -103,3 +103,32 @@ def text_update(text: str, user_id: int, update_id: int = 1) -> Update:
             text=text,
         ),
     )
+
+
+def callback_update(
+    data: str,
+    user_id: int,
+    *,
+    message_id: int = 500,
+    update_id: int = 1,
+) -> Update:
+    """تحديث تليجرام لضغطة زر داخلي."""
+    from aiogram.types import CallbackQuery
+
+    who = User(id=user_id, is_bot=False, first_name="Ali", username="alial097")
+    return Update(
+        update_id=update_id,
+        callback_query=CallbackQuery(
+            id=f"cb-{update_id}",
+            from_user=who,
+            chat_instance=f"chat-{user_id}",
+            data=data,
+            message=TgMessage(
+                message_id=message_id,
+                date=datetime.now(),
+                chat=Chat(id=user_id, type="private"),
+                from_user=User(id=BOT_ID, is_bot=True, first_name="Daily Tracker"),
+                text="رسالة اليوم",
+            ),
+        ),
+    )

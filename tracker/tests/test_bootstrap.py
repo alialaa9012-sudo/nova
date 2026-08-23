@@ -8,8 +8,6 @@ from sqlalchemy import select
 from tracker.db.models import Habit, HabitKind, Schedule
 from tracker.services.bootstrap import current_schedule, get_or_create_user
 
-pytestmark = pytest.mark.asyncio
-
 
 async def test_creates_user_with_defaults(session):
     user, created = await get_or_create_user(
