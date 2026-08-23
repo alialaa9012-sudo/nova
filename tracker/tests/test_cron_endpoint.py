@@ -26,3 +26,28 @@ class TestCronAuth:
         result = await cron_tick(key=settings.cron_secret)
         assert result["ok"] is True
         assert "sent" in result
+
+
+class TestStartupResilience:
+    """فشل ضبط الـwebhook يجب ألا يُسقط الخدمة — الحلقة تحرق الساعات المجانية."""
+
+    async def test_webhook_failure_is_reported_not_fatal(self, monkeypatch):
+        from tracker import app as app_module
+
+        async def always_fails(**kwargs):
+            raise RuntimeError("تليجرام غير متاح")
+
+        monkeypatch.setattr(app_module.bot, "set_webhook", always_fails)
+        monkeypatch.setattr(app_module, "WEBHOOK_RETRY_SECONDS", 0)
+
+        state = await app_module._register_webhook(get_settings())
+        assert state == "failed"
+
+    async def test_health_reports_startup_state(self):
+        from tracker.app import health, startup_state
+
+        startup_state["webhook"] = "failed"
+        body = await health()
+        assert body["status"] == "ok"
+        assert body["webhook"] == "failed"
+        startup_state["webhook"] = "not-configured"
