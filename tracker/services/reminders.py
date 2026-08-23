@@ -134,11 +134,22 @@ async def _dispatch(
         await send_review(bot, session, user, day)
         return True
 
+    if reminder.kind is ReminderKind.WEEKLY_REPORT:
+        from tracker.bot.handlers.reports import build_weekly
+
+        await bot.send_message(user.telegram_id, await build_weekly(session, user, day))
+        return True
+
+    if reminder.kind is ReminderKind.MONTHLY_REPORT:
+        from tracker.bot.handlers.reports import build_monthly
+
+        await bot.send_message(user.telegram_id, await build_monthly(session, user, day))
+        return True
+
     if reminder.kind is ReminderKind.SCHEDULE_ASK:
         await _send_schedule_ask(bot, session, user, day)
         return True
 
-    # التقارير الأسبوعية والشهرية تُنفَّذ في المرحلة التالية
     logger.info("نوع تذكير لم يُنفَّذ بعد: %s", reminder.kind)
     return False
 

@@ -5,7 +5,7 @@ from __future__ import annotations
 from datetime import date, datetime, time
 
 from tracker.db.models import Habit, HabitKind, HabitLog, Task, TaskInstance
-from tracker.services.timeutil import format_arabic_date, format_time
+from tracker.services.timeutil import ARABIC_MONTHS, format_arabic_date, format_time
 
 FILLED = "█"
 EMPTY = "░"
@@ -217,3 +217,70 @@ def render_review(summary) -> str:
 
 def render_note_saved(content: str) -> str:
     return f"📝 اتسجّل ملخص اليوم:\n<i>{content}</i>"
+
+
+def _range_label(start: date, end: date) -> str:
+    if start.month == end.month:
+        return f"{start.day} – {end.day} {ARABIC_MONTHS[start.month]} {start.year}"
+    return (
+        f"{start.day} {ARABIC_MONTHS[start.month]} – "
+        f"{end.day} {ARABIC_MONTHS[end.month]} {end.year}"
+    )
+
+
+def render_period(
+    progress,
+    *,
+    title: str,
+    tasks_note: str | None = None,
+    habits_note: str | None = None,
+    sentences: list[str] | None = None,
+) -> str:
+    """تقرير فترة (أسبوع أو شهر) — رقمان منفصلان وأشرطة لكل عادة."""
+    lines = [
+        f"{title}",
+        f"<i>{_range_label(progress.start, progress.end)}</i>",
+    ]
+
+    if progress.is_empty:
+        lines += ["", "لا توجد بيانات في هذه الفترة بعد."]
+        return "\n".join(lines)
+
+    lines += [
+        "",
+        f"📋 <b>المهام</b> — {progress.tasks_done} من {progress.tasks_total}",
+        progress_line(progress.tasks_pct),
+    ]
+    if tasks_note:
+        lines.append(f"<i>{tasks_note}</i>")
+
+    lines += [
+        "",
+        f"⚡ <b>العادات</b> — {progress.habits_done} من {progress.habits_total} يوم",
+        progress_line(progress.habits_pct),
+    ]
+    if habits_note:
+        lines.append(f"<i>{habits_note}</i>")
+
+    if progress.habit_stats:
+        lines += ["", "🏅 <b>ترتيب العادات</b>"]
+        for stat in progress.habit_stats:
+            row = (
+                f"{stat.habit.emoji} <code>{progress_bar(stat.pct, 8)}</code> "
+                f"{stat.pct:.0f}% · {stat.done_days}/{stat.active_days}"
+            )
+            if stat.stretch_days:
+                row += f" · ⭐{stat.stretch_days}"
+            lines.append(row)
+
+        best = max(progress.habit_stats, key=lambda s: s.best_streak)
+        if best.best_streak >= 2:
+            lines += ["", f"🔥 أطول سلسلة حالية: {best.habit.emoji} {best.best_streak} أيام"]
+
+    if sentences:
+        lines += ["", f"📖 <b>جمل الأسبوع</b> ({len(sentences)})"]
+        lines += [f"• {s}" for s in sentences[:15]]
+        if len(sentences) > 15:
+            lines.append(f"<i>و{len(sentences) - 15} غيرها في /dict</i>")
+
+    return "\n".join(lines)
