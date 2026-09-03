@@ -151,7 +151,13 @@ $('#logout-btn').addEventListener('click', async () => {
   showLogin();
 });
 
-$('#menu-toggle').addEventListener('click', () => $('#sidebar').classList.toggle('open'));
+function setSidebar(open) {
+  $('#sidebar').classList.toggle('open', open);
+  $('#sidebar-backdrop').hidden = !open;
+}
+$('#menu-toggle').addEventListener('click',
+  () => setSidebar(!$('#sidebar').classList.contains('open')));
+$('#sidebar-backdrop').addEventListener('click', () => setSidebar(false));
 
 // ---------- التنقل ----------
 
@@ -184,7 +190,7 @@ function buildNav() {
 
 async function go(pageId) {
   state.page = pageId;
-  $('#sidebar').classList.remove('open');
+  setSidebar(false);
   buildNav();
   const page = PAGES.find((p) => p.id === pageId) ?? PAGES[0];
   $('#page').replaceChildren(el('div', { className: 'loading', textContent: 'جاري التحميل...' }));
@@ -230,6 +236,16 @@ function panel(title, body, ...headActions) {
 
 function table(headers, rows, emptyText = 'مفيش بيانات هنا.') {
   if (!rows.length) return el('div', { className: 'empty', textContent: emptyText });
+  // على الموبايل الجدول بيبقى كروت، وكل خانة بتعرض اسم عمودها.
+  // بنلفّ محتوى كل خانة في عنصر واحد عشان المحاذاة تبقى موحّدة.
+  for (const tr of rows) {
+    [...tr.children].forEach((td, i) => {
+      td.dataset.label = headers[i] ?? '';
+      const cell = el('div', { className: 'cell' });
+      cell.append(...td.childNodes);
+      td.append(cell);
+    });
+  }
   return el('div', { className: 'table-scroll' },
     el('table', {},
       el('thead', {}, el('tr', {}, ...headers.map((h) => el('th', { textContent: h })))),

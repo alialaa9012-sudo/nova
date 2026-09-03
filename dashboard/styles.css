@@ -221,7 +221,11 @@ tbody tr:hover { background: rgba(255,255,255,.02); }
 
 /* ---------- الموبايل ---------- */
 .menu-toggle { display: none; }
+#sidebar-backdrop { display: none; }
 @media (max-width: 860px) {
+  /* القائمة المخفية بتطلع برّه الشاشة — من غير ده الصفحة بتتزحلق أفقيًا وتبيّنها. */
+  html, body { overflow-x: hidden; }
+
   .app { grid-template-columns: 1fr; }
   .sidebar {
     position: fixed; inset-inline-start: 0; top: 0; width: 236px; z-index: 90;
@@ -229,6 +233,11 @@ tbody tr:hover { background: rgba(255,255,255,.02); }
   }
   [dir='ltr'] .sidebar { transform: translateX(-100%); }
   .sidebar.open { transform: translateX(0); }
+  /* لمسة برّه القائمة بتقفلها */
+  #sidebar-backdrop:not([hidden]) {
+    display: block; position: fixed; inset: 0;
+    background: rgba(0,0,0,.55); z-index: 85;
+  }
   .menu-toggle {
     display: inline-flex; align-items: center; gap: 8px; margin-bottom: 16px;
     padding: 8px 14px; background: var(--panel); border: 1px solid var(--line);
@@ -236,4 +245,22 @@ tbody tr:hover { background: rgba(255,255,255,.02); }
   }
   .main { padding: 18px 16px 60px; }
   .page-head h2 { font-size: 21px; }
+
+  /* الجداول بتتحوّل لكروت مكدّسة — أسهل بكتير من جدول بيتزحلق على تليفون. */
+  .table-scroll { overflow-x: visible; }
+  .table-scroll table, .table-scroll tbody, .table-scroll tr, .table-scroll td { display: block; width: 100%; }
+  .table-scroll thead { display: none; }
+  .table-scroll tr { padding: 10px 0; border-bottom: 1px solid var(--line); }
+  .table-scroll tbody tr:last-child { border-bottom: 0; }
+  /* شبكة من عمودين: اسم العمود | القيمة — والقيم بتتكدّس تحت بعض. */
+  .table-scroll td {
+    display: grid; grid-template-columns: auto 1fr;
+    align-items: center; gap: 2px 14px; padding: 5px 16px; border: 0;
+  }
+  .table-scroll td[data-label]:not([data-label=""])::before {
+    content: attr(data-label); color: var(--muted);
+    font-size: 12px; font-weight: 600; grid-column: 1; grid-row: 1;
+  }
+  .table-scroll td > .cell { grid-column: 2; justify-self: end; text-align: end; }
+  .cell-actions { justify-content: flex-end; }
 }
