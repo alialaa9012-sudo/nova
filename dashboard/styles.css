@@ -122,6 +122,11 @@ button { cursor: pointer; }
 .kpi .value.good { color: var(--lime); }
 .kpi .hint { font-size: 11.5px; color: var(--muted); margin-top: 4px; }
 
+/* على الشاشات الواسعة: 4 أعمدة عشان الثمن بطاقات يملوا صفين كاملين. */
+@media (min-width: 861px) {
+  .kpis { grid-template-columns: repeat(4, 1fr); }
+}
+
 /* ---------- الجداول ---------- */
 .panel { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; margin-bottom: 22px; }
 .panel-head {
