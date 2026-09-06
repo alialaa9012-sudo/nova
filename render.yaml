@@ -1,0 +1,22 @@
+# ============================================================
+# NOVA — إعدادات النشر على Render
+# Render بيقرأ الملف ده لوحده ويجهّز كل حاجة.
+# إنت هتدخل حاجة واحدة بس: رابط قاعدة البيانات (DATABASE_URL).
+# ============================================================
+services:
+  - type: web
+    name: nova-panel
+    runtime: node
+    plan: free
+    region: frankfurt          # أقرب منطقة لمصر والخليج
+    buildCommand: npm ci --omit=dev
+    startCommand: npm start
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: JWT_SECRET
+        generateValue: true    # Render بيولّده لوحده — مش محتاج تعمل حاجة
+      - key: DATABASE_URL
+        sync: false            # هيسألك عليه وقت النشر — انسخه من Neon

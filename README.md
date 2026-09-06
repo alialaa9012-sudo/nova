@@ -20,76 +20,64 @@
 
 ---
 
-## تشغيل اللوحة في 4 خطوات
+## انشر اللوحة على الإنترنت (10 دقايق — من غير برمجة)
 
-### 1) نزّل المشروع وثبّت المكتبات
+عشان تفتح اللوحة من أي موبايل أو لابتوب، لازم تكون منشورة. أسهل طريقة **Render** — مجاني ومافيهوش تعقيد.
+
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/alialaa9012-sudo/nova)
+
+### الخطوات
+
+**1) هات رابط قاعدة البيانات من Neon**
+
+ادخل [console.neon.tech](https://console.neon.tech) → اختار مشروع **nova** → اضغط زرار **Connect** →
+انسخ الرابط كله (بيبدأ بـ `postgresql://` وفيه كلمة السر جواه).
+
+**2) اضغط زرار Deploy to Render فوق**
+
+- سجّل دخول بحساب GitHub بتاعك.
+- Render هيقرأ ملف `render.yaml` ويجهّز كل حاجة لوحده.
+- هيسألك على حاجة **واحدة** بس: `DATABASE_URL` → الصق الرابط اللي نسخته.
+- اضغط **Apply** واستنى 2-3 دقايق.
+
+**3) افتح لوحتك**
+
+Render هيديك رابط شكله `https://nova-panel-xxxx.onrender.com`.
+لوحة التحكم على: `https://nova-panel-xxxx.onrender.com/dashboard`
+
+> **ملاحظة على الخطة المجانية:** لو محدش فتح اللوحة لمدة 15 دقيقة، Render بينيّمها.
+> أول فتحة بعد كده بتاخد حوالي 50 ثانية تفتح، وبعدين بتبقى سريعة عادي.
+> لما تبدأ تدي اللوحة لمطاعم حقيقية، رقّي للخطة المدفوعة (7 دولار في الشهر) وهتشتغل على طول.
+
+### لو مش عارف تدخل — اعمل كلمة مرور جديدة
+
+```bash
+npm install
+npm run password owner@test.nova "كلمة-السر-الجديدة"
+```
+
+هيطبعلك سطر SQL. انسخه → Neon → **SQL Editor** → الصقه → **Run**.
+بعدها ادخل اللوحة بالإيميل ده وكلمة السر الجديدة.
+
+---
+
+## تشغيلها على جهازك (للتجربة السريعة)
 
 ```bash
 git clone https://github.com/alialaa9012-sudo/nova.git
 cd nova
 npm install
+cp .env.example .env      # حط DATABASE_URL و JWT_SECRET
+npm start                 # افتح localhost:3000/dashboard
 ```
 
-### 2) جهّز ملف الإعدادات
+توليد `JWT_SECRET`:
 
 ```bash
-cp .env.example .env
+node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 ```
-
-افتح `.env` واملأ حاجتين:
-
-- **`DATABASE_URL`** — من [Neon](https://console.neon.tech) → مشروع `nova` →
-  زرار **Connect** → انسخ الرابط بالكامل (بيبدأ بـ `postgresql://`).
-- **`JWT_SECRET`** — أي نص عشوائي طويل. تقدر تولّده بالأمر ده:
-
-  ```bash
-  node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
-  ```
 
 > ⚠️ ملف `.env` **مايترفعش على GitHub أبدًا** — هو متجاهَل في `.gitignore` وسيبه كده.
-
-### 3) شغّل
-
-```bash
-npm start
-```
-
-### 4) افتح اللوحة
-
-<http://localhost:3000/dashboard>
-
-ادخل بإيميل وباسورد أي مستخدم موجود في جدول `users`.
-
----
-
-## لو نسيت باسورد الدخول
-
-شغّل الأمر ده وهو هيطبعلك SQL جاهز تنسخه وتشغّله في Neon SQL Editor:
-
-```bash
-node -e "
-const b=require('bcryptjs');
-const email='owner@test.nova';        // غيّر الإيميل
-const pass='YourNewPassword123';      // غيّر الباسورد
-console.log(\`UPDATE users SET password_hash='\${b.hashSync(pass,10)}' WHERE lower(email)=lower('\${email}');\`);
-"
-```
-
----
-
-## النشر على الإنترنت (عشان تفتحها من الموبايل)
-
-اللوحة سيرفر Node عادي — تنشرها على أي استضافة بتدعم Node 20+
-(Render أو Railway أو Fly.io). الإعدادات:
-
-| الإعداد | القيمة |
-|---|---|
-| Build command | `npm install` |
-| Start command | `npm start` |
-| Environment variables | `DATABASE_URL` و `JWT_SECRET` و `NODE_ENV=production` |
-
-> مهم: لما تنشر، خلي `NODE_ENV=production` — كوكي الجلسة ساعتها بيتبعت
-> على HTTPS بس، وده اللي بيحمي حساب المطعم.
 
 الموقع التعريفي فاضل شغّال زي ما هو على GitHub Pages من ملفات الجذر.
 
