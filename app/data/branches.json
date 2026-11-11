@@ -1,0 +1,45 @@
+{
+  "brand": {
+    "name_ar": "خليها مشاوي",
+    "name_en": "Khaliha Mashawy",
+    "social_handle": "Mashawy.eg"
+  },
+  "branches": [
+    {
+      "id": "ashry",
+      "name_ar": "العاشر من رمضان",
+      "order_code_proposed": "A",
+      "address_ar": "العاشر من رمضان - أمام نادي الرواد - البوابة الرئيسية - بجوار بنزينة موبيل",
+      "phones": ["0554494299", "01068058870", "01110606788"],
+      "menu_file": "menu_ashry_zagazig.csv",
+      "zones_file": "delivery_zones_ashry.csv",
+      "charges_printed_on_menu": { "service_percent": 12, "tax_percent": null },
+      "apply_charges_to_online_orders": null,
+      "missing": ["working_hours", "order_reception_hours", "maps_url", "whatsapp"]
+    },
+    {
+      "id": "zagazig",
+      "name_ar": "الزقازيق",
+      "order_code_proposed": "Z",
+      "address_ar": "الزقازيق - شارع الغشام - برج المدينة المنورة",
+      "phones": ["0552311777", "01061005627", "01100691193"],
+      "menu_file": "menu_ashry_zagazig.csv",
+      "zones_file": "delivery_zones_zagazig.csv",
+      "charges_printed_on_menu": { "service_percent": 12, "tax_percent": null },
+      "apply_charges_to_online_orders": null,
+      "missing": ["working_hours", "order_reception_hours", "maps_url", "whatsapp"]
+    },
+    {
+      "id": "tagamoa",
+      "name_ar": "التجمع الخامس",
+      "order_code_proposed": "T",
+      "address_ar": "التجمع الخامس - شارع التسعين الشمالي - مول ليروس 1 - مجمع شيل أوت اللوتس",
+      "phones": ["01008888329", "01588888369"],
+      "menu_file": "menu_tagamoa.csv",
+      "zones_file": "delivery_zones_tagamoa.csv",
+      "charges_printed_on_menu": { "service_percent": 12, "tax_percent": 14 },
+      "apply_charges_to_online_orders": null,
+      "missing": ["working_hours", "order_reception_hours", "maps_url", "whatsapp"]
+    }
+  ]
+}
