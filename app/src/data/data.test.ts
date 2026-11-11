@@ -127,7 +127,7 @@ describe.each(Object.entries(ZONES))('zones %s', (file, expected) => {
 type Day = { opens: string; closes: string; crosses_midnight: boolean }
 type BranchesFile = {
   brand: {
-    social: Record<string, string>
+    social: Record<string, { handle: string; url: string; source: string; url_verified: boolean }[]>
     linktree: string
     whatsapp: { number: string; url: string; scope: string }
     logo: { file: string; url_path: string; width: number; height: number }
@@ -143,6 +143,7 @@ type BranchesFile = {
     timezone: string
     working_hours: Record<string, Day>
     order_reception: { same_as_working_hours: boolean }
+    online_charges: { service_percent: number; tax_percent: number; tax_base: string; tax_base_confirmed: boolean }
     missing: string[]
   }[]
 }
@@ -157,8 +158,13 @@ describe('review sheet and branches', () => {
     const zoneItems = sheet.filter((r) => r.section.startsWith('منطقة'))
     expect(zoneItems).toHaveLength(flagged.length)
     expect(sheet.map((r) => r.id)).toEqual(sheet.map((_, i) => `R${String(i + 1).padStart(2, '0')}`))
-    const decided = sheet.filter((r) => r.owner_decision.trim() !== '').map((r) => r.subject)
-    expect([...decided].sort()).toEqual(['أرقام واتساب', 'مواعيد العمل واستقبال الطلبات'].sort())
+    const decided = new Set(sheet.filter((r) => r.owner_decision.trim() !== '').map((r) => r.subject))
+    const answered = [
+      'أرقام واتساب', 'مواعيد العمل واستقبال الطلبات', 'نسبة الخدمة',
+      'نسبة الخدمة والضريبة', 'رابط المنيو في Linktree', 'حساب إنستجرام',
+    ]
+    for (const subject of answered) expect(decided.has(subject), subject).toBe(true)
+    for (const r of zoneItems) expect(r.owner_decision, r.subject).toBe('')
   })
 
   it('describes the three branches and points to existing files', () => {
@@ -183,7 +189,9 @@ describe('review sheet and branches', () => {
       expect(b.missing, b.id).not.toContain('maps_url')
     }
     expect(Object.keys(data.brand.social).sort()).toEqual(['facebook', 'instagram', 'snapchat', 'tiktok'])
-    for (const url of [...Object.values(data.brand.social), data.brand.linktree]) {
+    expect(data.brand.social.instagram.map((a) => a.handle)).toEqual(['khaliha.mashawy', 'mashawy.eg'])
+    const urls = Object.values(data.brand.social).flatMap((accounts) => accounts.map((a) => a.url))
+    for (const url of [...urls, data.brand.linktree]) {
       expect(url).toMatch(/^https:\/\//)
       expect(url).not.toContain('fbclid')
       expect(url).not.toContain('mibextid')
@@ -217,5 +225,14 @@ describe('review sheet and branches', () => {
     expect(brand.logo.url_path).toBe('/brand/logo-dark.jpg')
     expect(brand.logo.width).toBeGreaterThan(0)
     expect(brand.logo.height).toBeGreaterThan(0)
+  })
+
+  it('records the online charges decided by the owner', () => {
+    for (const b of branchesFile().branches) {
+      expect(b.online_charges.service_percent, b.id).toBe(0)
+      expect(b.online_charges.tax_percent, b.id).toBe(14)
+      expect(b.online_charges.tax_base, b.id).toBe('items_only')
+      expect(b.online_charges.tax_base_confirmed, b.id).toBe(false)
+    }
   })
 })
