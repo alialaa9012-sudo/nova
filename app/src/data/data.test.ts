@@ -143,7 +143,13 @@ type BranchesFile = {
     timezone: string
     working_hours: Record<string, Day>
     order_reception: { same_as_working_hours: boolean }
-    online_charges: { service_percent: number; tax_percent: number; tax_base: string; tax_base_confirmed: boolean }
+    online_charges: {
+      service_percent: number
+      tax_percent: number
+      tax_applies_to: string[]
+      tax_base: string | null
+      tax_base_confirmed: boolean | null
+    }
     missing: string[]
   }[]
 }
@@ -227,12 +233,18 @@ describe('review sheet and branches', () => {
     expect(brand.logo.height).toBeGreaterThan(0)
   })
 
-  it('records the online charges decided by the owner', () => {
+  it('records the online charges decided by the owner: tax only in Tagamoa', () => {
+    const tax: Record<string, number> = { ashry: 0, zagazig: 0, tagamoa: 14 }
     for (const b of branchesFile().branches) {
       expect(b.online_charges.service_percent, b.id).toBe(0)
-      expect(b.online_charges.tax_percent, b.id).toBe(14)
-      expect(b.online_charges.tax_base, b.id).toBe('items_only')
-      expect(b.online_charges.tax_base_confirmed, b.id).toBe(false)
+      expect(b.online_charges.tax_percent, b.id).toBe(tax[b.id])
+      if (tax[b.id] > 0) {
+        expect(b.online_charges.tax_applies_to, b.id).toEqual(['delivery', 'pickup', 'dine_in'])
+        expect(b.online_charges.tax_base, b.id).toBe('items_only')
+        expect(b.online_charges.tax_base_confirmed, b.id).toBe(false)
+      } else {
+        expect(b.online_charges.tax_applies_to, b.id).toEqual([])
+      }
     }
   })
 })

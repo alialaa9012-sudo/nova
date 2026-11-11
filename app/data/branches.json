@@ -137,14 +137,10 @@
       },
       "online_charges": {
         "service_percent": 0,
-        "tax_percent": 14,
-        "tax_applies_to": [
-          "delivery",
-          "pickup",
-          "dine_in"
-        ],
-        "tax_base": "items_only",
-        "tax_base_confirmed": false
+        "tax_percent": 0,
+        "tax_applies_to": [],
+        "tax_base": null,
+        "tax_base_confirmed": null
       }
     },
     {
@@ -213,14 +209,10 @@
       },
       "online_charges": {
         "service_percent": 0,
-        "tax_percent": 14,
-        "tax_applies_to": [
-          "delivery",
-          "pickup",
-          "dine_in"
-        ],
-        "tax_base": "items_only",
-        "tax_base_confirmed": false
+        "tax_percent": 0,
+        "tax_applies_to": [],
+        "tax_base": null,
+        "tax_base_confirmed": null
       }
     },
     {
