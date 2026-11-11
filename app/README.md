@@ -1,78 +1,49 @@
-# React + TypeScript + Vite
+# تطبيق طلبات «خليها مشاوي»
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+تطبيق ويب عربي (RTL) لطلب الأكل أونلاين من فروع المطعم الثلاثة: العاشر من رمضان، الزقازيق، التجمع الخامس. لا يحتاج العميل حساباً، والدفع كاش فقط.
 
-Currently, two official plugins are available:
+## الحالة الحالية: وضع تجريبي (المرحلة 2)
+- واجهة العميل ولوحة الكول سنتر كاملتان وتعملان في المتصفح.
+- **الطلبات في هذا الوضع تُحفظ في متصفح الجهاز نفسه فقط ولا تصل للمطعم.** شريط أعلى كل صفحة يوضح ذلك.
+- قاعدة البيانات (Supabase) مكتوبة ومختبرة على Postgres محلي (PGlite)، ولم تُنشر بعد. إشعار Telegram والنشر على Cloudflare ينتظران الحسابات.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## الصفحات
+| المسار | الوظيفة |
+|---|---|
+| `/` | اختيار الفرع، مع حالته (مفتوح أو مغلق) ومواعيده |
+| `/branch/:id` | منيو الفرع والسلة (`ashry`، `zagazig`، `tagamoa`) |
+| `/branch/:id/checkout` | إتمام الطلب: توصيل أو استلام، والبيانات، ورسوم المنطقة، والضريبة في التجمع |
+| `/order/:number` | تأكيد الطلب وتتبع حالته، ويتحدث تلقائياً |
+| `/track` | تتبع طلب برقمه ورقم الموبايل (طلبات آخر 3 أيام) |
+| `/admin` | لوحة الكول سنتر: فلترة بالفرع والتاريخ والحالة، بحث، تفاصيل، تغيير الحالة، إلغاء بسبب. **بلا تسجيل دخول في الوضع التجريبي** |
 
-## React Compiler
+## البنية
+- `data/`: مصدر الحقيقة للمنيو والمناطق والفروع (انظر `data/README.md`). التطبيق يقرأ هذه الملفات وقت البناء، فأي تعديل فيها يظهر بعد `npm run build`.
+- `src/lib/`: منطق بلا واجهة، وكل ملف له اختبارات:
+  - `hours.ts`: «مفتوح الآن» بتوقيت القاهرة، ويدعم الإغلاق بعد منتصف الليل.
+  - `pricing.ts`: المجموع والتوصيل والخدمة والضريبة.
+  - `phone.ts`: يقبل الأرقام العربية ويتحقق من رقم موبايل مصري.
+  - `orderStatus.ts`: الحالات الأربع وانتقالاتها.
+  - `catalog.ts`: يحوّل ملفات `data/` إلى منيو ومناطق لكل فرع.
+  - `cart.ts` و`checkout.ts`: السلة والتحقق من بيانات الطلب.
+- `src/lib/api/`: واجهة `OrdersApi`، وفيها وضعان:
+  - `local.ts`: الوضع التجريبي الحالي، ويطبق نفس قواعد قاعدة البيانات.
+  - عند الربط يُضاف `supabase.ts` يستدعي دوال `place_order` و`track_order` و`set_order_status`، ويُبدَّل في `api/index.ts` دون تغيير الصفحات.
+- `supabase/migrations/20261111120000_init.sql`: الجداول والدوال وصلاحيات RLS.
+- `supabase/seed.sql`: مولَّد من `data/` ولا يُعدَّل يدوياً.
+  - للتوليد: `python3 -I data/tools/build_seed.py`.
+  - للتأكد أنه محدَّث: أضف `--check`.
+- `src/db/database.test.ts`: يشغّل الـ migration والـ seed على Postgres داخل الذاكرة، ويختبر الأسعار والصلاحيات وانتقالات الحالة والمواعيد.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
-```
-
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
-```
+## قواعد مطبّقة
+- **الأسعار:** تُعاد حسابها في قاعدة البيانات عند تأكيد الطلب، ولا يُقبل أي سعر من المتصفح.
+- **الحالات:** أربع فقط. في طلب الاستلام تُعرض الحالة الثالثة «جاهز للاستلام»، وهي نفس الحالة في القاعدة. يُسجَّل وقت كل تغيير ومن قام به، والإلغاء يتطلب سبباً.
+- **رقم الطلب:** حرف الفرع ثم عداد يومي (`A-0001`، `Z-0001`، `T-0001`).
+- **الحماية من التكرار:** بحد أقصى 3 طلبات لكل رقم موبايل كل 10 دقائق.
+- **المواعيد:** لا يُقبل طلب والفرع مغلق. يستطيع العميل تجهيز السلة لكنه لا يؤكدها.
+- **الأصناف بالحجز المسبق** (كتف وفخدة، 24 ساعة) تظهر بزر اتصال بدل «أضف».
+- **المناطق المعلّقة** (16 منطقة بلا سعر واحد) لا تظهر حتى يحدد المالك سعرها.
+- **رسوم الطلب الأونلاين:** لا خدمة في كل الفروع. ضريبة 14٪ في التجمع فقط، وتُحسب على الأصناف دون رسوم التوصيل حتى يؤكد المالك.
 
 ## أدوات الواجهة والاختبار (تم إعدادها)
 
