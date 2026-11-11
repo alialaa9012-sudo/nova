@@ -124,30 +124,45 @@ describe.each(Object.entries(ZONES))('zones %s', (file, expected) => {
   })
 })
 
+type Day = { opens: string; closes: string; crosses_midnight: boolean }
+type BranchesFile = {
+  brand: {
+    social: Record<string, string>
+    linktree: string
+    whatsapp: { number: string; url: string; scope: string }
+    logo: { file: string; url_path: string; width: number; height: number }
+  }
+  branches: {
+    id: string
+    phones: string[]
+    menu_file: string
+    zones_file: string
+    maps_url: string
+    lat: number
+    lng: number
+    timezone: string
+    working_hours: Record<string, Day>
+    order_reception: { same_as_working_hours: boolean }
+    missing: string[]
+  }[]
+}
+const branchesFile = () => JSON.parse(read('branches.json')) as BranchesFile
+const WEEK = ['sat', 'sun', 'mon', 'tue', 'wed', 'thu', 'fri']
+const HHMM = /^([01]\d|2[0-3]):[0-5]\d$/
+
 describe('review sheet and branches', () => {
-  it('lists every pending or review zone exactly once', () => {
+  it('lists every pending or review zone exactly once and records the owner decisions', () => {
     const sheet = table('review_conflicts.csv')
     const flagged = Object.keys(ZONES).flatMap((f) => table(f).filter((r) => r.status !== 'ok'))
     const zoneItems = sheet.filter((r) => r.section.startsWith('منطقة'))
     expect(zoneItems).toHaveLength(flagged.length)
     expect(sheet.map((r) => r.id)).toEqual(sheet.map((_, i) => `R${String(i + 1).padStart(2, '0')}`))
-    for (const r of sheet) expect(r.owner_decision).toBe('')
+    const decided = sheet.filter((r) => r.owner_decision.trim() !== '').map((r) => r.subject)
+    expect([...decided].sort()).toEqual(['أرقام واتساب', 'مواعيد العمل واستقبال الطلبات'].sort())
   })
 
   it('describes the three branches and points to existing files', () => {
-    const data = JSON.parse(read('branches.json')) as {
-      brand: { social: Record<string, string>; linktree: string }
-      branches: {
-        id: string
-        phones: string[]
-        menu_file: string
-        zones_file: string
-        maps_url: string
-        lat: number
-        lng: number
-        missing: string[]
-      }[]
-    }
+    const data = branchesFile()
     expect(data.branches.map((b) => b.id)).toEqual(['ashry', 'zagazig', 'tagamoa'])
     for (const b of data.branches) {
       expect(b.phones.length).toBeGreaterThan(0)
@@ -157,10 +172,7 @@ describe('review sheet and branches', () => {
   })
 
   it('has Google Maps links with Egyptian coordinates and https social links', () => {
-    const data = JSON.parse(read('branches.json')) as {
-      brand: { social: Record<string, string>; linktree: string }
-      branches: { id: string; maps_url: string; lat: number; lng: number; missing: string[] }[]
-    }
+    const data = branchesFile()
     for (const b of data.branches) {
       expect(b.maps_url, b.id).toMatch(/^https:\/\/www\.google\.com\/maps\/place\//)
       expect(b.maps_url, b.id).not.toContain('g_ep=')
@@ -176,5 +188,34 @@ describe('review sheet and branches', () => {
       expect(url).not.toContain('fbclid')
       expect(url).not.toContain('mibextid')
     }
+  })
+
+  it('has the weekly opening hours for every branch, closing after midnight', () => {
+    for (const b of branchesFile().branches) {
+      expect(b.timezone, b.id).toBe('Africa/Cairo')
+      expect(Object.keys(b.working_hours), b.id).toEqual(WEEK)
+      for (const day of WEEK) {
+        const h = b.working_hours[day]
+        expect(h.opens, `${b.id} ${day}`).toBe('11:00')
+        expect(h.closes, `${b.id} ${day}`).toBe(day === 'thu' || day === 'fri' ? '01:00' : '00:00')
+        expect(h.opens).toMatch(HHMM)
+        expect(h.closes).toMatch(HHMM)
+        expect(h.crosses_midnight, `${b.id} ${day}`).toBe(true)
+      }
+      expect(b.order_reception.same_as_working_hours, b.id).toBe(true)
+      for (const field of ['working_hours', 'order_reception_hours', 'whatsapp']) {
+        expect(b.missing, b.id).not.toContain(field)
+      }
+    }
+  })
+
+  it('has one WhatsApp number whose wa.me link matches it, and the logo metadata', () => {
+    const { brand } = branchesFile()
+    expect(brand.whatsapp.number).toMatch(/^01[0125]\d{8}$/)
+    expect(brand.whatsapp.url).toBe(`https://wa.me/20${brand.whatsapp.number.slice(1)}`)
+    expect(brand.whatsapp.scope).toBe('all_branches')
+    expect(brand.logo.url_path).toBe('/brand/logo-dark.jpg')
+    expect(brand.logo.width).toBeGreaterThan(0)
+    expect(brand.logo.height).toBeGreaterThan(0)
   })
 })
