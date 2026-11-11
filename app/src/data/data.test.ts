@@ -136,13 +136,45 @@ describe('review sheet and branches', () => {
 
   it('describes the three branches and points to existing files', () => {
     const data = JSON.parse(read('branches.json')) as {
-      branches: { id: string; phones: string[]; menu_file: string; zones_file: string }[]
+      brand: { social: Record<string, string>; linktree: string }
+      branches: {
+        id: string
+        phones: string[]
+        menu_file: string
+        zones_file: string
+        maps_url: string
+        lat: number
+        lng: number
+        missing: string[]
+      }[]
     }
     expect(data.branches.map((b) => b.id)).toEqual(['ashry', 'zagazig', 'tagamoa'])
     for (const b of data.branches) {
       expect(b.phones.length).toBeGreaterThan(0)
       expect(Object.keys(MENU)).toContain(b.menu_file)
       expect(Object.keys(ZONES)).toContain(b.zones_file)
+    }
+  })
+
+  it('has Google Maps links with Egyptian coordinates and https social links', () => {
+    const data = JSON.parse(read('branches.json')) as {
+      brand: { social: Record<string, string>; linktree: string }
+      branches: { id: string; maps_url: string; lat: number; lng: number; missing: string[] }[]
+    }
+    for (const b of data.branches) {
+      expect(b.maps_url, b.id).toMatch(/^https:\/\/www\.google\.com\/maps\/place\//)
+      expect(b.maps_url, b.id).not.toContain('g_ep=')
+      expect(b.lat, b.id).toBeGreaterThan(22)
+      expect(b.lat, b.id).toBeLessThan(32)
+      expect(b.lng, b.id).toBeGreaterThan(24)
+      expect(b.lng, b.id).toBeLessThan(37)
+      expect(b.missing, b.id).not.toContain('maps_url')
+    }
+    expect(Object.keys(data.brand.social).sort()).toEqual(['facebook', 'instagram', 'snapchat', 'tiktok'])
+    for (const url of [...Object.values(data.brand.social), data.brand.linktree]) {
+      expect(url).toMatch(/^https:\/\//)
+      expect(url).not.toContain('fbclid')
+      expect(url).not.toContain('mibextid')
     }
   })
 })

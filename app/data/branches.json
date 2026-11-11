@@ -2,7 +2,17 @@
   "brand": {
     "name_ar": "خليها مشاوي",
     "name_en": "Khaliha Mashawy",
-    "social_handle": "Mashawy.eg"
+    "tagline_en": "Oriental Cuisine",
+    "linktree": "https://linktr.ee/khalihamashawy",
+    "social": {
+      "instagram": "https://www.instagram.com/khaliha.mashawy",
+      "tiktok": "https://www.tiktok.com/@khaliha.mashawy",
+      "facebook": "https://www.facebook.com/share/17inRwPVRa/",
+      "snapchat": "https://snapchat.com/t/YmA8Xpvs"
+    },
+    "profile_picture_url": "https://ugc.production.linktr.ee/7290aad3-0ac2-41b5-841f-a82a24f4d020_808b19150c194c79e431302503fbb8b7-tplv-tiktokx-cropcenter-1080-1080.jpeg",
+    "profile_picture_note": "صورة الحساب في Linktree (مربعة 1080×1080)، وليست لوجو شفافاً",
+    "social_handle_printed_on_menu": "Mashawy.eg"
   },
   "branches": [
     {
@@ -10,36 +20,86 @@
       "name_ar": "العاشر من رمضان",
       "order_code_proposed": "A",
       "address_ar": "العاشر من رمضان - أمام نادي الرواد - البوابة الرئيسية - بجوار بنزينة موبيل",
-      "phones": ["0554494299", "01068058870", "01110606788"],
+      "phones": [
+        "0554494299",
+        "01068058870",
+        "01110606788"
+      ],
       "menu_file": "menu_ashry_zagazig.csv",
       "zones_file": "delivery_zones_ashry.csv",
-      "charges_printed_on_menu": { "service_percent": 12, "tax_percent": null },
+      "charges_printed_on_menu": {
+        "service_percent": 12,
+        "tax_percent": null
+      },
       "apply_charges_to_online_orders": null,
-      "missing": ["working_hours", "order_reception_hours", "maps_url", "whatsapp"]
+      "missing": [
+        "working_hours",
+        "order_reception_hours",
+        "whatsapp"
+      ],
+      "maps_url": "https://www.google.com/maps/place/%D9%85%D8%B7%D8%B9%D9%85+%D8%AE%D9%84%D9%8A%D9%87%D8%A7+%D9%85%D8%B4%D8%A7%D9%88%D9%8A+(%D9%85%D8%B4%D9%88%D9%8A%D8%A7%D8%AA+-+%D9%85%D9%86%D8%AF%D9%8A)%E2%80%AD/@30.6122187,30.2877589,8z/data=!4m6!3m5!1s0x1457fdede843fb77:0x802a3f8441fb7368!8m2!3d30.2814822!4d31.7518513!16s%2Fg%2F11swd30v6l",
+      "lat": 30.2814822,
+      "lng": 31.7518513,
+      "maps_place_name": "مطعم خليها مشاوي (مشويات - مندي)",
+      "linktree_menu_pdf": "https://drive.google.com/file/d/1kxPZreDLMHw3TyvaLP7tG0--1161z1dB/view",
+      "linktree_menu_pdf_note": "ملف EL3asher Menu.pdf بتاريخ 29-4-2026 وهو أقدم من المنيو المعتمد (24-8-2026)، وأسعاره أقل. لا يُعتمد"
     },
     {
       "id": "zagazig",
       "name_ar": "الزقازيق",
       "order_code_proposed": "Z",
       "address_ar": "الزقازيق - شارع الغشام - برج المدينة المنورة",
-      "phones": ["0552311777", "01061005627", "01100691193"],
+      "phones": [
+        "0552311777",
+        "01061005627",
+        "01100691193"
+      ],
       "menu_file": "menu_ashry_zagazig.csv",
       "zones_file": "delivery_zones_zagazig.csv",
-      "charges_printed_on_menu": { "service_percent": 12, "tax_percent": null },
+      "charges_printed_on_menu": {
+        "service_percent": 12,
+        "tax_percent": null
+      },
       "apply_charges_to_online_orders": null,
-      "missing": ["working_hours", "order_reception_hours", "maps_url", "whatsapp"]
+      "missing": [
+        "working_hours",
+        "order_reception_hours",
+        "whatsapp"
+      ],
+      "maps_url": "https://www.google.com/maps/place/%D8%AE%D9%84%D9%8A%D9%87%D8%A7+%D9%85%D8%B4%D8%A7%D9%88%D9%8A+%D9%81%D8%B1%D8%B9+%D8%A7%D9%84%D8%B2%D9%82%D8%A7%D8%B2%D9%8A%D9%82%E2%80%AD/@30.5983495,31.4901034,17z/data=!3m1!4b1!4m6!3m5!1s0x14f7f13dcff7f1eb:0x896ff249f32d2dee!8m2!3d30.5983495!4d31.4901034!16s%2Fg%2F11hzctjtrj",
+      "lat": 30.5983495,
+      "lng": 31.4901034,
+      "maps_place_name": "خليها مشاوي فرع الزقازيق",
+      "linktree_menu_pdf": "https://drive.google.com/file/d/1kxPZreDLMHw3TyvaLP7tG0--1161z1dB/view",
+      "linktree_menu_pdf_note": "ملف EL3asher Menu.pdf بتاريخ 29-4-2026 وهو أقدم من المنيو المعتمد (24-8-2026)، وأسعاره أقل. لا يُعتمد"
     },
     {
       "id": "tagamoa",
       "name_ar": "التجمع الخامس",
       "order_code_proposed": "T",
       "address_ar": "التجمع الخامس - شارع التسعين الشمالي - مول ليروس 1 - مجمع شيل أوت اللوتس",
-      "phones": ["01008888329", "01588888369"],
+      "phones": [
+        "01008888329",
+        "01588888369"
+      ],
       "menu_file": "menu_tagamoa.csv",
       "zones_file": "delivery_zones_tagamoa.csv",
-      "charges_printed_on_menu": { "service_percent": 12, "tax_percent": 14 },
+      "charges_printed_on_menu": {
+        "service_percent": 12,
+        "tax_percent": 14
+      },
       "apply_charges_to_online_orders": null,
-      "missing": ["working_hours", "order_reception_hours", "maps_url", "whatsapp"]
+      "missing": [
+        "working_hours",
+        "order_reception_hours",
+        "whatsapp"
+      ],
+      "maps_url": "https://www.google.com/maps/place/Khaliha+Mashawy/@30.0300386,31.4848244,15z/data=!3m1!4b1!4m6!3m5!1s0x145823002614fb2f:0x580156fdf11d732b!8m2!3d30.0300399!4d31.5032784!16s%2Fg%2F11x2vqhpzp",
+      "lat": 30.0300399,
+      "lng": 31.5032784,
+      "maps_place_name": "Khaliha Mashawy",
+      "linktree_menu_pdf": "https://drive.google.com/file/d/1a31DPUCrX7LvOt7oVk9ij9NvIqzJAC4u/view",
+      "linktree_menu_pdf_note": "ملف FINAL Menu - DELIVERY-19-8-26-A3.pdf: أرقامه مطابقة لمنيو RESTURANT الأسود المعتمد في menu_tagamoa.csv"
     }
   ]
 }
