@@ -9,6 +9,7 @@ import menuWhiteRaw from '../../data/menu_ashry_zagazig.csv?raw'
 import menuBlackRaw from '../../data/menu_tagamoa.csv?raw'
 import type { WeeklyHours } from './hours'
 import type { Charges, TaxBase } from './pricing'
+import { zoneLabel } from './zones'
 
 export type BranchId = 'ashry' | 'zagazig' | 'tagamoa'
 
@@ -62,6 +63,18 @@ export interface DeliveryZone {
   label: string
   fee: number
   needsReview: boolean
+  /** Added from the admin screen (not part of the branch's original list). */
+  custom?: boolean
+}
+
+/** A zone from the branch file that has no single fee yet, so customers never see it. */
+export interface PendingZone {
+  type: string
+  name: string
+  label: string
+  feeMin: number
+  feeMax: number
+  note: string
 }
 
 interface RawBranches {
@@ -91,7 +104,8 @@ export const brand: Brand = {
   name: raw.brand.name_ar,
   whatsappNumber: raw.brand.whatsapp.number,
   whatsappUrl: raw.brand.whatsapp.url,
-  logoUrl: raw.brand.logo.url_path,
+  // Follows the deploy base path, so the logo also loads when the app is not served from "/".
+  logoUrl: import.meta.env.BASE_URL + raw.brand.logo.url_path.replace(/^\//, ''),
 }
 
 export const branches: Branch[] = raw.branches.map((b) => ({
@@ -189,12 +203,24 @@ export function getZones(branchId: string): DeliveryZone[] {
       id: `${branch.id}-z${index + 1}`,
       type: row.zone_type,
       name: row.zone_name,
-      label: row.zone_type === 'منطقة' ? row.zone_name : `${row.zone_type} ${row.zone_name}`,
+      label: zoneLabel(row.zone_type, row.zone_name),
       fee: Number(row.fee_min),
       needsReview: row.status === 'review',
     }))
 }
 
-export function findZone(branchId: string, zoneId: string): DeliveryZone | undefined {
-  return getZones(branchId).find((z) => z.id === zoneId)
+/** Zones the owner still has to price (a range, two prices or a note in the branch file). */
+export function getPendingZones(branchId: string): PendingZone[] {
+  const branch = getBranch(branchId)
+  if (!branch) return []
+  return parseCsv(ZONE_SOURCES[branch.zonesFile] ?? '')
+    .filter((row) => row.status === 'pending')
+    .map((row) => ({
+      type: row.zone_type,
+      name: row.zone_name,
+      label: zoneLabel(row.zone_type, row.zone_name),
+      feeMin: Number(row.fee_min),
+      feeMax: Number(row.fee_max),
+      note: row.note,
+    }))
 }

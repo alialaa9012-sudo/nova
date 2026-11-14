@@ -140,3 +140,76 @@ describe('call-center board', () => {
     expect(order.history.map((h) => h.to)).toEqual(['new', 'preparing', 'cancelled'])
   })
 })
+
+describe('delivery zones screen', () => {
+  it('adds a zone to a branch, offers it at checkout with its fee, and removes it after confirmation', async () => {
+    const user = userEvent.setup()
+    const router = renderAt('/admin/zones')
+    await user.click(screen.getByRole('button', { name: 'فرع التجمع الخامس' }))
+    expect(await screen.findByRole('heading', { name: 'مناطق فرع التجمع الخامس (71)' })).toBeInTheDocument()
+    // Tagamoa has plain areas only, so there is no type field
+    expect(screen.queryByLabelText('النوع')).not.toBeInTheDocument()
+
+    await user.click(screen.getByRole('button', { name: 'إضافة المنطقة' }))
+    expect(screen.getByText('اكتب اسم المنطقة.')).toBeInTheDocument()
+    expect(screen.getByLabelText('اسم المنطقة')).toHaveFocus()
+
+    await user.type(screen.getByLabelText('اسم المنطقة'), 'اللوتس الشمالية')
+    await user.type(screen.getByLabelText('رسوم التوصيل (ج.م)'), '80')
+    await user.click(screen.getByRole('button', { name: 'إضافة المنطقة' }))
+    expect(await screen.findByText('هذه المنطقة موجودة بالفعل في هذا الفرع.')).toBeInTheDocument()
+
+    await user.clear(screen.getByLabelText('اسم المنطقة'))
+    await user.type(screen.getByLabelText('اسم المنطقة'), 'مدينتي')
+    await user.clear(screen.getByLabelText('رسوم التوصيل (ج.م)'))
+    await user.type(screen.getByLabelText('رسوم التوصيل (ج.م)'), '١٥٠')
+    await user.click(screen.getByRole('button', { name: 'إضافة المنطقة' }))
+    expect(await screen.findByRole('heading', { name: 'مناطق فرع التجمع الخامس (72)' })).toBeInTheDocument()
+    expect(screen.getByRole('status')).toHaveTextContent('أُضيفت «مدينتي» إلى فرع التجمع الخامس برسوم 150 ج.م.')
+    const list = screen.getByRole('list', { name: 'قائمة المناطق' })
+    expect(within(list).getAllByRole('listitem')[0]).toHaveTextContent('مدينتي')
+
+    // the customer sees it at checkout and the fee joins the total
+    const item = getMenu('tagamoa')[0].items.find((i) => i.name === 'صدور فراخ')!
+    localStorage.setItem(
+      'km.cart.v1.tagamoa',
+      JSON.stringify([{ sizeId: item.sizes[0].id, itemId: item.id, name: item.name, sizeLabel: 'ربع', unitPrice: 250, qty: 1 }]),
+    )
+    await router.navigate('/branch/tagamoa/checkout')
+    await user.selectOptions(await screen.findByLabelText('المنطقة'), await screen.findByRole('option', { name: 'مدينتي · 150 ج.م' }))
+    expect(screen.getByRole('button', { name: 'تأكيد الطلب · 435 ج.م' })).toBeEnabled() // 250 + 35 tax + 150
+
+    // other branches do not get it
+    await router.navigate('/admin/zones')
+    await user.click(await screen.findByRole('button', { name: 'فرع الزقازيق' }))
+    expect(await screen.findByRole('heading', { name: 'مناطق فرع الزقازيق (73)' })).toBeInTheDocument()
+    expect(screen.queryByText('مدينتي')).not.toBeInTheDocument()
+
+    await user.click(screen.getByRole('button', { name: 'فرع التجمع الخامس' }))
+    await user.click(await screen.findByRole('button', { name: 'حذف مدينتي' }))
+    await user.click(screen.getByRole('button', { name: 'تأكيد الحذف' }))
+    expect(await screen.findByRole('heading', { name: 'مناطق فرع التجمع الخامس (71)' })).toBeInTheDocument()
+    expect(await api.listZones('tagamoa')).toHaveLength(71)
+  })
+
+  it('prices a zone the branch file left pending, with the branch own zone types', async () => {
+    const user = userEvent.setup()
+    renderAt('/admin/zones')
+    expect(await screen.findByRole('heading', { name: 'مناطق تحتاج سعراً (8)' })).toBeInTheDocument()
+    expect(screen.getByLabelText('النوع')).toHaveValue('منطقة')
+
+    await user.click(screen.getByRole('button', { name: 'حدد السعر: مجاورة 39' }))
+    expect(screen.getByLabelText('النوع')).toHaveValue('مجاورة')
+    expect(screen.getByLabelText('رقم أو اسم المجاورة')).toHaveValue('39')
+    expect(screen.getByLabelText('رسوم التوصيل (ج.م)')).toHaveFocus()
+
+    await user.click(screen.getByRole('button', { name: 'إضافة المنطقة' }))
+    expect(screen.getByText('اكتب رسوم التوصيل رقماً صحيحاً من 0 إلى 5000 جنيه.')).toBeInTheDocument()
+    await user.type(screen.getByLabelText('رسوم التوصيل (ج.م)'), '45')
+    await user.click(screen.getByRole('button', { name: 'إضافة المنطقة' }))
+
+    expect(await screen.findByRole('heading', { name: 'مناطق تحتاج سعراً (7)' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'مناطق فرع العاشر من رمضان (137)' })).toBeInTheDocument()
+    expect((await api.listZones('ashry')).at(-1)).toMatchObject({ label: 'مجاورة 39', fee: 45, custom: true })
+  })
+})

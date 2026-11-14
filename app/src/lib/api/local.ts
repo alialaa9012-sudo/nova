@@ -1,12 +1,13 @@
 // Demo backend: keeps orders in this browser only and applies the same rules as the
 // database function place_order. Replaced by the Supabase backend in production.
-import { findSize, findZone, getBranch } from '../catalog'
+import { branches, findSize, getBranch, getZones, type BranchId, type DeliveryZone } from '../catalog'
 import { cairoDate } from '../format'
 import { getOpenStatus } from '../hours'
 import { canTransition, type OrderStatus } from '../orderStatus'
 import { normalizeEgyptianMobile } from '../phone'
 import { computeTotals, round2 } from '../pricing'
-import { ApiError, type Order, type OrdersApi, type PlaceOrderInput } from './types'
+import { cleanZoneName, DEFAULT_ZONE_TYPE, MAX_ZONE_FEE, MAX_ZONE_NAME, zoneKey, zoneLabel } from '../zones'
+import { ApiError, type NewZoneInput, type Order, type OrdersApi, type PlaceOrderInput } from './types'
 
 export interface KeyValueStore {
   getItem(key: string): string | null
@@ -14,6 +15,17 @@ export interface KeyValueStore {
 }
 
 export const ORDERS_KEY = 'km.demo.orders.v1'
+export const ZONES_KEY = 'km.demo.zones.v1'
+
+/** A zone added from the admin screen, as kept in the store. */
+interface StoredZone {
+  id: string
+  branchId: BranchId
+  type: string
+  name: string
+  fee: number
+  createdAt: string
+}
 const CHANGE_EVENT = 'km:orders-changed'
 
 export function memoryStore(): KeyValueStore {
@@ -56,6 +68,33 @@ export function createLocalApi(options: { store: KeyValueStore; now?: () => Date
     store.setItem(ORDERS_KEY, JSON.stringify(orders))
     events.dispatchEvent(new Event(CHANGE_EVENT))
   }
+  const readZones = (): StoredZone[] => {
+    try {
+      return JSON.parse(store.getItem(ZONES_KEY) ?? '[]') as StoredZone[]
+    } catch {
+      return []
+    }
+  }
+  const writeZones = (zones: StoredZone[]) => {
+    store.setItem(ZONES_KEY, JSON.stringify(zones))
+    events.dispatchEvent(new Event(CHANGE_EVENT))
+  }
+  const toZone = (z: StoredZone): DeliveryZone => ({
+    id: z.id,
+    type: z.type,
+    name: z.name,
+    label: zoneLabel(z.type, z.name),
+    fee: z.fee,
+    needsReview: false,
+    custom: true,
+  })
+  /** The branch's own list followed by the zones added from the admin screen. */
+  const zonesOf = (branchId: string): DeliveryZone[] => [
+    ...getZones(branchId),
+    ...readZones()
+      .filter((z) => z.branchId === branchId)
+      .map(toZone),
+  ]
   const update = (orderId: string, change: (o: Order) => Order): Order => {
     const orders = read()
     const i = orders.findIndex((o) => o.id === orderId)
@@ -86,7 +125,7 @@ export function createLocalApi(options: { store: KeyValueStore; now?: () => Date
       let deliveryFee = 0
       let zoneLabel: string | undefined
       if (input.orderType === 'delivery') {
-        const zone = input.zoneId ? findZone(branch.id, input.zoneId) : undefined
+        const zone = input.zoneId ? zonesOf(branch.id).find((z) => z.id === input.zoneId) : undefined
         if (!zone) throw new ApiError('INVALID_ZONE')
         if (!clean(input.street, 200) || !clean(input.building, 50)) throw new ApiError('ADDRESS_REQUIRED')
         deliveryFee = zone.fee
@@ -168,9 +207,47 @@ export function createLocalApi(options: { store: KeyValueStore; now?: () => Date
       return update(orderId, (o) => ({ ...o, posInvoiceNo: clean(value, 40) }))
     },
 
+    async listZones(branchId) {
+      return zonesOf(branchId)
+    },
+
+    async addZone(branchId, input: NewZoneInput) {
+      const branch = getBranch(branchId)
+      if (!branch) throw new ApiError('BRANCH_NOT_FOUND')
+      const existing = zonesOf(branch.id)
+      const type = input.type ?? DEFAULT_ZONE_TYPE
+      if (type !== DEFAULT_ZONE_TYPE && !existing.some((z) => z.type === type)) throw new ApiError('INVALID_ZONE_TYPE')
+      const name = cleanZoneName(input.name)
+      const label = zoneLabel(type, name)
+      if (name === '' || label.length < 2 || name.length > MAX_ZONE_NAME) throw new ApiError('INVALID_ZONE_NAME')
+      if (!Number.isInteger(input.fee) || input.fee < 0 || input.fee > MAX_ZONE_FEE) throw new ApiError('INVALID_ZONE_FEE')
+      const key = zoneKey(label)
+      if (existing.some((z) => zoneKey(z.label) === key)) throw new ApiError('ZONE_EXISTS')
+
+      const stored: StoredZone = {
+        id: `${branch.id}-n-${newId()}`,
+        branchId: branch.id,
+        type,
+        name,
+        fee: input.fee,
+        createdAt: now().toISOString(),
+      }
+      writeZones([...readZones(), stored])
+      return toZone(stored)
+    },
+
+    async removeZone(zoneId) {
+      const zones = readZones()
+      if (!zones.some((z) => z.id === zoneId)) {
+        const original = branches.some((b) => getZones(b.id).some((z) => z.id === zoneId))
+        throw new ApiError(original ? 'ZONE_NOT_REMOVABLE' : 'ZONE_NOT_FOUND')
+      }
+      writeZones(zones.filter((z) => z.id !== zoneId))
+    },
+
     subscribe(onChange) {
       const onStorage = (e: StorageEvent) => {
-        if (e.key === ORDERS_KEY) onChange()
+        if (e.key === ORDERS_KEY || e.key === ZONES_KEY) onChange()
       }
       events.addEventListener(CHANGE_EVENT, onChange)
       if (typeof window !== 'undefined') window.addEventListener('storage', onStorage)

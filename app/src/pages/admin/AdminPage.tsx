@@ -11,6 +11,7 @@ import { branches } from '@/lib/catalog'
 import { cairoDate } from '@/lib/format'
 import { nextStatus, statusLabel, type OrderStatus } from '@/lib/orderStatus'
 import { toAsciiDigits } from '@/lib/phone'
+import { AdminNav } from './AdminNav'
 import { CancelDialog } from './CancelDialog'
 import { OrderCard } from './OrderCard'
 import { OrderDetailsSheet } from './OrderDetailsSheet'
@@ -99,6 +100,7 @@ export function AdminPage() {
       <title>لوحة الكول سنتر | خليها مشاوي</title>
       <SiteHeader wide title="لوحة الكول سنتر" />
       <main className="mx-auto grid max-w-6xl gap-4 px-4 py-6">
+        <AdminNav />
         <h1 className="text-2xl font-extrabold">الطلبات</h1>
         {api.mode === 'local' ? (
           <p role="note" className="rounded-lg bg-amber-100 p-3 text-sm font-semibold text-amber-950">

@@ -280,4 +280,35 @@ describe('staff and tracking', () => {
       await db.query('update menu_item_sizes set price = 170 where id = $1', [size])
     })
   })
+
+  it('lets only an admin add a delivery zone, which customers can then order to', async () => {
+    await at('2027-01-05 12:00+02') // Tuesday noon in Cairo
+    const insert = `insert into delivery_zones (branch_id, name_ar, fee, fee_max) values ('tagamoa', 'مدينتي', 150, 150) returning id`
+    await expect(as('anon', () => db.query(insert))).rejects.toThrow(/row-level security|permission denied/)
+    await expect(as(STAFF, () => db.query(insert))).rejects.toThrow(/row-level security|permission denied/)
+    const id = await as(ADMIN, async () => Number((await db.query<{ id: number }>(insert)).rows[0].id))
+    await expect(as(ADMIN, () => db.query(insert))).rejects.toThrow(/duplicate key/) // one zone per name in a branch
+
+    const order = {
+      branch_id: 'tagamoa',
+      order_type: 'delivery',
+      customer_name: 'سارة',
+      phone: '01500000001',
+      zone_id: id,
+      street: 'شارع 1',
+      building: '5',
+      items: [{ size_id: await sizeId('tagamoa', 'صدور فراخ', 'ربع'), qty: 1 }],
+    }
+    // 250 items + 35 tax (14% of items) + 150 delivery
+    expect(await place(order)).toMatchObject({ subtotal: 250, delivery_fee: 150, tax_amount: 35, total: 435 })
+    // the zone cannot be used from another branch
+    await expect(place({ ...order, branch_id: 'zagazig', phone: '01500000002', items: [{ size_id: await sizeId('zagazig', 'صدور فراخ', 'ربع'), qty: 1 }] })).rejects.toThrow(/INVALID_ZONE/)
+
+    // once the admin switches it off, customers no longer see it or order to it
+    await as(ADMIN, () => db.query('update delivery_zones set is_active = false where id = $1', [id]))
+    await as('anon', async () => {
+      expect((await db.query('select 1 from delivery_zones where id = $1', [id])).rows).toHaveLength(0)
+    })
+    await expect(place({ ...order, phone: '01500000003' })).rejects.toThrow(/INVALID_ZONE/)
+  })
 })

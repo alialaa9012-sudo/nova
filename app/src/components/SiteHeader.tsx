@@ -18,7 +18,7 @@ export function SiteHeader({
   children?: ReactNode
 }) {
   return (
-    <header className="sticky top-0 z-30 bg-black text-white">
+    <header className="sticky top-[env(safe-area-inset-top,0px)] z-30 bg-black text-white">
       <div className={cn('mx-auto flex items-center gap-2 px-4 py-2', wide ? 'max-w-6xl' : 'max-w-3xl')}>
         {backTo ? (
           <Link to={backTo} className="rounded-md p-2 hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-white">

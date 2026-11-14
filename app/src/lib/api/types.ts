@@ -1,4 +1,4 @@
-import type { BranchId } from '../catalog'
+import type { BranchId, DeliveryZone } from '../catalog'
 import type { OrderStatus } from '../orderStatus'
 import type { OrderType, Totals } from '../pricing'
 
@@ -14,6 +14,14 @@ export interface PlaceOrderInput {
   landmark?: string
   notes?: string
   lines: { sizeId: string; qty: number }[]
+}
+
+export interface NewZoneInput {
+  /** One of the branch's own zone types (e.g. "مجاورة" at Ashry). Defaults to a plain area. */
+  type?: string
+  name: string
+  /** Delivery fee in whole pounds. */
+  fee: number
 }
 
 export interface OrderLine {
@@ -72,5 +80,11 @@ export interface OrdersApi {
   listOrders(): Promise<Order[]>
   setStatus(orderId: string, status: OrderStatus, note?: string): Promise<Order>
   setPosInvoice(orderId: string, value: string): Promise<Order>
+  /** Zones a customer of this branch can choose, including zones added by the admin. */
+  listZones(branchId: BranchId): Promise<DeliveryZone[]>
+  addZone(branchId: BranchId, input: NewZoneInput): Promise<DeliveryZone>
+  /** Removes a zone that was added through addZone. Placed orders keep their own copy. */
+  removeZone(zoneId: string): Promise<void>
+  /** Called when orders or zones change. */
   subscribe(onChange: () => void): () => void
 }

@@ -20,6 +20,12 @@ const MESSAGES: Record<string, string> = {
   NOT_ALLOWED: 'ليست لديك صلاحية لهذا الإجراء.',
   INVALID_TRANSITION: 'لا يمكن نقل الطلب لهذه الحالة.',
   CANCEL_REASON_REQUIRED: 'اختر سبب الإلغاء.',
+  INVALID_ZONE_NAME: 'اكتب اسم المنطقة، حتى 60 حرفاً.',
+  INVALID_ZONE_TYPE: 'اختر نوع المنطقة من القائمة.',
+  INVALID_ZONE_FEE: 'اكتب رسوم التوصيل رقماً صحيحاً من 0 إلى 5000 جنيه.',
+  ZONE_EXISTS: 'هذه المنطقة موجودة بالفعل في هذا الفرع.',
+  ZONE_NOT_FOUND: 'المنطقة غير موجودة.',
+  ZONE_NOT_REMOVABLE: 'هذه المنطقة من القائمة الأصلية للفرع ولا تُحذف من هنا.',
 }
 
 export function errorMessage(error: unknown): string {

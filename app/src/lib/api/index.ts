@@ -6,4 +6,4 @@ export const api: OrdersApi = createLocalApi({ store: browserStore() })
 
 export { errorMessage } from './errors'
 export { ApiError } from './types'
-export type { Order, OrdersApi, PlaceOrderInput } from './types'
+export type { NewZoneInput, Order, OrdersApi, PlaceOrderInput } from './types'

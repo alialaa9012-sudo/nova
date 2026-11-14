@@ -5,10 +5,27 @@ import { expect, test, type Page, type TestInfo } from '@playwright/test'
 // no WCAG 2.x A/AA violation.
 const MONDAY_NOON_CAIRO = new Date('2027-01-04T10:00:00Z')
 
+// Runs in the page (a string because the e2e TypeScript project has no DOM types).
+const WAIT_FOR_ANIMATIONS = `Promise.all(
+  document.getAnimations()
+    .filter((a) => Number.isFinite(Number(a.effect && a.effect.getComputedTiming().endTime)))
+    .map((a) => a.finished.catch(() => undefined))
+)`
+
 async function expectNoViolations(page: Page, testInfo: TestInfo, label: string) {
+  // Sheets and dialogs fade in. Colors measured mid-fade are blends with the page behind,
+  // not what people read, so let running (finite) animations finish before scanning.
+  await page.evaluate(WAIT_FOR_ANIMATIONS)
   const results = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']).analyze()
   await testInfo.attach(`axe-${label}`, { body: JSON.stringify(results.violations, null, 2), contentType: 'application/json' })
-  const summary = results.violations.map((v) => `${v.id}: ${v.nodes.map((n) => n.target.join(' ')).join(' | ')}`)
+  // One line per failing element, with the measured colors for contrast failures.
+  const summary = results.violations.flatMap((v) =>
+    v.nodes.map((n) => {
+      const data = n.any[0]?.data as { fgColor?: string; bgColor?: string; contrastRatio?: number } | undefined
+      const colors = data?.contrastRatio ? ` (${data.fgColor} on ${data.bgColor}, ${data.contrastRatio}:1)` : ''
+      return `${v.id}: ${n.target.join(' ')}${colors}`
+    }),
+  )
   expect(summary, `axe violations on ${label}`).toEqual([])
 }
 
@@ -96,5 +113,20 @@ test.describe('accessibility @a11y', () => {
     await list.getByRole('button', { name: 'إلغاء' }).click()
     await expect(page.getByRole('dialog', { name: 'إلغاء الطلب Z-0001' })).toBeVisible()
     await expectNoViolations(page, testInfo, 'cancel-dialog')
+  })
+  test('delivery zones screen with errors, an added zone and the delete confirmation', async ({ page }, testInfo) => {
+    await page.goto('/admin/zones')
+    await expect(page.getByRole('heading', { name: 'مناطق تحتاج سعراً (8)' })).toBeVisible()
+    await page.getByRole('button', { name: 'إضافة المنطقة' }).click()
+    await expect(page.getByText('اكتب اسم المنطقة.')).toBeVisible()
+    await expectNoViolations(page, testInfo, 'zones-ashry-with-errors')
+
+    await page.getByRole('button', { name: 'فرع التجمع الخامس' }).click()
+    await page.getByLabel('اسم المنطقة', { exact: true }).fill('مدينتي')
+    await page.getByLabel('رسوم التوصيل (ج.م)').fill('150')
+    await page.getByRole('button', { name: 'إضافة المنطقة' }).click()
+    await page.getByRole('button', { name: 'حذف مدينتي' }).click()
+    await expect(page.getByRole('button', { name: 'تأكيد الحذف' })).toBeVisible()
+    await expectNoViolations(page, testInfo, 'zones-added-confirm-delete')
   })
 })

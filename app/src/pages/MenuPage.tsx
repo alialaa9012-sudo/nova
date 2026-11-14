@@ -37,7 +37,7 @@ export function MenuPage() {
     <>
       <title>{`منيو فرع ${branch.name} | خليها مشاوي`}</title>
       <SiteHeader backTo="/" backLabel="كل الفروع" title={`فرع ${branch.name}`} />
-      <div className="sticky top-[72px] z-20 border-b bg-background/95 backdrop-blur">
+      <div className="sticky top-[calc(72px+env(safe-area-inset-top,0px))] z-20 border-b bg-background/95 backdrop-blur">
         <div className="mx-auto grid max-w-3xl gap-2 px-4 py-2">
           <OpenBadge branch={branch} now={now} />
           <nav aria-label="أقسام المنيو" className="-mx-4 overflow-x-auto px-4 pb-1">
@@ -97,7 +97,7 @@ export function MenuPage() {
       </main>
 
       {count > 0 ? (
-        <div className="fixed inset-x-0 bottom-0 z-30 border-t bg-background/95 p-3 backdrop-blur">
+        <div className="fixed inset-x-0 bottom-0 z-30 border-t bg-background/95 p-3 pb-[max(0.75rem,env(safe-area-inset-bottom,0px))] backdrop-blur">
           <div className="mx-auto max-w-3xl">
             <Button size="lg" className="h-12 w-full text-base" onClick={() => setCartOpen(true)}>
               <ShoppingBag aria-hidden="true" /> عرض السلة ({count}) · {formatEGP(cartSubtotal(lines))}

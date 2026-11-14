@@ -1,5 +1,5 @@
 import { Banknote } from 'lucide-react'
-import { useMemo, useState, type FormEvent } from 'react'
+import { useEffect, useMemo, useState, type FormEvent } from 'react'
 import { Link, useNavigate } from 'react-router'
 import { Field } from '@/components/Field'
 import { OrderSummary } from '@/components/OrderSummary'
@@ -12,7 +12,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { useNow } from '@/hooks/useNow'
 import { fieldProps } from '@/lib/a11y'
 import { api, errorMessage } from '@/lib/api'
-import { getZones, type DeliveryZone } from '@/lib/catalog'
+import type { DeliveryZone } from '@/lib/catalog'
 import { emptyCheckoutForm, validateCheckout, type CheckoutErrors, type CheckoutForm } from '@/lib/checkout'
 import { formatEGP } from '@/lib/format'
 import { formatTimeAr, getOpenStatus } from '@/lib/hours'
@@ -32,7 +32,20 @@ export function CheckoutPage() {
   const navigate = useNavigate()
   const now = useNow()
   const { lines, dispatch } = useCart()
-  const zones = useMemo(() => getZones(branch.id), [branch.id])
+  const [zones, setZones] = useState<DeliveryZone[]>([])
+  useEffect(() => {
+    let alive = true
+    const load = async () => {
+      const list = await api.listZones(branch.id)
+      if (alive) setZones(list)
+    }
+    void load()
+    const stop = api.subscribe(() => void load())
+    return () => {
+      alive = false
+      stop()
+    }
+  }, [branch.id])
   const zoneGroups = useMemo(() => {
     const groups = new Map<string, DeliveryZone[]>()
     for (const z of zones) groups.set(z.type, [...(groups.get(z.type) ?? []), z])

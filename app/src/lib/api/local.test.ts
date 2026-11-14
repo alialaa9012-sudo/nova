@@ -110,6 +110,90 @@ describe('local demo backend', () => {
   })
 })
 
+describe('delivery zones added by the admin', () => {
+  const code = async (run: () => Promise<unknown>) => {
+    try {
+      await run()
+      return 'OK'
+    } catch (e) {
+      return (e as ApiError).code
+    }
+  }
+
+  it('adds a zone to one branch only and charges its fee on orders', async () => {
+    const { api } = setup()
+    const before = await api.listZones('tagamoa')
+    expect(before).toEqual(getZones('tagamoa'))
+
+    const zone = await api.addZone('tagamoa', { name: '  مدينتي   الجديدة ', fee: 150 })
+    expect(zone).toMatchObject({ name: 'مدينتي الجديدة', label: 'مدينتي الجديدة', type: 'منطقة', fee: 150, custom: true })
+    expect(await api.listZones('tagamoa')).toHaveLength(before.length + 1)
+    expect((await api.listZones('zagazig')).map((z) => z.label)).not.toContain('مدينتي الجديدة')
+
+    const order = await api.placeOrder({ ...tagamoaDelivery(), zoneId: zone.id })
+    expect(order.zoneLabel).toBe('مدينتي الجديدة')
+    // 630 items + 88.2 tax (14% of items) + 150 delivery
+    expect(order.totals).toMatchObject({ subtotal: 630, deliveryFee: 150, tax: 88.2, total: 868.2 })
+    // the same zone id is not valid at another branch
+    expect(await code(() => api.placeOrder({ ...tagamoaDelivery(), branchId: 'zagazig', zoneId: zone.id }))).toBe('INVALID_ZONE')
+  })
+
+  it('refuses bad names, bad fees and duplicates, including spelling variants', async () => {
+    const { api } = setup()
+    expect(await code(() => api.addZone('tagamoa', { name: '   ', fee: 50 }))).toBe('INVALID_ZONE_NAME')
+    expect(await code(() => api.addZone('tagamoa', { name: 'ا', fee: 50 }))).toBe('INVALID_ZONE_NAME')
+    expect(await code(() => api.addZone('tagamoa', { name: 'م'.repeat(61), fee: 50 }))).toBe('INVALID_ZONE_NAME')
+    for (const fee of [-1, 5001, 12.5, Number.NaN]) {
+      expect(await code(() => api.addZone('tagamoa', { name: 'مدينتي', fee })), String(fee)).toBe('INVALID_ZONE_FEE')
+    }
+    // already in the branch file
+    expect(await code(() => api.addZone('tagamoa', { name: 'اللوتس الشمالية', fee: 80 }))).toBe('ZONE_EXISTS')
+    expect(await code(() => api.addZone('tagamoa', { name: 'اللوتس  الشماليه', fee: 80 }))).toBe('ZONE_EXISTS')
+    // added twice
+    expect(await code(() => api.addZone('tagamoa', { name: 'أرض الجولف', fee: 90 }))).toBe('OK')
+    expect(await code(() => api.addZone('tagamoa', { name: 'ارض الجولف', fee: 95 }))).toBe('ZONE_EXISTS')
+    // free delivery is allowed, and the same name can exist at another branch
+    expect(await code(() => api.addZone('zagazig', { name: 'أرض الجولف', fee: 0 }))).toBe('OK')
+    expect(await code(() => api.addZone('cairo' as never, { name: 'مدينتي', fee: 50 }))).toBe('BRANCH_NOT_FOUND')
+  })
+
+  it('accepts the branch own zone types and prices a zone the file left pending', async () => {
+    const { api } = setup()
+    // Ashry groups its zones; "مجاورة 39" is pending in the file (two prices), so customers do not see it.
+    expect((await api.listZones('ashry')).map((z) => z.label)).not.toContain('مجاورة 39')
+    const zone = await api.addZone('ashry', { type: 'مجاورة', name: '٣٩', fee: 45 })
+    expect(zone).toMatchObject({ type: 'مجاورة', name: '39', label: 'مجاورة 39', fee: 45 })
+    // "مجاورة 1" exists in the file, also when typed with Arabic digits
+    expect(await code(() => api.addZone('ashry', { type: 'مجاورة', name: '١', fee: 30 }))).toBe('ZONE_EXISTS')
+    // Tagamoa has plain areas only
+    expect(await code(() => api.addZone('tagamoa', { type: 'مجاورة', name: '5', fee: 30 }))).toBe('INVALID_ZONE_TYPE')
+  })
+
+  it('removes only zones that were added, and keeps placed orders intact', async () => {
+    const { api } = setup()
+    const zone = await api.addZone('tagamoa', { name: 'مدينتي', fee: 150 })
+    const order = await api.placeOrder({ ...tagamoaDelivery(), zoneId: zone.id })
+
+    const seen: number[] = []
+    const stop = api.subscribe(() => seen.push(1))
+    await api.removeZone(zone.id)
+    stop()
+    expect(seen).toHaveLength(1)
+
+    expect(await api.listZones('tagamoa')).toEqual(getZones('tagamoa'))
+    expect(await code(() => api.placeOrder({ ...tagamoaDelivery(), phone: '01112345678', zoneId: zone.id }))).toBe('INVALID_ZONE')
+    expect((await api.trackOrder(order.number, order.phone))?.totals.deliveryFee).toBe(150)
+    expect(await code(() => api.removeZone(getZones('tagamoa')[0].id))).toBe('ZONE_NOT_REMOVABLE')
+    expect(await code(() => api.removeZone('nope'))).toBe('ZONE_NOT_FOUND')
+  })
+
+  it('explains zone errors in Arabic', () => {
+    for (const c of ['INVALID_ZONE_NAME', 'INVALID_ZONE_TYPE', 'INVALID_ZONE_FEE', 'ZONE_EXISTS', 'ZONE_NOT_FOUND', 'ZONE_NOT_REMOVABLE']) {
+      expect(errorMessage(new ApiError(c)), c).not.toContain('خطأ غير متوقع')
+    }
+  })
+})
+
 describe('checkout validation', () => {
   it('requires name and phone always, and zone, street and building for delivery', () => {
     expect(validateCheckout(emptyCheckoutForm)).toEqual({
