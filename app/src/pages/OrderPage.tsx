@@ -36,14 +36,14 @@ export function OrderPage() {
     }
   }, [number, phone])
 
-  const header = <SiteHeader backTo="/" backLabel="الصفحة الرئيسية" title={`طلب ${number}`} />
+  const header = <SiteHeader narrow backTo="/" backLabel="الصفحة الرئيسية" title={`طلب ${number}`} />
 
   if (!phone) {
     return (
       <>
         <title>{`طلب ${number} | خليها مشاوي`}</title>
         {header}
-        <main className="mx-auto grid max-w-md gap-4 px-4 py-8">
+        <main className="mx-auto grid max-w-md gap-4 px-5 py-8">
           <h1 className="text-2xl font-extrabold">
             طلب رقم <span dir="ltr">{number}</span>
           </h1>
@@ -70,10 +70,10 @@ export function OrderPage() {
       <>
         <title>الطلب غير موجود | خليها مشاوي</title>
         {header}
-        <main className="mx-auto grid max-w-md gap-4 px-4 py-8 text-center">
+        <main className="mx-auto grid max-w-md gap-4 px-5 py-8 text-center">
           <h1 className="text-2xl font-bold">لم نجد هذا الطلب</h1>
           <p className="text-muted-foreground">تأكد من رقم الطلب ورقم الموبايل. التتبع متاح لطلبات آخر 3 أيام.</p>
-          <Button asChild size="lg" className="mx-auto h-12">
+          <Button asChild size="lg" className="mx-auto">
             <Link to="/track">تتبع طلب آخر</Link>
           </Button>
         </main>
@@ -86,28 +86,28 @@ export function OrderPage() {
     <>
       <title>{`طلب ${order.number} | خليها مشاوي`}</title>
       {header}
-      <main className="mx-auto grid max-w-3xl gap-4 px-4 py-6">
+      <main className="mx-auto grid max-w-3xl gap-4 px-5 pt-2 pb-8">
         {navState?.justPlaced ? (
-          <div role="status" className="rounded-xl bg-emerald-50 p-4 text-emerald-950">
-            <h1 className="text-2xl font-extrabold">تم إرسال طلبك</h1>
+          <div role="status" className="rounded-[20px] bg-emerald-50 p-4 text-emerald-950">
+            <h1 className="text-[22px] leading-[30px] font-extrabold">تم إرسال طلبك</h1>
             <p className="mt-1">
               رقم طلبك <strong dir="ltr">{order.number}</strong>. احتفظ به لمتابعة الطلب.
             </p>
           </div>
         ) : (
-          <h1 className="text-2xl font-extrabold">
+          <h1 className="text-[26px] leading-9 font-extrabold">
             طلب رقم <span dir="ltr">{order.number}</span>
           </h1>
         )}
 
-        <section aria-labelledby="status-title" className="grid gap-3 rounded-xl border bg-card p-4">
+        <section aria-labelledby="status-title" className="grid gap-3 rounded-[20px] bg-card p-4 shadow-card">
           <h2 id="status-title" className="font-bold">
             حالة الطلب
           </h2>
           <StatusTimeline order={order} />
         </section>
 
-        <section aria-labelledby="details-title" className="grid gap-3 rounded-xl border bg-card p-4">
+        <section aria-labelledby="details-title" className="grid gap-3 rounded-[20px] bg-card p-4 shadow-card">
           <h2 id="details-title" className="font-bold">
             تفاصيل الطلب
           </h2>
@@ -130,27 +130,27 @@ export function OrderPage() {
             taxPercent={branch?.charges.tax_percent ?? 0}
             servicePercent={branch?.charges.service_percent ?? 0}
           />
-          <p className="flex items-center gap-2 text-sm font-semibold">
+          <p className="flex min-h-11 items-center gap-2 rounded-xl bg-brand-tint px-3 text-sm font-semibold">
             <Banknote className="size-5" aria-hidden="true" /> الدفع كاش عند الاستلام
           </p>
         </section>
 
         <div className="flex flex-wrap gap-2">
           {branch ? (
-            <Button asChild variant="outline" size="lg" className="h-12">
-              <a href={`tel:${branch.phones[0]}`}>
-                <Phone aria-hidden="true" /> اتصل بالفرع
-              </a>
+            <Button asChild className="h-12 min-w-40 flex-1">
+              <Link to={`/branch/${branch.id}`}>اطلب مرة أخرى</Link>
             </Button>
           ) : null}
-          <Button asChild variant="outline" size="lg" className="h-12">
+          <Button asChild variant="outline" className="h-12">
             <a href={brand.whatsappUrl} target="_blank" rel="noopener noreferrer">
               <MessageCircle aria-hidden="true" /> واتساب
             </a>
           </Button>
           {branch ? (
-            <Button asChild size="lg" className="h-12">
-              <Link to={`/branch/${branch.id}`}>اطلب مرة أخرى</Link>
+            <Button asChild variant="outline" className="h-12">
+              <a href={`tel:${branch.phones[0]}`}>
+                <Phone aria-hidden="true" /> اتصل بالفرع
+              </a>
             </Button>
           ) : null}
         </div>

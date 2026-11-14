@@ -6,9 +6,12 @@ import zonesAshryRaw from '../../data/delivery_zones_ashry.csv?raw'
 import zonesTagamoaRaw from '../../data/delivery_zones_tagamoa.csv?raw'
 import zonesZagazigRaw from '../../data/delivery_zones_zagazig.csv?raw'
 import menuWhiteRaw from '../../data/menu_ashry_zagazig.csv?raw'
+import menuExtrasRaw from '../../data/menu_extras.csv?raw'
 import menuBlackRaw from '../../data/menu_tagamoa.csv?raw'
+import promotionsRaw from '../../data/promotions.json?raw'
 import type { WeeklyHours } from './hours'
 import type { Charges, TaxBase } from './pricing'
+import { imageKey } from './text'
 import { zoneLabel } from './zones'
 
 export type BranchId = 'ashry' | 'zagazig' | 'tagamoa'
@@ -32,6 +35,8 @@ export interface Brand {
   whatsappNumber: string
   whatsappUrl: string
   logoUrl: string
+  logoWidth: number
+  logoHeight: number
 }
 
 export interface MenuSize {
@@ -48,6 +53,30 @@ export interface MenuItem {
   sizes: MenuSize[]
   advanceNoticeHours: number | null
   needsReview: boolean
+  /** Photo URL, when a file named after the item exists in app/menu-images. */
+  image?: string
+  /** Short label over the photo, from data/menu_extras.csv. Never invented by the app. */
+  badge?: { text: string; style: BadgeStyle }
+}
+
+export type BadgeStyle = 'a' | 'b' | 'c'
+
+/** A banner on the home page. Shown only when the owner supplies real content. */
+export interface HeroBanner {
+  badge?: string
+  title: string
+  description?: string
+  ctaLabel: string
+  /** Opens this branch menu; without it the button scrolls to the branch list. */
+  branchId?: BranchId
+  image?: string
+}
+
+/** An offer strip on the menu page. Display only: the app applies no discount by itself. */
+export interface MenuStrip {
+  text: string
+  /** Short text inside the circle, e.g. "30%". */
+  circle?: string
 }
 
 export interface MenuCategory {
@@ -81,7 +110,7 @@ interface RawBranches {
   brand: {
     name_ar: string
     whatsapp: { number: string; url: string }
-    logo: { url_path: string }
+    logo: { url_path: string; width: number; height: number }
   }
   branches: {
     id: BranchId
@@ -106,6 +135,8 @@ export const brand: Brand = {
   whatsappUrl: raw.brand.whatsapp.url,
   // Follows the deploy base path, so the logo also loads when the app is not served from "/".
   logoUrl: import.meta.env.BASE_URL + raw.brand.logo.url_path.replace(/^\//, ''),
+  logoWidth: raw.brand.logo.width,
+  logoHeight: raw.brand.logo.height,
 }
 
 export const branches: Branch[] = raw.branches.map((b) => ({
@@ -128,6 +159,46 @@ export const branches: Branch[] = raw.branches.map((b) => ({
 
 export function getBranch(id: string): Branch | undefined {
   return branches.find((b) => b.id === id)
+}
+
+// Item photos: any image in app/menu-images named after an item is used for it, in every
+// menu and category that has an item with that name. No data file needs editing.
+const imageFiles = import.meta.glob<string>('../../menu-images/*.{jpg,jpeg,png,webp}', {
+  eager: true,
+  query: '?url',
+  import: 'default',
+})
+const fileName = (path: string) => path.slice(path.lastIndexOf('/') + 1)
+/** Photo files by the comparison key of their name (without the extension). */
+export const menuImages = new Map(
+  Object.entries(imageFiles).map(([path, url]) => [imageKey(fileName(path).replace(/\.[^.]+$/, '')), { url, file: fileName(path) }]),
+)
+
+/** Rows of data/menu_extras.csv keyed by menu file, category and item. */
+const menuExtras = new Map(parseCsv(menuExtrasRaw).map((row) => [`${row.menu_file}|${row.category}|${row.item}`, row]))
+const isBadgeStyle = (value: string): value is BadgeStyle => value === 'a' || value === 'b' || value === 'c'
+
+interface RawPromotions {
+  hero: { badge?: string; title: string; description?: string; cta_label: string; branch_id?: BranchId; image?: string }[]
+  menu_strip: { text: string; circle?: string; branches?: BranchId[] } | null
+}
+const promotions = JSON.parse(promotionsRaw) as RawPromotions
+
+export const heroBanners: HeroBanner[] = promotions.hero.map((h) => ({
+  badge: h.badge || undefined,
+  title: h.title,
+  description: h.description || undefined,
+  ctaLabel: h.cta_label,
+  branchId: h.branch_id,
+  image: h.image ? import.meta.env.BASE_URL + h.image.replace(/^\//, '') : undefined,
+}))
+
+export function getMenuStrip(branchId: string): MenuStrip | null {
+  const strip = promotions.menu_strip
+  if (!strip) return null
+  const only = strip.branches ?? []
+  if (only.length > 0 && !only.some((b) => b === branchId)) return null
+  return { text: strip.text, circle: strip.circle || undefined }
 }
 
 const MENU_SOURCES: Record<string, { prefix: string; text: string }> = {
@@ -155,6 +226,7 @@ function buildMenu(file: string): MenuCategory[] {
     const key = `${row.category}|${row.item}`
     let item = items.get(key)
     if (!item) {
+      const extra = menuExtras.get(`${file}|${key}`)
       item = {
         id: `${source.prefix}${items.size + 1}`,
         category: row.category,
@@ -163,6 +235,8 @@ function buildMenu(file: string): MenuCategory[] {
         sizes: [],
         advanceNoticeHours: row.advance_notice_hours ? Number(row.advance_notice_hours) : null,
         needsReview: false,
+        image: menuImages.get(imageKey(row.item))?.url,
+        badge: extra?.badge ? { text: extra.badge, style: isBadgeStyle(extra.badge_style) ? extra.badge_style : 'a' } : undefined,
       }
       items.set(key, item)
       category.items.push(item)

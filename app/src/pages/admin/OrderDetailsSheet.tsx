@@ -97,7 +97,7 @@ export function OrderDetailsSheet({
             </Button>
             <Field id="pos-invoice" label="رقم الفاتورة في Crystal Mind" optional>
               <div className="flex gap-2">
-                <Input id="pos-invoice" dir="ltr" className="h-10 text-start" value={invoice} onChange={(e) => setInvoice(e.target.value)} />
+                <Input id="pos-invoice" dir="ltr" className="h-11 text-end" value={invoice} onChange={(e) => setInvoice(e.target.value)} />
                 <Button variant="outline" onClick={() => void saveInvoice()}>
                   حفظ
                 </Button>

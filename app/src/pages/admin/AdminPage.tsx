@@ -11,6 +11,7 @@ import { branches } from '@/lib/catalog'
 import { cairoDate } from '@/lib/format'
 import { nextStatus, statusLabel, type OrderStatus } from '@/lib/orderStatus'
 import { toAsciiDigits } from '@/lib/phone'
+import { cn } from '@/lib/utils'
 import { AdminNav } from './AdminNav'
 import { CancelDialog } from './CancelDialog'
 import { OrderCard } from './OrderCard'
@@ -98,22 +99,22 @@ export function AdminPage() {
   return (
     <>
       <title>لوحة الكول سنتر | خليها مشاوي</title>
-      <SiteHeader wide title="لوحة الكول سنتر" />
-      <main className="mx-auto grid max-w-6xl gap-4 px-4 py-6">
+      <SiteHeader wide logo title="لوحة الكول سنتر" />
+      <main className="mx-auto grid max-w-[1280px] gap-4 px-5 pt-2 pb-8 md:px-6">
         <AdminNav />
-        <h1 className="text-2xl font-extrabold">الطلبات</h1>
+        <h1 className="text-[26px] leading-9 font-extrabold">الطلبات</h1>
         {api.mode === 'local' ? (
-          <p role="note" className="rounded-lg bg-amber-100 p-3 text-sm font-semibold text-amber-950">
+          <p role="note" className="rounded-2xl bg-amber-100 p-3 text-sm font-semibold text-amber-950">
             وضع تجريبي: تظهر هنا طلبات هذا المتصفح فقط. بعد ربط قاعدة البيانات تصل الطلبات من كل الأجهزة، ويدخل الموظفون بحساباتهم.
           </p>
         ) : null}
-        <div className="grid gap-3 rounded-xl border bg-card p-4 sm:grid-cols-3">
+        <div className="grid gap-3 rounded-[20px] bg-card p-4 shadow-card sm:grid-cols-3">
           <Field id="f-branch" label="الفرع">
             <select
               id="f-branch"
               value={branchFilter}
               onChange={(e) => setBranchFilter(e.target.value)}
-              className="h-10 w-full rounded-md border border-input bg-background px-3"
+              className="h-[52px] w-full rounded-2xl border border-input bg-surface px-4 text-base outline-none focus-visible:border-brand focus-visible:ring-1 focus-visible:ring-brand"
             >
               <option value="all">كل الفروع</option>
               {branches.map((b) => (
@@ -124,15 +125,22 @@ export function AdminPage() {
             </select>
           </Field>
           <Field id="f-date" label="التاريخ">
-            <Input id="f-date" type="date" className="h-10" value={date} onChange={(e) => setDate(e.target.value)} />
+            <Input id="f-date" type="date" value={date} onChange={(e) => setDate(e.target.value)} />
           </Field>
           <Field id="f-search" label="بحث برقم الطلب أو الموبايل">
-            <Input id="f-search" type="search" dir="ltr" className="h-10 text-start" value={query} onChange={(e) => setQuery(e.target.value)} />
+            <Input id="f-search" type="search" dir="ltr" className="text-end" value={query} onChange={(e) => setQuery(e.target.value)} />
           </Field>
         </div>
         <div role="group" aria-label="تصفية حسب الحالة" className="flex flex-wrap gap-2">
           {FILTERS.map((f) => (
-            <Button key={f.value} variant={filter === f.value ? 'default' : 'outline'} aria-pressed={filter === f.value} onClick={() => setFilter(f.value)}>
+            <Button
+              key={f.value}
+              variant="outline"
+              // Dark when active, so staff filters never look like the orange customer actions.
+              className={cn('h-10 px-4 text-[13px] font-semibold', filter === f.value && 'bg-foreground text-white shadow-none hover:bg-foreground active:bg-foreground')}
+              aria-pressed={filter === f.value}
+              onClick={() => setFilter(f.value)}
+            >
               {f.label} ({countOf(f.value)})
             </Button>
           ))}
@@ -140,9 +148,9 @@ export function AdminPage() {
         {!loaded ? (
           <p aria-busy="true">جاري تحميل الطلبات…</p>
         ) : visible.length === 0 ? (
-          <p className="rounded-xl border bg-card p-8 text-center text-muted-foreground">لا توجد طلبات بهذه التصفية.</p>
+          <p className="rounded-[20px] bg-card p-8 text-center text-muted-foreground shadow-card">لا توجد طلبات بهذه التصفية.</p>
         ) : (
-          <ul className="grid gap-3 md:grid-cols-2" aria-label="قائمة الطلبات">
+          <ul className="grid gap-3 lg:grid-cols-2 min-[1440px]:grid-cols-3" aria-label="قائمة الطلبات">
             {visible.map((o) => (
               <li key={o.id}>
                 <OrderCard order={o} now={now} onAdvance={() => void advance(o)} onCancel={() => setCancelId(o.id)} onOpen={() => setDetailId(o.id)} />

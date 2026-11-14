@@ -130,7 +130,8 @@ type BranchesFile = {
     social: Record<string, { handle: string; url: string; source: string; url_verified: boolean }[]>
     linktree: string
     whatsapp: { number: string; url: string; scope: string }
-    logo: { file: string; url_path: string; width: number; height: number }
+    logo: { file: string; url_path: string; width: number; height: number; background: string }
+    logo_dark: { file: string; url_path: string }
   }
   branches: {
     id: string
@@ -228,9 +229,12 @@ describe('review sheet and branches', () => {
     expect(brand.whatsapp.number).toMatch(/^01[0125]\d{8}$/)
     expect(brand.whatsapp.url).toBe(`https://wa.me/20${brand.whatsapp.number.slice(1)}`)
     expect(brand.whatsapp.scope).toBe('all_branches')
-    expect(brand.logo.url_path).toBe('/brand/logo-dark.jpg')
+    // the light, transparent logo is the one the app shows; the dark one stays available
+    expect(brand.logo.url_path).toBe('/brand/logo.png')
+    expect(brand.logo.background).toBe('transparent')
     expect(brand.logo.width).toBeGreaterThan(0)
     expect(brand.logo.height).toBeGreaterThan(0)
+    expect(brand.logo_dark.url_path).toBe('/brand/logo-dark.jpg')
   })
 
   it('records the online charges decided by the owner: tax only in Tagamoa', () => {

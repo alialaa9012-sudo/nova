@@ -1,5 +1,6 @@
 // Helpers shared by the zone admin screen and the backends.
 import { toAsciiDigits } from './phone'
+import { searchKey } from './text'
 
 export const DEFAULT_ZONE_TYPE = 'منطقة'
 export const MAX_ZONE_NAME = 60
@@ -15,20 +16,8 @@ export function cleanZoneName(name: string): string {
   return toAsciiDigits(name).replace(/\s+/g, ' ').trim()
 }
 
-/**
- * Comparison key that treats spelling variants as the same zone:
- * Arabic or ASCII digits, alef forms, ta marbuta/ha, alef maqsura/ya, tatweel, spacing.
- */
-export function zoneKey(label: string): string {
-  return toAsciiDigits(label)
-    .replace(/ـ/g, '')
-    .replace(/[أإآ]/g, 'ا')
-    .replace(/ة/g, 'ه')
-    .replace(/ى/g, 'ي')
-    .replace(/\s+/g, ' ')
-    .trim()
-    .toLowerCase()
-}
+/** Comparison key that treats spelling variants as the same zone (see searchKey). */
+export const zoneKey = searchKey
 
 /** Whole pounds from 0 to MAX_ZONE_FEE, typed with Arabic or ASCII digits; null when not valid. */
 export function parseZoneFee(text: string): number | null {

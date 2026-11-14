@@ -1,16 +1,13 @@
 import { expect, test } from '@playwright/test'
-
-// Monday 12:00 Cairo: all branches are open. Date is frozen, timers keep running.
-const MONDAY_NOON_CAIRO = new Date('2027-01-04T10:00:00Z')
+import { MONDAY_NOON_CAIRO, pickZone } from './helpers.ts'
 
 test.beforeEach(async ({ page }) => {
   await page.clock.setFixedTime(MONDAY_NOON_CAIRO)
 })
 
 test('the admin adds a delivery zone to one branch and a customer orders to it', async ({ page }) => {
-  // Reach the board from the demo banner, then the zones tab.
-  await page.goto('/')
-  await page.getByRole('link', { name: 'لوحة الكول سنتر' }).click()
+  // Staff open the board by its address, then the zones tab.
+  await page.goto('/admin')
   await page.getByRole('link', { name: 'مناطق التوصيل' }).click()
   await expect(page.getByRole('heading', { level: 1, name: 'مناطق التوصيل' })).toBeVisible()
 
@@ -40,7 +37,7 @@ test('the admin adds a delivery zone to one branch and a customer orders to it',
   await expect(page.getByText('لا توجد منطقة بهذا الاسم.')).toBeVisible()
 
   // The customer orders to the new zone: 250 items + 35 tax + 150 delivery.
-  await page.getByRole('link', { name: 'واجهة العميل' }).click()
+  await page.goto('/')
   await page.getByRole('link', { name: 'اطلب من فرع التجمع الخامس' }).click()
   await page.getByRole('button', { name: 'أضف صدور فراخ' }).click()
   await page.getByRole('dialog', { name: 'صدور فراخ' }).getByRole('button', { name: 'أضف للسلة · 250 ج.م' }).click()
@@ -48,7 +45,7 @@ test('the admin adds a delivery zone to one branch and a customer orders to it',
   await page.getByRole('dialog', { name: 'السلة' }).getByRole('link', { name: 'إتمام الطلب' }).click()
   await page.getByLabel('الاسم').fill('سارة')
   await page.getByLabel('رقم الموبايل').fill('01098765432')
-  await page.getByLabel('المنطقة').selectOption({ label: 'مدينتي · 150 ج.م' })
+  await pickZone(page, 'مدينتي')
   await page.getByLabel('الشارع').fill('شارع 1')
   await page.getByLabel('رقم العمارة').fill('5')
   await page.getByRole('button', { name: 'تأكيد الطلب · 435 ج.م' }).click()

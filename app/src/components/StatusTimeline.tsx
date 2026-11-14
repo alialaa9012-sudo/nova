@@ -42,7 +42,7 @@ export function StatusTimeline({ order }: { order: Order }) {
             <span
               className={cn(
                 'flex size-8 shrink-0 items-center justify-center rounded-full border-2 text-sm font-bold',
-                done ? 'border-emerald-700 bg-emerald-700 text-white' : 'border-stone-400 text-stone-700',
+                done ? 'border-emerald-700 bg-emerald-700 text-white' : 'border-stone-300 text-muted-foreground',
               )}
             >
               {done ? <Check className="size-4" aria-hidden="true" /> : i + 1}

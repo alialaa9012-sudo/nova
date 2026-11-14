@@ -1,4 +1,3 @@
-import { Separator } from '@/components/ui/separator'
 import { formatEGP } from '@/lib/format'
 import type { OrderType, Totals } from '@/lib/pricing'
 import { cn } from '@/lib/utils'
@@ -13,9 +12,9 @@ export interface SummaryLine {
 
 function Row({ label, value, strong }: { label: string; value: string; strong?: boolean }) {
   return (
-    <div className={cn('flex justify-between gap-3', strong && 'text-base font-bold')}>
-      <dt>{label}</dt>
-      <dd className="tabular-nums">{value}</dd>
+    <div className={cn('flex items-baseline justify-between gap-3', strong && 'pt-1 text-foreground')}>
+      <dt className={cn(strong ? 'text-base font-bold' : 'text-muted-foreground')}>{label}</dt>
+      <dd className={cn('tabular-nums', strong && 'text-lg leading-[26px] font-extrabold')}>{value}</dd>
     </div>
   )
 }
@@ -39,17 +38,17 @@ export function OrderSummary({
     <div className="grid gap-3">
       <ul className="grid gap-2">
         {lines.map((l) => (
-          <li key={l.key} className="flex justify-between gap-3 text-sm">
+          <li key={l.key} className="flex justify-between gap-3 text-sm leading-5">
             <span>
               {l.qty} × {l.name}
               {l.sizeLabel ? ` (${l.sizeLabel})` : ''}
             </span>
-            <span className="shrink-0 tabular-nums">{formatEGP(l.lineTotal)}</span>
+            <span className="shrink-0 font-semibold tabular-nums">{formatEGP(l.lineTotal)}</span>
           </li>
         ))}
       </ul>
-      <Separator />
-      <dl className="grid gap-1 text-sm">
+      <hr className="border-brand-tint" />
+      <dl className="grid gap-1.5 text-sm leading-5">
         <Row label="المجموع" value={formatEGP(totals.subtotal)} />
         {orderType === 'delivery' ? (
           <Row label="التوصيل" value={zonePending ? 'يُحدد بعد اختيار المنطقة' : formatEGP(totals.deliveryFee)} />

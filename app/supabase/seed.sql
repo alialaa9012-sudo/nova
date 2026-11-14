@@ -3,7 +3,7 @@
 begin;
 
 insert into public.app_settings (key, value) values
-  ('brand', '{"name_ar": "خليها مشاوي", "name_en": "Khaliha Mashawy", "whatsapp": {"number": "01061005627", "url": "https://wa.me/201061005627", "scope": "all_branches"}, "logo_url": "/brand/logo-dark.jpg"}'::jsonb);
+  ('brand', '{"name_ar": "خليها مشاوي", "name_en": "Khaliha Mashawy", "whatsapp": {"number": "01061005627", "url": "https://wa.me/201061005627", "scope": "all_branches"}, "logo_url": "/brand/logo.png"}'::jsonb);
 
 insert into public.branches (id, code, name_ar, address_ar, phones, maps_url, lat, lng, timezone, service_percent, tax_percent, tax_base, sort_order) values
   ('ashry', 'A', 'العاشر من رمضان', 'العاشر من رمضان - أمام نادي الرواد - البوابة الرئيسية - بجوار بنزينة موبيل', array['0554494299', '01068058870', '01110606788']::text[], 'https://www.google.com/maps/place/%D9%85%D8%B7%D8%B9%D9%85+%D8%AE%D9%84%D9%8A%D9%87%D8%A7+%D9%85%D8%B4%D8%A7%D9%88%D9%8A+(%D9%85%D8%B4%D9%88%D9%8A%D8%A7%D8%AA+-+%D9%85%D9%86%D8%AF%D9%8A)%E2%80%AD/@30.6122187,30.2877589,8z/data=!4m6!3m5!1s0x1457fdede843fb77:0x802a3f8441fb7368!8m2!3d30.2814822!4d31.7518513!16s%2Fg%2F11swd30v6l', 30.2814822, 31.7518513, 'Africa/Cairo', 0, 0, null, 1),

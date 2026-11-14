@@ -1,9 +1,9 @@
 import AxeBuilder from '@axe-core/playwright'
 import { expect, test, type Page, type TestInfo } from '@playwright/test'
+import { MONDAY_NOON_CAIRO, pickZone } from './helpers.ts'
 
 // Accessibility scans with axe-core (Deque). Each screen and open dialog must have
 // no WCAG 2.x A/AA violation.
-const MONDAY_NOON_CAIRO = new Date('2027-01-04T10:00:00Z')
 
 // Runs in the page (a string because the e2e TypeScript project has no DOM types).
 const WAIT_FOR_ANIMATIONS = `Promise.all(
@@ -74,7 +74,11 @@ test.describe('accessibility @a11y', () => {
 
     await page.getByLabel('الاسم').fill('سارة')
     await page.getByLabel('رقم الموبايل').fill('01098765432')
-    await page.getByLabel('المنطقة').selectOption({ label: 'اللوتس الشمالية · 75 ج.م' })
+    // the open zone list is scanned too, then a zone is chosen from it
+    await page.getByRole('combobox', { name: 'المنطقة' }).fill('اللوتس')
+    await expect(page.getByRole('listbox', { name: 'المناطق' })).toBeVisible()
+    await expectNoViolations(page, testInfo, 'checkout-zone-list')
+    await pickZone(page, 'اللوتس الشمالية')
     await page.getByLabel('الشارع').fill('شارع التسعين')
     await page.getByLabel('رقم العمارة').fill('12')
     await page.getByRole('button', { name: /^تأكيد الطلب/ }).click()

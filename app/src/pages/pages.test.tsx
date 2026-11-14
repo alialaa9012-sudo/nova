@@ -87,7 +87,13 @@ describe('ordering', () => {
     expect(screen.getByLabelText('الاسم')).toHaveFocus()
     expect(screen.getByLabelText('الاسم')).toHaveAttribute('aria-invalid', 'true')
 
-    await user.selectOptions(screen.getByLabelText('المنطقة'), screen.getByRole('option', { name: 'اللوتس الشمالية · 75 ج.م' }))
+    // the zone field filters while typing, also with a different spelling
+    const zone = screen.getByRole('combobox', { name: 'المنطقة' })
+    await user.type(zone, 'اللوتس الشماليه')
+    expect(screen.getAllByRole('option')).toHaveLength(1)
+    await user.click(screen.getByRole('option', { name: /اللوتس الشمالية/ }))
+    expect(zone).toHaveValue('اللوتس الشمالية · 75 ج.م')
+    expect(screen.queryByRole('listbox')).not.toBeInTheDocument()
     expect(screen.getByText('ضريبة 14٪')).toBeInTheDocument()
     expect(screen.getByText('70 ج.م')).toBeInTheDocument() // 14% of 500
     expect(screen.getByRole('button', { name: 'تأكيد الطلب · 645 ج.م' })).toBeEnabled()
@@ -176,7 +182,8 @@ describe('delivery zones screen', () => {
       JSON.stringify([{ sizeId: item.sizes[0].id, itemId: item.id, name: item.name, sizeLabel: 'ربع', unitPrice: 250, qty: 1 }]),
     )
     await router.navigate('/branch/tagamoa/checkout')
-    await user.selectOptions(await screen.findByLabelText('المنطقة'), await screen.findByRole('option', { name: 'مدينتي · 150 ج.م' }))
+    await user.type(await screen.findByRole('combobox', { name: 'المنطقة' }), 'مدينتي')
+    await user.click(await screen.findByRole('option', { name: /مدينتي/ }))
     expect(screen.getByRole('button', { name: 'تأكيد الطلب · 435 ج.م' })).toBeEnabled() // 250 + 35 tax + 150
 
     // other branches do not get it
@@ -211,5 +218,57 @@ describe('delivery zones screen', () => {
     expect(await screen.findByRole('heading', { name: 'مناطق تحتاج سعراً (7)' })).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: 'مناطق فرع العاشر من رمضان (137)' })).toBeInTheDocument()
     expect((await api.listZones('ashry')).at(-1)).toMatchObject({ label: 'مجاورة 39', fee: 45, custom: true })
+  })
+})
+
+describe('menu search and zone picker', () => {
+  it('filters the menu by name, ignoring spelling variants, and says when nothing matches', async () => {
+    const user = userEvent.setup()
+    renderAt('/branch/ashry')
+    const search = screen.getByRole('searchbox', { name: 'ابحث عن صنف' })
+    await user.type(search, 'كفته')
+    expect(screen.getByRole('button', { name: 'أضف كفتة فراخ' })).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'أضف صدور فراخ' })).not.toBeInTheDocument()
+    // sections and category chips without a match are hidden
+    expect(screen.queryByRole('heading', { level: 2, name: 'المشروبات' })).not.toBeInTheDocument()
+    expect(within(screen.getByRole('navigation', { name: 'أقسام المنيو' })).queryByRole('link', { name: 'المشروبات' })).not.toBeInTheDocument()
+
+    await user.clear(search)
+    await user.type(search, 'بيتزا')
+    expect(screen.getByText('لا يوجد صنف بهذا الاسم.')).toBeInTheDocument()
+    await user.clear(search)
+    expect(screen.getByRole('heading', { level: 2, name: 'المشروبات' })).toBeInTheDocument()
+  })
+
+  it('chooses a delivery zone with the keyboard and clears the choice when the text changes', async () => {
+    const user = userEvent.setup()
+    const item = getMenu('tagamoa')[0].items.find((i) => i.name === 'صدور فراخ')!
+    localStorage.setItem(
+      'km.cart.v1.tagamoa',
+      JSON.stringify([{ sizeId: item.sizes[0].id, itemId: item.id, name: item.name, sizeLabel: 'ربع', unitPrice: 250, qty: 1 }]),
+    )
+    renderAt('/branch/tagamoa/checkout')
+    const zone = screen.getByRole('combobox', { name: 'المنطقة' })
+    await user.click(zone)
+    expect(await screen.findAllByRole('option')).toHaveLength(71)
+
+    await user.type(zone, 'اللوتس')
+    const options = screen.getAllByRole('option')
+    expect(options.length).toBeGreaterThan(1)
+    expect(zone).toHaveAttribute('aria-activedescendant', options[0].id)
+    await user.keyboard('{ArrowDown}')
+    expect(zone).toHaveAttribute('aria-activedescendant', options[1].id)
+    await user.keyboard('{ArrowUp}{Enter}')
+    expect(zone).toHaveAttribute('aria-expanded', 'false')
+    expect((zone as HTMLInputElement).value).toMatch(/^اللوتس.* · \d+ ج\.م$/)
+    expect(screen.queryByText('يُحدد بعد اختيار المنطقة')).not.toBeInTheDocument()
+
+    // editing the text drops the choice, so an unfinished search is never ordered to
+    await user.type(zone, 'x')
+    expect(screen.getByText('يُحدد بعد اختيار المنطقة')).toBeInTheDocument()
+    expect(screen.getByRole('status')).toHaveTextContent('لا توجد منطقة بهذا الاسم.')
+    await user.keyboard('{Escape}')
+    await user.click(screen.getByRole('button', { name: /^تأكيد الطلب/ }))
+    expect(screen.getByText('اختر المنطقة.')).toBeInTheDocument()
   })
 })

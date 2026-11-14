@@ -1,7 +1,5 @@
 import { expect, test } from '@playwright/test'
-
-// Monday 12:00 Cairo: all branches are open. Date is frozen, timers keep running.
-const MONDAY_NOON_CAIRO = new Date('2027-01-04T10:00:00Z')
+import { MONDAY_NOON_CAIRO } from './helpers.ts'
 
 test.beforeEach(async ({ page }) => {
   await page.clock.setFixedTime(MONDAY_NOON_CAIRO)
@@ -20,6 +18,37 @@ test.describe('home page', () => {
     }
     await expect(page.getByText('مفتوح الآن حتى 12 منتصف الليل')).toHaveCount(3)
     await expect(page.getByRole('note').first()).toContainText('نسخة تجريبية')
+    // customers never get a way into the staff board from the site itself
+    await expect(page.getByRole('link', { name: 'لوحة الكول سنتر' })).toHaveCount(0)
+    await expect(page.getByRole('img', { name: 'خليها مشاوي' })).toHaveJSProperty('complete', true)
+  })
+
+  test('phones get a bottom navigation, wide screens get the same links in the header', async ({ page, isMobile }) => {
+    await page.goto('/')
+    const nav = page.getByRole('navigation', { name: 'التنقل الرئيسي' })
+    if (isMobile) {
+      await expect(nav.getByRole('link', { name: 'الرئيسية' })).toHaveAttribute('aria-current', 'page')
+      await nav.getByRole('link', { name: 'تتبع طلب' }).click()
+      await expect(page).toHaveURL(/\/track$/)
+      await expect(page.getByRole('navigation', { name: 'التنقل الرئيسي' }).getByRole('link', { name: 'تتبع طلب' })).toHaveAttribute('aria-current', 'page')
+    } else {
+      await expect(nav).toBeHidden()
+      await page.getByRole('banner').getByRole('link', { name: 'تتبع طلب' }).click()
+      await expect(page).toHaveURL(/\/track$/)
+    }
+  })
+
+  test('the menu highlights the section in view and search narrows it', async ({ page }) => {
+    await page.goto('/branch/ashry')
+    const bar = page.getByRole('navigation', { name: 'أقسام المنيو' })
+    await expect(bar.getByRole('link', { name: 'المشويات' })).toHaveAttribute('aria-current', 'true')
+    await bar.getByRole('link', { name: 'المشروبات' }).click()
+    await expect(bar.getByRole('link', { name: 'المشروبات' })).toHaveAttribute('aria-current', 'true')
+    await expect(page.getByRole('heading', { level: 2, name: 'المشروبات' })).toBeInViewport()
+
+    await page.getByRole('searchbox', { name: 'ابحث عن صنف' }).fill('كفته')
+    await expect(page.getByRole('button', { name: 'أضف كفتة فراخ' })).toBeVisible()
+    await expect(page.getByRole('button', { name: 'أضف صدور فراخ' })).toHaveCount(0)
   })
 
   test('shows when a closed branch opens', async ({ page }) => {

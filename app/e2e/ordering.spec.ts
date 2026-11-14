@@ -1,7 +1,5 @@
 import { expect, test, type Page } from '@playwright/test'
-
-// Monday 12:00 Cairo: all branches are open. Date is frozen, timers keep running.
-const MONDAY_NOON_CAIRO = new Date('2027-01-04T10:00:00Z')
+import { MONDAY_NOON_CAIRO, pickZone } from './helpers.ts'
 
 test.beforeEach(async ({ page }) => {
   await page.clock.setFixedTime(MONDAY_NOON_CAIRO)
@@ -30,7 +28,8 @@ test('a delivery order at Tagamoa: zone fee, 14% tax, order number, then the cal
 
   await page.getByLabel('الاسم').fill('سارة')
   await page.getByLabel('رقم الموبايل').fill('01098765432')
-  await page.getByLabel('المنطقة').selectOption({ label: 'اللوتس الشمالية · 75 ج.م' })
+  await pickZone(page, 'اللوتس الشمالية')
+  await expect(page.getByRole('combobox', { name: 'المنطقة' })).toHaveValue('اللوتس الشمالية · 75 ج.م')
   await page.getByLabel('الشارع').fill('شارع التسعين')
   await page.getByLabel('رقم العمارة').fill('12')
   // 250 items + 35 tax (14% of items) + 75 delivery

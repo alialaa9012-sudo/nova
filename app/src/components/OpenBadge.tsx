@@ -18,12 +18,12 @@ export function OpenBadge({ branch, now, className }: { branch: Branch; now: Dat
   return (
     <span
       className={cn(
-        'inline-flex w-fit items-center gap-1.5 rounded-full px-3 py-1 text-sm font-semibold',
+        'inline-flex w-fit items-center gap-1.5 rounded-full px-2.5 py-1.5 text-xs leading-4 font-semibold',
         status.isOpen ? 'bg-emerald-100 text-emerald-900' : 'bg-stone-200 text-stone-900',
         className,
       )}
     >
-      <Clock className="size-4" aria-hidden="true" />
+      <Clock className="size-3.5" aria-hidden="true" />
       {text}
     </span>
   )

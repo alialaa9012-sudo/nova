@@ -14,7 +14,8 @@ createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <DirectionProvider dir="rtl">
       <RouterProvider router={router} />
-      <Toaster position="top-center" richColors />
+      {/* Above the floating cart bar and the bottom navigation. */}
+      <Toaster position="bottom-center" richColors offset={{ bottom: 96 }} mobileOffset={{ bottom: 96 }} />
     </DirectionProvider>
   </StrictMode>,
 )

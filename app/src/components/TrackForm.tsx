@@ -32,7 +32,7 @@ export function TrackForm({ fixedNumber, onDone }: { fixedNumber?: string; onDon
           <Input
             {...fieldProps('order-number', errors.number)}
             dir="ltr"
-            className="h-11 text-start"
+            className="text-end"
             placeholder="A-0012"
             value={number}
             onChange={(e) => setNumber(e.target.value)}
@@ -46,13 +46,13 @@ export function TrackForm({ fixedNumber, onDone }: { fixedNumber?: string; onDon
           inputMode="tel"
           autoComplete="tel"
           dir="ltr"
-          className="h-11 text-start"
+          className="text-end"
           placeholder="01XXXXXXXXX"
           value={phone}
           onChange={(e) => setPhone(e.target.value)}
         />
       </Field>
-      <Button type="submit" size="lg" className="h-12 text-base">
+      <Button type="submit" size="lg" className="w-full">
         عرض حالة الطلب
       </Button>
     </form>

@@ -60,13 +60,22 @@
       "scope": "all_branches"
     },
     "logo": {
+      "file": "public/brand/logo.png",
+      "url_path": "/brand/logo.png",
+      "width": 530,
+      "height": 471,
+      "format": "png",
+      "background": "transparent",
+      "note": "الشعار الفاتح الذي أرسله المالك (PNG شفاف 863×811)، مقصوص الهوامش الفارغة فقط دون تغيير الرسم. يصلح للخلفيات الفاتحة"
+    },
+    "logo_dark": {
       "file": "public/brand/logo-dark.jpg",
       "url_path": "/brand/logo-dark.jpg",
       "width": 1536,
       "height": 1024,
       "format": "jpeg",
       "background": "solid black, no transparency",
-      "note": "نسخة ذهبية ثلاثية الأبعاد أرسلها المالك. تصلح للخلفيات الداكنة فقط، وللخلفيات الفاتحة يلزم PNG أو SVG شفاف"
+      "note": "نسخة ذهبية ثلاثية الأبعاد أرسلها المالك. تصلح للخلفيات الداكنة فقط"
     },
     "social_note": "حسابا إنستجرام صحيحان بقرار المالك. حساب Mashawy.eg مطبوع على المنيو بجانب أيقونتي إنستجرام وفيسبوك، وروابطه مشتقة من الاسم وغير موثقة لأن الصفحات خلف تسجيل دخول"
   },

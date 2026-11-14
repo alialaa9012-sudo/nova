@@ -123,12 +123,12 @@ export function ZonesPage() {
   return (
     <>
       <title>مناطق التوصيل | خليها مشاوي</title>
-      <SiteHeader wide title="لوحة الكول سنتر" />
-      <main className="mx-auto grid max-w-6xl gap-4 px-4 py-6">
+      <SiteHeader wide logo title="لوحة الكول سنتر" />
+      <main className="mx-auto grid max-w-[1280px] gap-4 px-5 pt-2 pb-8 md:px-6">
         <AdminNav />
-        <h1 className="text-2xl font-extrabold">مناطق التوصيل</h1>
+        <h1 className="text-[26px] leading-9 font-extrabold">مناطق التوصيل</h1>
         {api.mode === 'local' ? (
-          <p role="note" className="rounded-lg bg-amber-100 p-3 text-sm font-semibold text-amber-950">
+          <p role="note" className="rounded-2xl bg-amber-100 p-3 text-sm font-semibold text-amber-950">
             وضع تجريبي: المناطق التي تضيفها تُحفظ في هذا المتصفح فقط. بعد ربط قاعدة البيانات تظهر لكل الأجهزة، ويضيفها المدير فقط.
           </p>
         ) : null}
@@ -141,7 +141,7 @@ export function ZonesPage() {
           ))}
         </div>
 
-        <section aria-labelledby="add-title" className="grid gap-4 rounded-xl border bg-card p-4">
+        <section aria-labelledby="add-title" className="grid gap-4 rounded-[20px] bg-card p-4 shadow-card">
           <h2 id="add-title" className="text-lg font-bold">
             إضافة منطقة إلى فرع {branch.name}
           </h2>
@@ -153,7 +153,7 @@ export function ZonesPage() {
                   name="zone-type"
                   value={form.type}
                   onChange={(e) => setForm((f) => ({ ...f, type: e.target.value }))}
-                  className="h-11 w-full rounded-md border border-input bg-background px-3 text-base focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none"
+                  className="h-[52px] w-full rounded-2xl border border-input bg-surface px-4 text-base outline-none focus-visible:border-brand focus-visible:ring-1 focus-visible:ring-brand"
                 >
                   {types.map((t) => (
                     <option key={t} value={t}>
@@ -166,19 +166,19 @@ export function ZonesPage() {
               <span className="hidden sm:block" />
             )}
             <Field id="zone-name" label={nameLabel} error={errors.name}>
-              <Input {...fieldProps('zone-name', errors.name)} className="h-11" maxLength={MAX_ZONE_NAME + 20} value={form.name} onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))} />
+              <Input {...fieldProps('zone-name', errors.name)} maxLength={MAX_ZONE_NAME + 20} value={form.name} onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))} />
             </Field>
             <Field id="zone-fee" label="رسوم التوصيل (ج.م)" error={errors.fee}>
               <Input
                 {...fieldProps('zone-fee', errors.fee)}
                 inputMode="numeric"
                 dir="ltr"
-                className="h-11 text-start"
+                className="text-end"
                 value={form.fee}
                 onChange={(e) => setForm((f) => ({ ...f, fee: e.target.value }))}
               />
             </Field>
-            <Button type="submit" size="lg" className="h-11 sm:mt-[1.625rem]" disabled={saving}>
+            <Button type="submit" size="lg" className="sm:mt-[1.625rem]" disabled={saving}>
               <Plus aria-hidden="true" /> إضافة المنطقة
             </Button>
           </form>
@@ -189,17 +189,17 @@ export function ZonesPage() {
         </section>
 
         {pending.length > 0 ? (
-          <section aria-labelledby="pending-title" className="grid gap-3 rounded-xl border bg-card p-4">
+          <section aria-labelledby="pending-title" className="grid gap-3 rounded-[20px] bg-card p-4 shadow-card">
             <h2 id="pending-title" className="text-lg font-bold">
               مناطق تحتاج سعراً ({pending.length})
             </h2>
             <p className="text-sm text-muted-foreground">هذه المناطق في ملف الفرع بأكثر من سعر أو بملاحظة، فلا تظهر للعميل. حدد لكل منطقة سعراً واحداً لتظهر.</p>
-            <ul className="divide-y">
+            <ul className="divide-y divide-brand-tint">
               {pending.map((p) => (
                 <li key={p.label} className="flex flex-wrap items-center gap-x-3 gap-y-1 py-2">
                   <span className="font-semibold">{p.label}</span>
                   <span className="text-sm text-muted-foreground">{pendingHint(p)}</span>
-                  <Button variant="outline" className="ms-auto h-9" onClick={() => priceLater(p)} aria-label={`حدد السعر: ${p.label}`}>
+                  <Button variant="outline" className="ms-auto h-9 bg-control px-4" onClick={() => priceLater(p)} aria-label={`حدد السعر: ${p.label}`}>
                     حدد السعر
                   </Button>
                 </li>
@@ -208,7 +208,7 @@ export function ZonesPage() {
           </section>
         ) : null}
 
-        <section aria-labelledby="list-title" className="grid gap-3 rounded-xl border bg-card p-4">
+        <section aria-labelledby="list-title" className="grid gap-3 rounded-[20px] bg-card p-4 shadow-card">
           <h2 id="list-title" className="text-lg font-bold">
             مناطق فرع {branch.name} ({list.length})
           </h2>
@@ -221,13 +221,13 @@ export function ZonesPage() {
               </p>
               <div className="max-w-sm">
                 <Field id="zone-search" label="بحث باسم المنطقة">
-                  <Input id="zone-search" type="search" className="h-10" value={query} onChange={(e) => setQuery(e.target.value)} />
+                  <Input id="zone-search" type="search" value={query} onChange={(e) => setQuery(e.target.value)} />
                 </Field>
               </div>
               {visible.length === 0 ? (
                 <p className="py-4 text-center text-muted-foreground">لا توجد منطقة بهذا الاسم.</p>
               ) : (
-                <ul className="divide-y" aria-label="قائمة المناطق">
+                <ul className="divide-y divide-brand-tint" aria-label="قائمة المناطق">
                   {visible.map((z) => (
                     <li key={z.id} className="flex flex-wrap items-center gap-x-3 gap-y-2 py-2">
                       <span className="font-semibold">{z.label}</span>

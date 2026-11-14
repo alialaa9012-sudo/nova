@@ -7,8 +7,25 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
+    /* Brand palette and elevations (design spec, section 6). */
     --color-brand: var(--brand);
-    --color-brand-bright: var(--brand-bright);
+    --color-brand-pressed: var(--brand-pressed);
+    --color-brand-text: var(--brand-text);
+    --color-brand-soft: var(--brand-soft);
+    --color-brand-tint: var(--brand-tint);
+    --color-control: var(--control);
+    --color-chip: var(--chip-idle);
+    --color-nav: var(--nav);
+    --color-surface: var(--surface);
+    --color-hero-from: var(--hero-from);
+    --color-hero-to: var(--hero-to);
+    --color-badge-a: var(--badge-a);
+    --color-badge-b: var(--badge-b);
+    --color-badge-c: var(--badge-c);
+    --color-discount: var(--discount);
+    --shadow-card: 0 4px 16px rgb(74 38 14 / 0.08);
+    --shadow-nav: 0 8px 24px rgb(74 38 14 / 0.14);
+    --shadow-cta: 0 6px 16px rgb(217 58 11 / 0.3);
     --font-heading: var(--font-sans);
     --font-sans: 'Cairo Variable', 'Geist Variable', sans-serif;
     --color-sidebar-ring: var(--sidebar-ring);
@@ -52,24 +69,44 @@
 }
 
 :root {
-    --background: oklch(0.985 0.006 85);
-    --foreground: oklch(0.145 0 0);
-    --card: oklch(1 0 0);
-    --card-foreground: oklch(0.145 0 0);
-    --popover: oklch(1 0 0);
-    --popover-foreground: oklch(0.145 0 0);
-    --primary: oklch(0.2 0.012 60);
-    --primary-foreground: oklch(0.985 0 0);
-    --secondary: oklch(0.97 0 0);
-    --secondary-foreground: oklch(0.205 0 0);
-    --muted: oklch(0.97 0 0);
-    --muted-foreground: oklch(0.5 0 0);
-    --accent: oklch(0.97 0 0);
-    --accent-foreground: oklch(0.205 0 0);
+    /* Page and surfaces */
+    --background: #fceddf;            /* page */
+    --foreground: #1a1511;            /* text */
+    --card: #fef9f5;
+    --card-foreground: #1a1511;
+    --popover: #fef9f5;
+    --popover-foreground: #1a1511;
+    --surface: #ffffff;               /* inputs and dialogs */
+    --control: #fdf5ec;               /* header buttons, search field */
+    --chip-idle: #f5f5f5;             /* idle size chips, quantity stepper */
+    --nav: #fefcfa;                   /* bottom navigation */
+
+    /* Brand: measured #dd3d0e, darkened so white text reaches 4.6:1 */
+    --brand: #d93a0b;
+    --brand-pressed: #c2350b;
+    --brand-text: #b8330a;            /* brand-coloured text on light backgrounds */
+    --brand-soft: #fcc494;
+    --brand-tint: #fbe6d1;
+    --hero-from: #380201;
+    --hero-to: #a31a07;
+    --badge-a: #ab2016;
+    --badge-b: #f0aa37;
+    --badge-c: #d6461a;
+    --discount: #bc2618;
+
+    /* shadcn roles mapped onto the palette */
+    --primary: var(--brand);
+    --primary-foreground: #ffffff;
+    --secondary: var(--card);
+    --secondary-foreground: #1a1511;
+    --muted: var(--chip-idle);
+    --muted-foreground: #6b6560;      /* 5.0:1 on the page */
+    --accent: var(--brand-tint);
+    --accent-foreground: #1a1511;
     --destructive: oklch(0.577 0.245 27.325);
     --border: oklch(0.922 0 0);
     --input: oklch(0.922 0 0);
-    --ring: oklch(0.708 0 0);
+    --ring: var(--brand);
     --chart-1: oklch(0.87 0 0);
     --chart-2: oklch(0.556 0 0);
     --chart-3: oklch(0.439 0 0);
@@ -84,8 +121,6 @@
     --sidebar-accent-foreground: oklch(0.205 0 0);
     --sidebar-border: oklch(0.922 0 0);
     --sidebar-ring: oklch(0.708 0 0);
-    --brand: oklch(0.47 0.09 70);
-    --brand-bright: oklch(0.8 0.13 82);
 }
 
 .dark {

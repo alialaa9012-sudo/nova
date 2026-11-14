@@ -23,7 +23,7 @@ export function OrderCard({
   const next = nextStatus(order.status)
   const minutes = Math.max(0, Math.floor((now.getTime() - Date.parse(order.createdAt)) / 60_000))
   return (
-    <Card className={cn(order.status === 'new' && 'border-amber-600 ring-2 ring-amber-500')}>
+    <Card className={cn('h-full', order.status === 'new' && 'ring-2 ring-brand')}>
       <CardHeader>
         <CardTitle className="flex flex-wrap items-center gap-2 text-lg">
           <h2 dir="ltr">{order.number}</h2>
