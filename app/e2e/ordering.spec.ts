@@ -100,3 +100,31 @@ test('a closed branch lets the customer prepare a cart but not confirm it', asyn
   await expect(page.getByRole('alert')).toContainText('الفرع مغلق الآن')
   await expect(page.getByRole('button', { name: /^تأكيد الطلب/ })).toBeDisabled()
 })
+
+// Runs in the page (a string because the e2e TypeScript project has no DOM types): is the
+// fourth zone option the element a tap at its centre would actually hit, without scrolling?
+const FOURTH_OPTION_IS_TAPPABLE = `(() => {
+  const option = document.querySelectorAll('[role="option"]')[3]
+  if (!option) return false
+  const box = option.getBoundingClientRect()
+  return option.contains(document.elementFromPoint(box.left + box.width / 2, box.top + box.height / 2))
+})()`
+
+test('the open zone list is never hidden behind the confirm bar', async ({ page }) => {
+  await page.goto('/branch/tagamoa')
+  await addToCart(page, 'صدور فراخ', /^ربع/, 'أضف للسلة · 250 ج.م')
+  await page.getByRole('button', { name: /عرض السلة/ }).click()
+  await page.getByRole('dialog', { name: 'السلة' }).getByRole('link', { name: 'إتمام الطلب' }).click()
+
+  const zone = page.getByRole('combobox', { name: 'المنطقة' })
+  await zone.fill('ال') // many zones match
+  const options = page.getByRole('option')
+  await expect(options.nth(3)).toBeVisible()
+  await expect.poll(() => page.evaluate(FOURTH_OPTION_IS_TAPPABLE)).toBe(true)
+  // the field label stays readable above the list
+  await expect(page.getByText('المنطقة', { exact: true })).toBeInViewport({ ratio: 1 })
+
+  const name = await options.nth(3).locator('span').first().innerText()
+  await options.nth(3).click()
+  await expect(zone).toHaveValue(new RegExp(`^${name} · `))
+})

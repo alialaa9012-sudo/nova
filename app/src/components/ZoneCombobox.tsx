@@ -7,6 +7,8 @@ import { searchKey } from '@/lib/text'
 import { cn } from '@/lib/utils'
 
 const display = (zone: DeliveryZone) => `${zone.label} · ${formatEGP(zone.fee)}`
+/** Space the open list needs under the field, in pixels (its 280px limit plus a margin). */
+const LIST_ROOM = 300
 
 /**
  * Delivery zone picker: type to filter the branch zones, then choose one.
@@ -26,6 +28,7 @@ export function ZoneCombobox({
   error?: string
 }) {
   const listId = useId()
+  const box = useRef<HTMLDivElement>(null)
   const list = useRef<HTMLUListElement>(null)
   const [text, setText] = useState('')
   const [open, setOpen] = useState(false)
@@ -42,6 +45,15 @@ export function ZoneCombobox({
     if (expanded) list.current?.children[current]?.scrollIntoView?.({ block: 'nearest' })
   }, [expanded, current])
 
+  // When the list would run off the screen, bring the field up under the page header first.
+  useEffect(() => {
+    const field = box.current
+    if (!open || !field || typeof field.scrollIntoView !== 'function') return
+    if (window.innerHeight - field.getBoundingClientRect().bottom >= LIST_ROOM) return
+    const calm = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+    field.scrollIntoView({ block: 'start', behavior: calm ? 'auto' : 'smooth' })
+  }, [open])
+
   function choose(zone: DeliveryZone) {
     onChange(zone.id)
     setText(display(zone))
@@ -49,7 +61,8 @@ export function ZoneCombobox({
   }
 
   return (
-    <div className="relative scroll-mt-24">
+    // The scroll margin leaves room for the sticky header and the field's own label.
+    <div ref={box} className="relative scroll-mt-28">
       <Search className="pointer-events-none absolute start-4 top-[26px] size-5 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
       <input
         {...fieldProps(id, error)}
@@ -94,7 +107,7 @@ export function ZoneCombobox({
           id={listId}
           role="listbox"
           aria-label="المناطق"
-          className="absolute inset-x-0 top-full z-20 mt-1 max-h-[min(280px,40svh)] overflow-y-auto rounded-2xl bg-surface p-1 shadow-nav"
+          className="absolute inset-x-0 top-full z-40 mt-1 max-h-[min(280px,40svh)] overflow-y-auto rounded-2xl bg-surface p-1 shadow-nav"
         >
           {matches.map((zone, i) => (
             <li
@@ -114,7 +127,7 @@ export function ZoneCombobox({
         </ul>
       ) : null}
       {open && matches.length === 0 ? (
-        <p role="status" className="absolute inset-x-0 top-full z-20 mt-1 rounded-2xl bg-surface p-4 text-sm text-muted-foreground shadow-nav">
+        <p role="status" className="absolute inset-x-0 top-full z-40 mt-1 rounded-2xl bg-surface p-4 text-sm text-muted-foreground shadow-nav">
           لا توجد منطقة بهذا الاسم.
         </p>
       ) : null}
