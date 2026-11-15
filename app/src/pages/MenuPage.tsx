@@ -43,7 +43,7 @@ export function MenuPage() {
   )
   const sectionIds = useMemo(() => shown.map((c) => c.id), [shown])
   const offset = HEADER + stickyHeight + 8
-  const activeId = useActiveSection(sectionIds, offset)
+  const [activeId, selectSection] = useActiveSection(sectionIds, offset)
 
   // The category bar's real height decides where a section lands under the sticky bars.
   useEffect(() => {
@@ -66,6 +66,7 @@ export function MenuPage() {
   }
 
   function goToSection(id: string) {
+    selectSection(id)
     const calm = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
     document.getElementById(id)?.scrollIntoView?.({ behavior: calm ? 'auto' : 'smooth', block: 'start' })
   }

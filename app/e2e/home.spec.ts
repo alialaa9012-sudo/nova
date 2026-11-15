@@ -73,3 +73,23 @@ test.describe('home page', () => {
     await expect(page.getByRole('heading', { name: 'الصفحة غير موجودة' })).toBeVisible()
   })
 })
+
+// The Artifact viewer scrolls the page's body instead of the window. The active category must
+// still follow the scroll and respond to taps there.
+test('the category bar works when the page scrolls inside the body, as in the Artifact viewer', async ({ page }) => {
+  await page.goto('/branch/ashry')
+  await page.getByRole('heading', { level: 2, name: 'المشويات' }).waitFor()
+  await page.addStyleTag({ content: 'html { height: 100%; overflow: hidden } body { height: 100%; overflow-y: auto; margin: 0 }' })
+  const bar = page.getByRole('navigation', { name: 'أقسام المنيو' })
+  await expect(bar.getByRole('link', { name: 'المشويات' })).toHaveAttribute('aria-current', 'true')
+
+  // Tapping a chip selects it and brings its section into view.
+  await bar.getByRole('link', { name: 'المشروبات' }).click()
+  await expect(bar.getByRole('link', { name: 'المشروبات' })).toHaveAttribute('aria-current', 'true')
+  await expect(page.getByRole('heading', { level: 2, name: 'المشروبات' })).toBeInViewport()
+
+  // Scrolling the body by hand moves the highlight too.
+  // (a string: the e2e TypeScript project has no DOM types)
+  await page.evaluate(`document.body.scrollTo({ top: document.querySelectorAll('main section')[5].getBoundingClientRect().top + document.body.scrollTop - 100 })`)
+  await expect(bar.getByRole('link', { name: 'المشروبات' })).not.toHaveAttribute('aria-current', 'true')
+})
