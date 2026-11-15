@@ -309,3 +309,29 @@ describe('checkout draft and order number', () => {
     expect(strip.compareDocumentPosition(firstBranch) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
   })
 })
+
+describe('call-center queue', () => {
+  it('puts the longest-waiting order first and colours its wait time', async () => {
+    const user = userEvent.setup()
+    const pickup = (branchId: 'ashry' | 'zagazig', phone: string) => {
+      const item = getMenu(branchId)[0].items[0]
+      return api.placeOrder({ branchId, orderType: 'pickup', customerName: 'عميل', phone, lines: [{ sizeId: item.sizes[0].id, qty: 1 }] })
+    }
+    vi.setSystemTime(new Date('2027-01-04T10:00:00Z'))
+    await pickup('ashry', '01012345678') // A-0001, 30 minutes old at 10:30
+    vi.setSystemTime(new Date('2027-01-04T10:25:00Z'))
+    await pickup('zagazig', '01112345678') // Z-0001, 5 minutes old
+    vi.setSystemTime(new Date('2027-01-04T10:30:00Z'))
+    renderAt('/admin')
+
+    const list = await screen.findByRole('list', { name: 'قائمة الطلبات' })
+    expect(within(list).getAllByRole('heading', { level: 2 }).map((h) => h.textContent)).toEqual(['A-0001', 'Z-0001'])
+    expect(within(list).getByText('منذ 30 دقيقة')).toHaveClass('bg-danger-soft')
+    expect(within(list).getByText('منذ 5 دقيقة')).toHaveClass('bg-closed-soft')
+    // the items are on the card itself
+    expect(within(list).getAllByRole('list')).toHaveLength(2)
+
+    await user.click(screen.getByRole('button', { name: 'الكل (2)' }))
+    expect(within(screen.getByRole('list', { name: 'قائمة الطلبات' })).getAllByRole('heading', { level: 2 }).map((h) => h.textContent)).toEqual(['Z-0001', 'A-0001'])
+  })
+})

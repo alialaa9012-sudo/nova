@@ -1,5 +1,6 @@
 import type { RouteObject } from 'react-router'
 import App from './App'
+import { RouteLoading } from './components/RouteLoading'
 import { BranchLayout } from './pages/BranchLayout'
 import { CheckoutPage } from './pages/CheckoutPage'
 import { HomePage } from './pages/HomePage'
@@ -13,6 +14,7 @@ export const routes: RouteObject[] = [
     path: '/',
     element: <App />,
     errorElement: <NotFoundPage />,
+    HydrateFallback: RouteLoading,
     children: [
       { index: true, element: <HomePage /> },
       {

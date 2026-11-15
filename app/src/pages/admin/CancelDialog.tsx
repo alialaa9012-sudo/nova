@@ -27,7 +27,7 @@ export function CancelDialog({ order, onClose, onConfirm }: { order: Order; onCl
         </DialogHeader>
         <RadioGroup value={reason} onValueChange={setReason} aria-label="سبب الإلغاء" className="grid gap-2">
           {CANCEL_REASONS.map((r, i) => (
-            <Label key={r} htmlFor={`reason-${i}`} className="flex min-h-11 cursor-pointer items-center gap-3 rounded-lg border p-3">
+            <Label key={r} htmlFor={`reason-${i}`} className="flex min-h-12 cursor-pointer items-center gap-3 rounded-2xl border border-line bg-surface p-3 has-[[data-state=checked]]:border-brand has-[[data-state=checked]]:bg-brand-tint">
               <RadioGroupItem id={`reason-${i}`} value={r} />
               {r}
             </Label>

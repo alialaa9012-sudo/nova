@@ -3,7 +3,7 @@ import { NavLink } from 'react-router'
 import { brand } from '@/lib/catalog'
 import { cn } from '@/lib/utils'
 
-const item = 'flex h-full flex-col items-center justify-center gap-1 rounded-[32px] text-[11px] leading-[14px] font-semibold outline-none focus-visible:ring-3 focus-visible:ring-ring/50'
+const item = 'flex h-full flex-col items-center justify-center gap-1 rounded-[32px] text-xs leading-4 font-semibold outline-none focus-visible:ring-3 focus-visible:ring-ring/50'
 
 /** Floating navigation for phones and tablets, on the home and tracking pages only. */
 export function BottomNav() {

@@ -2,6 +2,7 @@ import { Plus, Trash2 } from 'lucide-react'
 import { useEffect, useMemo, useState, type FormEvent } from 'react'
 import { toast } from 'sonner'
 import { Field } from '@/components/Field'
+import { SelectInput } from '@/components/SelectInput'
 import { SiteHeader } from '@/components/SiteHeader'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -126,7 +127,7 @@ export function ZonesPage() {
       <SiteHeader wide logo title="لوحة الكول سنتر" />
       <main className="mx-auto grid max-w-[1280px] gap-4 px-5 pt-2 pb-8 md:px-6">
         <AdminNav />
-        <h1 className="text-[26px] leading-9 font-extrabold">مناطق التوصيل</h1>
+        <h1 className="sr-only">مناطق التوصيل</h1>
         {api.mode === 'local' ? (
           <p role="note" className="rounded-2xl bg-warning-soft p-3 text-sm font-semibold text-warning-ink">
             وضع تجريبي: المناطق التي تضيفها تُحفظ في هذا المتصفح فقط. بعد ربط قاعدة البيانات تظهر لكل الأجهزة، ويضيفها المدير فقط.
@@ -148,19 +149,18 @@ export function ZonesPage() {
           <form noValidate onSubmit={onSubmit} className="grid items-start gap-4 sm:grid-cols-[auto_1fr_10rem_auto]">
             {types.length > 1 ? (
               <Field id="zone-type" label="النوع">
-                <select
+                <SelectInput
                   id="zone-type"
                   name="zone-type"
                   value={form.type}
                   onChange={(e) => setForm((f) => ({ ...f, type: e.target.value }))}
-                  className="h-[52px] w-full rounded-2xl border border-input bg-surface px-4 text-base outline-none focus-visible:border-brand focus-visible:ring-1 focus-visible:ring-brand"
                 >
                   {types.map((t) => (
                     <option key={t} value={t}>
                       {t}
                     </option>
                   ))}
-                </select>
+                </SelectInput>
               </Field>
             ) : (
               <span className="hidden sm:block" />
@@ -199,7 +199,7 @@ export function ZonesPage() {
                 <li key={p.label} className="flex flex-wrap items-center gap-x-3 gap-y-1 py-2">
                   <span className="font-semibold">{p.label}</span>
                   <span className="text-sm text-muted-foreground">{pendingHint(p)}</span>
-                  <Button variant="outline" className="ms-auto h-9 bg-control px-4" onClick={() => priceLater(p)} aria-label={`حدد السعر: ${p.label}`}>
+                  <Button variant="outline" className="ms-auto h-11 bg-control px-4" onClick={() => priceLater(p)} aria-label={`حدد السعر: ${p.label}`}>
                     حدد السعر
                   </Button>
                 </li>
@@ -227,7 +227,7 @@ export function ZonesPage() {
               {visible.length === 0 ? (
                 <p className="py-4 text-center text-muted-foreground">لا توجد منطقة بهذا الاسم.</p>
               ) : (
-                <ul className="divide-y divide-brand-tint" aria-label="قائمة المناطق">
+                <ul className="grid lg:grid-cols-2 lg:gap-x-10 [&>li]:border-b [&>li]:border-brand-tint" aria-label="قائمة المناطق">
                   {visible.map((z) => (
                     <li key={z.id} className="flex flex-wrap items-center gap-x-3 gap-y-2 py-2">
                       <span className="font-semibold">{z.label}</span>
@@ -236,15 +236,15 @@ export function ZonesPage() {
                       {z.custom ? (
                         confirmId === z.id ? (
                           <span className="flex gap-2">
-                            <Button className="h-9 bg-danger text-white hover:bg-danger-ink" onClick={() => void remove(z)}>
+                            <Button className="h-11 bg-danger text-white hover:bg-danger-ink" onClick={() => void remove(z)}>
                               تأكيد الحذف
                             </Button>
-                            <Button variant="outline" className="h-9" onClick={() => setConfirmId(null)}>
+                            <Button variant="outline" className="h-11" onClick={() => setConfirmId(null)}>
                               تراجع
                             </Button>
                           </span>
                         ) : (
-                          <Button variant="ghost" className="h-9 text-danger" onClick={() => setConfirmId(z.id)} aria-label={`حذف ${z.label}`}>
+                          <Button variant="ghost" className="h-11 text-danger" onClick={() => setConfirmId(z.id)} aria-label={`حذف ${z.label}`}>
                             <Trash2 aria-hidden="true" /> حذف
                           </Button>
                         )

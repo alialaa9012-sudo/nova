@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
 import { Field } from '@/components/Field'
+import { SelectInput } from '@/components/SelectInput'
 import { SiteHeader } from '@/components/SiteHeader'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -71,7 +72,11 @@ export function AdminPage() {
       (!q || o.number.includes(q) || o.phone.includes(q)),
   )
   const countOf = (f: Filter) => (f === 'all' ? inScope.length : inScope.filter((o) => o.status === f).length)
-  const visible = filter === 'all' ? inScope : inScope.filter((o) => o.status === filter)
+  // Work queues show the longest-waiting order first; history views show the latest first.
+  const oldestFirst = filter === 'new' || filter === 'preparing' || filter === 'out_for_delivery'
+  const visible = (filter === 'all' ? inScope : inScope.filter((o) => o.status === filter))
+    .slice()
+    .sort((a, b) => (oldestFirst ? a.createdAt.localeCompare(b.createdAt) : b.createdAt.localeCompare(a.createdAt)))
   const detail = orders.find((o) => o.id === detailId) ?? null
   const cancelling = orders.find((o) => o.id === cancelId) ?? null
 
@@ -102,55 +107,48 @@ export function AdminPage() {
       <SiteHeader wide logo title="لوحة الكول سنتر" />
       <main className="mx-auto grid max-w-[1280px] gap-4 px-5 pt-2 pb-8 md:px-6">
         <AdminNav />
-        <h1 className="text-[26px] leading-9 font-extrabold">الطلبات</h1>
-        {api.mode === 'local' ? (
-          <p role="note" className="rounded-2xl bg-warning-soft p-3 text-sm font-semibold text-warning-ink">
-            وضع تجريبي: تظهر هنا طلبات هذا المتصفح فقط. بعد ربط قاعدة البيانات تصل الطلبات من كل الأجهزة، ويدخل الموظفون بحساباتهم.
-          </p>
-        ) : null}
-        <div className="grid gap-3 rounded-[20px] bg-card p-4 shadow-card sm:grid-cols-3">
-          <Field id="f-branch" label="الفرع">
-            <select
-              id="f-branch"
-              value={branchFilter}
-              onChange={(e) => setBranchFilter(e.target.value)}
-              className="h-[52px] w-full rounded-2xl border border-input bg-surface px-4 text-base outline-none focus-visible:border-brand focus-visible:ring-1 focus-visible:ring-brand"
-            >
-              <option value="all">كل الفروع</option>
-              {branches.map((b) => (
-                <option key={b.id} value={b.id}>
-                  {b.name}
-                </option>
-              ))}
-            </select>
-          </Field>
-          <Field id="f-date" label="التاريخ">
-            <Input id="f-date" type="date" value={date} onChange={(e) => setDate(e.target.value)} />
-          </Field>
-          <Field id="f-search" label="بحث برقم الطلب أو الموبايل">
-            <Input id="f-search" type="search" dir="ltr" className="text-end" value={query} onChange={(e) => setQuery(e.target.value)} />
-          </Field>
-        </div>
-        <div role="group" aria-label="تصفية حسب الحالة" className="flex flex-wrap gap-2">
-          {FILTERS.map((f) => (
-            <Button
-              key={f.value}
-              variant="outline"
-              // Dark when active, so staff filters never look like the orange customer actions.
-              className={cn('h-10 px-4 text-[13px] font-semibold', filter === f.value && 'bg-foreground text-white shadow-none hover:bg-foreground active:bg-foreground')}
-              aria-pressed={filter === f.value}
-              onClick={() => setFilter(f.value)}
-            >
-              {f.label} ({countOf(f.value)})
-            </Button>
-          ))}
+        {/* The tab already names the screen and the banner already says it is a demo. */}
+        <h1 className="sr-only">الطلبات</h1>
+        <div className="grid gap-3 rounded-[20px] bg-card p-4 shadow-card">
+          <div className="grid gap-3 sm:grid-cols-3">
+            <Field id="f-branch" label="الفرع">
+              <SelectInput id="f-branch" value={branchFilter} onChange={(e) => setBranchFilter(e.target.value)}>
+                <option value="all">كل الفروع</option>
+                {branches.map((b) => (
+                  <option key={b.id} value={b.id}>
+                    {b.name}
+                  </option>
+                ))}
+              </SelectInput>
+            </Field>
+            <Field id="f-date" label="التاريخ">
+              <Input id="f-date" type="date" value={date} onChange={(e) => setDate(e.target.value)} />
+            </Field>
+            <Field id="f-search" label="بحث برقم الطلب أو الموبايل">
+              <Input id="f-search" type="search" dir="ltr" className="text-end" value={query} onChange={(e) => setQuery(e.target.value)} />
+            </Field>
+          </div>
+          <div role="group" aria-label="تصفية حسب الحالة" className="flex flex-wrap gap-2">
+            {FILTERS.map((f) => (
+              <Button
+                key={f.value}
+                variant="outline"
+                // Dark when active, so staff filters never look like the orange customer actions.
+                className={cn('h-10 bg-control px-4 text-[13px] font-semibold shadow-none', filter === f.value && 'bg-foreground text-white hover:bg-foreground active:bg-foreground')}
+                aria-pressed={filter === f.value}
+                onClick={() => setFilter(f.value)}
+              >
+                {f.label} ({countOf(f.value)})
+              </Button>
+            ))}
+          </div>
         </div>
         {!loaded ? (
           <p aria-busy="true">جاري تحميل الطلبات…</p>
         ) : visible.length === 0 ? (
           <p className="rounded-[20px] bg-card p-8 text-center text-muted-foreground shadow-card">لا توجد طلبات بهذه التصفية.</p>
         ) : (
-          <ul className="grid gap-3 lg:grid-cols-2 min-[1440px]:grid-cols-3" aria-label="قائمة الطلبات">
+          <ul className="grid gap-3 lg:grid-cols-2 min-[90rem]:grid-cols-3" aria-label="قائمة الطلبات">
             {visible.map((o) => (
               <li key={o.id}>
                 <OrderCard order={o} now={now} onAdvance={() => void advance(o)} onCancel={() => setCancelId(o.id)} onOpen={() => setDetailId(o.id)} />
