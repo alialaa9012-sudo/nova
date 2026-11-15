@@ -27,7 +27,7 @@ export function OrderCard({
       <CardHeader>
         <CardTitle className="flex flex-wrap items-center gap-2 text-lg">
           <h2 dir="ltr">{order.number}</h2>
-          <span className="rounded-full bg-stone-200 px-2 py-0.5 text-xs font-semibold text-stone-900">فرع {branch?.name}</span>
+          <span className="rounded-full bg-closed-soft px-2 py-0.5 text-xs font-semibold text-closed-ink">فرع {branch?.name}</span>
           <span className="rounded-full border px-2 py-0.5 text-xs font-semibold">{order.orderType === 'delivery' ? 'توصيل' : 'استلام'}</span>
         </CardTitle>
         <CardDescription>
@@ -47,7 +47,7 @@ export function OrderCard({
           </p>
         ) : null}
         <p>{order.lines.reduce((n, l) => n + l.qty, 0)} صنف · <span className="font-bold">{formatEGP(order.totals.total)} كاش</span></p>
-        {order.status === 'cancelled' && order.cancelReason ? <p className="font-semibold text-red-700">سبب الإلغاء: {order.cancelReason}</p> : null}
+        {order.status === 'cancelled' && order.cancelReason ? <p className="font-semibold text-danger">سبب الإلغاء: {order.cancelReason}</p> : null}
       </CardContent>
       <CardFooter className="flex flex-wrap gap-2">
         {next ? <Button onClick={onAdvance}>{`نقل إلى: ${statusLabel(next, order.orderType)}`}</Button> : null}
@@ -55,7 +55,7 @@ export function OrderCard({
           التفاصيل
         </Button>
         {order.status !== 'cancelled' ? (
-          <Button variant="ghost" className="text-red-700" onClick={onCancel}>
+          <Button variant="ghost" className="text-danger" onClick={onCancel}>
             إلغاء
           </Button>
         ) : null}

@@ -1,7 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
-@import "@fontsource-variable/geist";
 @import "@fontsource-variable/cairo";
 
 @custom-variant dark (&:is(.dark *));
@@ -23,11 +22,24 @@
     --color-badge-b: var(--badge-b);
     --color-badge-c: var(--badge-c);
     --color-discount: var(--discount);
+    --color-gold: var(--gold);
+    --color-gold-deep: var(--gold-deep);
+    --color-line: var(--line);
+    --color-success: var(--success);
+    --color-success-soft: var(--success-soft);
+    --color-success-ink: var(--success-ink);
+    --color-warning-soft: var(--warning-soft);
+    --color-warning-ink: var(--warning-ink);
+    --color-danger: var(--danger);
+    --color-danger-soft: var(--danger-soft);
+    --color-danger-ink: var(--danger-ink);
+    --color-closed-soft: var(--closed-soft);
+    --color-closed-ink: var(--closed-ink);
     --shadow-card: 0 4px 16px rgb(74 38 14 / 0.08);
     --shadow-nav: 0 8px 24px rgb(74 38 14 / 0.14);
     --shadow-cta: 0 6px 16px rgb(217 58 11 / 0.3);
     --font-heading: var(--font-sans);
-    --font-sans: 'Cairo Variable', 'Geist Variable', sans-serif;
+    --font-sans: 'Cairo Variable', system-ui, sans-serif;
     --color-sidebar-ring: var(--sidebar-ring);
     --color-sidebar-border: var(--sidebar-border);
     --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -94,6 +106,23 @@
     --badge-c: #d6461a;
     --discount: #bc2618;
 
+    /* Logo touches: the muted gold of the logo frame (measured from logo.png). Lines and frames only, never text. */
+    --gold: #b09878;
+    --gold-deep: #8a7150;             /* 4.4:1 on cards, for small gold marks that must stay visible */
+    --line: #938679;                  /* field borders and outlined controls: 3.4:1 on cards and white */
+
+    /* States: one warm set for the whole app instead of stock Tailwind greens, ambers and stones */
+    --success: #1f6b45;               /* solid (white text 6.5:1), done steps */
+    --success-soft: #ddf1e3;
+    --success-ink: #1c5b3a;           /* text on success-soft, 6.8:1 */
+    --warning-soft: #fbefc9;
+    --warning-ink: #4a2c06;           /* 11:1 */
+    --danger: #b42318;                /* error text 6.3:1 on cards, white on it 6.6:1 */
+    --danger-soft: #fde9e5;
+    --danger-ink: #8f1d13;
+    --closed-soft: #ece2d6;           /* closed branch, cancelled, calm order age */
+    --closed-ink: #3d3127;            /* 9.9:1; do not put muted text on closed-soft */
+
     /* shadcn roles mapped onto the palette */
     --primary: var(--brand);
     --primary-foreground: #ffffff;
@@ -103,9 +132,9 @@
     --muted-foreground: #6b6560;      /* 5.0:1 on the page */
     --accent: var(--brand-tint);
     --accent-foreground: #1a1511;
-    --destructive: oklch(0.577 0.245 27.325);
+    --destructive: var(--danger);
     --border: oklch(0.922 0 0);
-    --input: oklch(0.922 0 0);
+    --input: var(--line);
     --ring: var(--brand);
     --chart-1: oklch(0.87 0 0);
     --chart-2: oklch(0.556 0 0);
@@ -123,39 +152,6 @@
     --sidebar-ring: oklch(0.708 0 0);
 }
 
-.dark {
-    --background: oklch(0.145 0 0);
-    --foreground: oklch(0.985 0 0);
-    --card: oklch(0.205 0 0);
-    --card-foreground: oklch(0.985 0 0);
-    --popover: oklch(0.205 0 0);
-    --popover-foreground: oklch(0.985 0 0);
-    --primary: oklch(0.922 0 0);
-    --primary-foreground: oklch(0.205 0 0);
-    --secondary: oklch(0.269 0 0);
-    --secondary-foreground: oklch(0.985 0 0);
-    --muted: oklch(0.269 0 0);
-    --muted-foreground: oklch(0.708 0 0);
-    --accent: oklch(0.269 0 0);
-    --accent-foreground: oklch(0.985 0 0);
-    --destructive: oklch(0.704 0.191 22.216);
-    --border: oklch(1 0 0 / 10%);
-    --input: oklch(1 0 0 / 15%);
-    --ring: oklch(0.556 0 0);
-    --chart-1: oklch(0.87 0 0);
-    --chart-2: oklch(0.556 0 0);
-    --chart-3: oklch(0.439 0 0);
-    --chart-4: oklch(0.371 0 0);
-    --chart-5: oklch(0.269 0 0);
-    --sidebar: oklch(0.205 0 0);
-    --sidebar-foreground: oklch(0.985 0 0);
-    --sidebar-primary: oklch(0.488 0.243 264.376);
-    --sidebar-primary-foreground: oklch(0.985 0 0);
-    --sidebar-accent: oklch(0.269 0 0);
-    --sidebar-accent-foreground: oklch(0.985 0 0);
-    --sidebar-border: oklch(1 0 0 / 10%);
-    --sidebar-ring: oklch(0.556 0 0);
-}
 
 @layer base {
   * {
@@ -166,5 +162,38 @@
     }
   html {
     @apply font-sans;
+    /* Browser surfaces carry the palette too. */
+    accent-color: var(--brand);
+    caret-color: var(--brand);
+    scrollbar-color: var(--brand-soft) transparent;
+    }
+  ::selection {
+    background: var(--brand-soft);
+    color: var(--foreground);
+    }
+  p, li, dd {
+    text-wrap: pretty; /* no lone word on the last line */
+    }
+  h1, h2, h3 {
+    text-wrap: balance;
+    }
+  /* Search fields draw their own clear button. */
+  input[type='search']::-webkit-search-cancel-button {
+    appearance: none;
+    }
+}
+
+/* Reduced motion: windows and toasts fade in place instead of sliding. */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    --tw-enter-translate-x: 0 !important;
+    --tw-enter-translate-y: 0 !important;
+    --tw-exit-translate-x: 0 !important;
+    --tw-exit-translate-y: 0 !important;
+    --tw-enter-scale: 1 !important;
+    --tw-exit-scale: 1 !important;
+    }
+  html {
+    scroll-behavior: auto;
     }
 }

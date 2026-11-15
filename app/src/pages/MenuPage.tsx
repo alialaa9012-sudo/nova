@@ -74,7 +74,7 @@ export function MenuPage() {
         <h1 className="sr-only">منيو فرع {branch.name}</h1>
         <OpenBadge branch={branch} now={now} />
         {closedMessage ? (
-          <p role="status" className="mt-3 rounded-2xl bg-stone-200 p-3 text-sm font-semibold text-stone-900">
+          <p role="status" className="mt-3 rounded-2xl bg-closed-soft p-3 text-sm font-semibold text-closed-ink">
             {closedMessage}
           </p>
         ) : null}

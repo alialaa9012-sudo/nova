@@ -32,7 +32,7 @@ export function CartSheet({
             <span className="text-sm leading-5 text-muted-foreground">المجموع</span>
             <span className="text-lg leading-[26px] font-extrabold tabular-nums">{formatEGP(cartSubtotal(lines))}</span>
           </p>
-          {closedMessage ? <p className="text-sm font-semibold text-red-700">{closedMessage}</p> : null}
+          {closedMessage ? <p className="text-sm font-semibold text-danger">{closedMessage}</p> : null}
           {lines.length > 0 && !closedMessage ? (
             <Button asChild size="lg" className="w-full shadow-cta">
               <Link to={`/branch/${branch.id}/checkout`} onClick={() => onOpenChange(false)}>
@@ -67,7 +67,7 @@ export function CartSheet({
                   <button
                     type="button"
                     onClick={() => dispatch({ type: 'remove', sizeId: l.sizeId })}
-                    className="-mt-2 -me-2 grid size-11 place-items-center rounded-full text-muted-foreground outline-none hover:text-red-700 focus-visible:ring-3 focus-visible:ring-ring/50 active:text-red-700"
+                    className="-mt-2 -me-2 grid size-11 place-items-center rounded-full text-muted-foreground outline-none hover:text-danger focus-visible:ring-3 focus-visible:ring-ring/50 active:text-danger"
                   >
                     <Trash2 className="size-5" aria-hidden="true" />
                     <span className="sr-only">حذف {l.name}</span>

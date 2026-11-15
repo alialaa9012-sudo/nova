@@ -13,7 +13,7 @@ export function StatusTimeline({ order }: { order: Order }) {
             <span
               className={cn(
                 'flex size-8 shrink-0 items-center justify-center rounded-full text-white',
-                h.to === 'cancelled' ? 'bg-red-700' : 'bg-stone-600',
+                h.to === 'cancelled' ? 'bg-danger' : 'bg-closed-ink',
               )}
             >
               {h.to === 'cancelled' ? <X className="size-4" aria-hidden="true" /> : <Check className="size-4" aria-hidden="true" />}
@@ -42,7 +42,7 @@ export function StatusTimeline({ order }: { order: Order }) {
             <span
               className={cn(
                 'flex size-8 shrink-0 items-center justify-center rounded-full border-2 text-sm font-bold',
-                done ? 'border-emerald-700 bg-emerald-700 text-white' : 'border-stone-300 text-muted-foreground',
+                done ? 'border-success bg-success text-white' : 'border-line text-muted-foreground',
               )}
             >
               {done ? <Check className="size-4" aria-hidden="true" /> : i + 1}

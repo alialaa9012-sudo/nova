@@ -104,7 +104,7 @@ export function AdminPage() {
         <AdminNav />
         <h1 className="text-[26px] leading-9 font-extrabold">الطلبات</h1>
         {api.mode === 'local' ? (
-          <p role="note" className="rounded-2xl bg-amber-100 p-3 text-sm font-semibold text-amber-950">
+          <p role="note" className="rounded-2xl bg-warning-soft p-3 text-sm font-semibold text-warning-ink">
             وضع تجريبي: تظهر هنا طلبات هذا المتصفح فقط. بعد ربط قاعدة البيانات تصل الطلبات من كل الأجهزة، ويدخل الموظفون بحساباتهم.
           </p>
         ) : null}

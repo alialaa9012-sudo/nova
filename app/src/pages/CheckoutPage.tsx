@@ -227,12 +227,12 @@ export function CheckoutPage() {
           <div className="fixed inset-x-0 bottom-0 z-20 bg-linear-to-t from-background from-75% to-transparent px-4 pt-8 pb-[max(1rem,env(safe-area-inset-bottom,0px))]">
             <div className="mx-auto grid max-w-3xl gap-2">
               {!status.isOpen ? (
-                <p role="alert" className="rounded-2xl bg-stone-200 p-3 text-sm font-semibold text-stone-900">
+                <p role="alert" className="rounded-2xl bg-closed-soft p-3 text-sm font-semibold text-closed-ink">
                   الفرع مغلق الآن{status.opensAt ? `، ويفتح ${formatTimeAr(status.opensAt)}` : ''}. أكد طلبك في مواعيد العمل.
                 </p>
               ) : null}
               {serverError ? (
-                <p role="alert" className="rounded-2xl bg-red-50 p-3 text-sm font-semibold text-red-800">
+                <p role="alert" className="rounded-2xl bg-danger-soft p-3 text-sm font-semibold text-danger-ink">
                   {serverError}
                 </p>
               ) : null}

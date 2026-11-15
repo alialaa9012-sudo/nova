@@ -74,7 +74,7 @@ export function OrderDetailsSheet({
                 {order.landmark ? <p>علامة مميزة: {order.landmark}</p> : null}
               </>
             ) : null}
-            {order.notes ? <p className="rounded-md bg-amber-50 p-2 text-amber-950">ملاحظات: {order.notes}</p> : null}
+            {order.notes ? <p className="rounded-md bg-warning-soft p-2 text-warning-ink">ملاحظات: {order.notes}</p> : null}
           </section>
           <section className="grid gap-2">
             <h3 className="text-base font-bold">الأصناف</h3>
@@ -107,7 +107,7 @@ export function OrderDetailsSheet({
           <div className="flex flex-wrap gap-2">
             {next ? <Button onClick={onAdvance}>{`نقل إلى: ${statusLabel(next, order.orderType)}`}</Button> : null}
             {order.status !== 'cancelled' ? (
-              <Button variant="outline" className="text-red-700" onClick={onCancel}>
+              <Button variant="outline" className="text-danger" onClick={onCancel}>
                 إلغاء الطلب
               </Button>
             ) : null}

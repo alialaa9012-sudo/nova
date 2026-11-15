@@ -19,7 +19,7 @@ export function OpenBadge({ branch, now, className }: { branch: Branch; now: Dat
     <span
       className={cn(
         'inline-flex w-fit items-center gap-1.5 rounded-full px-2.5 py-1.5 text-xs leading-4 font-semibold',
-        status.isOpen ? 'bg-emerald-100 text-emerald-900' : 'bg-stone-200 text-stone-900',
+        status.isOpen ? 'bg-success-soft text-success-ink' : 'bg-closed-soft text-closed-ink',
         className,
       )}
     >

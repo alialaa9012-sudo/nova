@@ -128,7 +128,7 @@ export function ZonesPage() {
         <AdminNav />
         <h1 className="text-[26px] leading-9 font-extrabold">مناطق التوصيل</h1>
         {api.mode === 'local' ? (
-          <p role="note" className="rounded-2xl bg-amber-100 p-3 text-sm font-semibold text-amber-950">
+          <p role="note" className="rounded-2xl bg-warning-soft p-3 text-sm font-semibold text-warning-ink">
             وضع تجريبي: المناطق التي تضيفها تُحفظ في هذا المتصفح فقط. بعد ربط قاعدة البيانات تظهر لكل الأجهزة، ويضيفها المدير فقط.
           </p>
         ) : null}
@@ -183,7 +183,7 @@ export function ZonesPage() {
             </Button>
           </form>
           <p className="text-sm text-muted-foreground">تظهر المنطقة للعميل فور إضافتها، وتُحسب رسومها في إجمالي الطلب.</p>
-          <p role="status" className="text-sm font-semibold text-emerald-800 empty:hidden">
+          <p role="status" className="text-sm font-semibold text-success-ink empty:hidden">
             {lastAdded}
           </p>
         </section>
@@ -231,12 +231,12 @@ export function ZonesPage() {
                   {visible.map((z) => (
                     <li key={z.id} className="flex flex-wrap items-center gap-x-3 gap-y-2 py-2">
                       <span className="font-semibold">{z.label}</span>
-                      {z.custom ? <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-xs font-semibold text-emerald-900">مضافة</span> : null}
+                      {z.custom ? <span className="rounded-full bg-success-soft px-2 py-0.5 text-xs font-semibold text-success-ink">مضافة</span> : null}
                       <span className="ms-auto font-bold tabular-nums">{formatEGP(z.fee)}</span>
                       {z.custom ? (
                         confirmId === z.id ? (
                           <span className="flex gap-2">
-                            <Button className="h-9 bg-red-700 text-white hover:bg-red-800" onClick={() => void remove(z)}>
+                            <Button className="h-9 bg-danger text-white hover:bg-danger-ink" onClick={() => void remove(z)}>
                               تأكيد الحذف
                             </Button>
                             <Button variant="outline" className="h-9" onClick={() => setConfirmId(null)}>
@@ -244,7 +244,7 @@ export function ZonesPage() {
                             </Button>
                           </span>
                         ) : (
-                          <Button variant="ghost" className="h-9 text-red-700" onClick={() => setConfirmId(z.id)} aria-label={`حذف ${z.label}`}>
+                          <Button variant="ghost" className="h-9 text-danger" onClick={() => setConfirmId(z.id)} aria-label={`حذف ${z.label}`}>
                             <Trash2 aria-hidden="true" /> حذف
                           </Button>
                         )

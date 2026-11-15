@@ -22,7 +22,7 @@ export function Field({
       </Label>
       {children}
       {error ? (
-        <p id={`${id}-error`} className="text-sm font-semibold text-red-700">
+        <p id={`${id}-error`} className="text-sm font-semibold text-danger">
           {error}
         </p>
       ) : null}

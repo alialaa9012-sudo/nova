@@ -151,7 +151,8 @@ describe('delivery zones screen', () => {
   it('adds a zone to a branch, offers it at checkout with its fee, and removes it after confirmation', async () => {
     const user = userEvent.setup()
     const router = renderAt('/admin/zones')
-    await user.click(screen.getByRole('button', { name: 'فرع التجمع الخامس' }))
+    // the staff screens load on demand
+    await user.click(await screen.findByRole('button', { name: 'فرع التجمع الخامس' }))
     expect(await screen.findByRole('heading', { name: 'مناطق فرع التجمع الخامس (71)' })).toBeInTheDocument()
     // Tagamoa has plain areas only, so there is no type field
     expect(screen.queryByLabelText('النوع')).not.toBeInTheDocument()
@@ -203,7 +204,7 @@ describe('delivery zones screen', () => {
     const user = userEvent.setup()
     renderAt('/admin/zones')
     expect(await screen.findByRole('heading', { name: 'مناطق تحتاج سعراً (8)' })).toBeInTheDocument()
-    expect(screen.getByLabelText('النوع')).toHaveValue('منطقة')
+    expect(await screen.findByLabelText('النوع')).toHaveValue('منطقة')
 
     await user.click(screen.getByRole('button', { name: 'حدد السعر: مجاورة 39' }))
     expect(screen.getByLabelText('النوع')).toHaveValue('مجاورة')

@@ -1,7 +1,5 @@
 import type { RouteObject } from 'react-router'
 import App from './App'
-import { AdminPage } from './pages/admin/AdminPage'
-import { ZonesPage } from './pages/admin/ZonesPage'
 import { BranchLayout } from './pages/BranchLayout'
 import { CheckoutPage } from './pages/CheckoutPage'
 import { HomePage } from './pages/HomePage'
@@ -27,8 +25,9 @@ export const routes: RouteObject[] = [
       },
       { path: 'order/:number', element: <OrderPage /> },
       { path: 'track', element: <TrackPage /> },
-      { path: 'admin', element: <AdminPage /> },
-      { path: 'admin/zones', element: <ZonesPage /> },
+      // Staff screens load on demand, so customers never download them.
+      { path: 'admin', lazy: () => import('./pages/admin/AdminPage').then((m) => ({ Component: m.AdminPage })) },
+      { path: 'admin/zones', lazy: () => import('./pages/admin/ZonesPage').then((m) => ({ Component: m.ZonesPage })) },
       { path: '*', element: <NotFoundPage /> },
     ],
   },

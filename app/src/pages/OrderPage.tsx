@@ -88,7 +88,7 @@ export function OrderPage() {
       {header}
       <main className="mx-auto grid max-w-3xl gap-4 px-5 pt-2 pb-8">
         {navState?.justPlaced ? (
-          <div role="status" className="rounded-[20px] bg-emerald-50 p-4 text-emerald-950">
+          <div role="status" className="rounded-[20px] bg-success-soft p-4 text-success-ink">
             <h1 className="text-[22px] leading-[30px] font-extrabold">تم إرسال طلبك</h1>
             <p className="mt-1">
               رقم طلبك <strong dir="ltr">{order.number}</strong>. احتفظ به لمتابعة الطلب.

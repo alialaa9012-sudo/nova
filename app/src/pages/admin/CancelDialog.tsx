@@ -40,7 +40,7 @@ export function CancelDialog({ order, onClose, onConfirm }: { order: Order; onCl
           <Button variant="outline" onClick={onClose}>
             تراجع
           </Button>
-          <Button className="bg-red-700 text-white hover:bg-red-800" disabled={!finalReason} onClick={() => onConfirm(finalReason)}>
+          <Button className="bg-danger text-white hover:bg-danger-ink" disabled={!finalReason} onClick={() => onConfirm(finalReason)}>
             تأكيد الإلغاء
           </Button>
         </DialogFooter>
