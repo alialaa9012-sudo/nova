@@ -76,21 +76,38 @@ export function ItemCard({ item, phone, onAdd }: { item: MenuItem; phone: string
   )
 }
 
-/** A compact row for sections without photos: reads like the printed menu, several times denser than empty photo tiles. */
+/**
+ * A dense row for sections without photos, read like the printed menu: name and price on one line,
+ * a one-line description, and a quiet «+» so the solid brand colour stays with the cart bar.
+ */
 export function ItemRow({ item, phone, onAdd }: { item: MenuItem; phone: string; onAdd: () => void }) {
   return (
-    <li className={cn(pressable, 'flex items-center gap-3 px-4 py-3')}>
-      <div className="flex min-w-0 flex-1 flex-col gap-0.5">
-        <Details item={item}>
-          {item.badge ? (
-            <span className={cn('w-fit rounded-full px-2 py-0.5 text-[11px] leading-[14px] font-bold', BADGE_COLORS[item.badge.style])}>{item.badge.text}</span>
-          ) : null}
-          <div className="pt-0.5">
-            <Price item={item} />
-          </div>
-        </Details>
+    <li className="relative flex items-center gap-3 px-4 py-2.5 focus-within:z-10 focus-within:ring-3 focus-within:ring-ring/50 has-[button:hover]:bg-control">
+      <div className="flex min-w-0 flex-1 flex-col">
+        <div className="flex items-baseline justify-between gap-3">
+          <p className="min-w-0 text-[15px] leading-[22px] font-bold">{item.name}</p>
+          <Price item={item} />
+        </div>
+        {item.description ? <p className="line-clamp-1 text-xs leading-[18px] text-muted-foreground sm:line-clamp-2">{item.description}</p> : null}
+        {item.advanceNoticeHours ? (
+          <p className="text-xs leading-[18px] font-semibold text-brand-text">بالحجز المسبق قبل {item.advanceNoticeHours} ساعة عبر الهاتف</p>
+        ) : null}
+        {item.badge ? (
+          <span className={cn('mt-0.5 w-fit rounded-full px-2 py-0.5 text-[11px] leading-[14px] font-bold', BADGE_COLORS[item.badge.style])}>{item.badge.text}</span>
+        ) : null}
       </div>
-      <Action item={item} phone={phone} onAdd={onAdd} />
+      {item.advanceNoticeHours ? (
+        <Action item={item} phone={phone} onAdd={onAdd} />
+      ) : (
+        <button
+          type="button"
+          aria-label={`أضف ${item.name}`}
+          onClick={onAdd}
+          className="grid size-10 shrink-0 place-items-center rounded-full bg-brand-tint text-brand-text outline-none after:absolute after:inset-0 after:content-[''] hover:bg-brand-soft"
+        >
+          <Plus className="size-5" aria-hidden="true" />
+        </button>
+      )}
     </li>
   )
 }

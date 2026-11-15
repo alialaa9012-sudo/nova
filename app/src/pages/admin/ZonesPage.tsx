@@ -11,6 +11,7 @@ import { api, ApiError, errorMessage } from '@/lib/api'
 import { branches, getPendingZones, type BranchId, type DeliveryZone, type PendingZone } from '@/lib/catalog'
 import { formatEGP } from '@/lib/format'
 import { cleanZoneName, DEFAULT_ZONE_TYPE, MAX_ZONE_FEE, MAX_ZONE_NAME, parseZoneFee, zoneKey } from '@/lib/zones'
+import { cn } from '@/lib/utils'
 import { AdminNav } from './AdminNav'
 
 interface ZoneForm {
@@ -146,7 +147,7 @@ export function ZonesPage() {
 
         <div role="group" aria-label="الفرع" className="flex flex-wrap gap-2">
           {branches.map((b) => (
-            <Button key={b.id} size="lg" className="h-11" variant={b.id === branchId ? 'default' : 'outline'} aria-pressed={b.id === branchId} onClick={() => chooseBranch(b.id)}>
+            <Button key={b.id} size="lg" className={cn('h-11 bg-control shadow-none', b.id === branchId && 'bg-foreground text-white hover:bg-foreground')} variant="outline" aria-pressed={b.id === branchId} onClick={() => chooseBranch(b.id)}>
               فرع {b.name}
             </Button>
           ))}

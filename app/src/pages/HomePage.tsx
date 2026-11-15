@@ -1,4 +1,4 @@
-import { ChevronLeft, MapPin, MessageCircle, Phone, Search } from 'lucide-react'
+import { ChevronLeft, MapPin, MessageCircle, PackageSearch, Phone, Search } from 'lucide-react'
 import { Link } from 'react-router'
 import { BottomNav } from '@/components/BottomNav'
 import { HeroBanner } from '@/components/HeroBanner'
@@ -70,9 +70,9 @@ export function HomePage() {
           <Link
             to={`/order/${previous.number}`}
             state={{ phone: previous.phone }}
-            className="mt-5 flex min-h-14 items-center gap-3 rounded-[20px] border border-gold bg-card px-4 py-3 shadow-card outline-none hover:bg-control focus-visible:ring-3 focus-visible:ring-ring/50"
+            className="mt-5 flex min-h-14 w-full items-center gap-3 rounded-[20px] border border-gold sm:w-fit sm:min-w-80 bg-card px-4 py-3 shadow-card outline-none hover:bg-control focus-visible:ring-3 focus-visible:ring-ring/50"
           >
-            <Search className="size-5 shrink-0 text-gold-deep" aria-hidden="true" />
+            <PackageSearch className="size-5 shrink-0 text-gold-deep" aria-hidden="true" />
             <span className="flex-1 font-bold">حالة طلبك {previous.number}</span>
             <ChevronLeft className="size-5 shrink-0 text-muted-foreground" aria-hidden="true" />
           </Link>

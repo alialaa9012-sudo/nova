@@ -143,7 +143,8 @@ export function MenuPage() {
                   ))}
                 </ul>
               ) : (
-                <ul className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+                // One card per section, rows divided by hairlines; two columns from 1024px.
+                <ul className="grid overflow-hidden rounded-[20px] bg-card shadow-card lg:grid-cols-2 [&>li]:border-b [&>li]:border-brand-tint lg:[&>li:nth-child(odd)]:border-e">
                   {category.items.map((item) => (
                     <ItemRow key={item.id} item={item} phone={branch.phones[0]} onAdd={() => setSelected(item)} />
                   ))}

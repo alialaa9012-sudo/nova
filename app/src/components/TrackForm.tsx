@@ -35,7 +35,10 @@ export function TrackForm({ fixedNumber, onDone }: { fixedNumber?: string; onDon
             className="text-end"
             placeholder="A-0012"
             value={number}
-            onChange={(e) => setNumber(e.target.value)}
+            onChange={(e) => {
+              setNumber(e.target.value)
+              setErrors((x) => ({ ...x, number: undefined }))
+            }}
           />
         </Field>
       )}
@@ -49,7 +52,10 @@ export function TrackForm({ fixedNumber, onDone }: { fixedNumber?: string; onDon
           className="text-end"
           placeholder="01XXXXXXXXX"
           value={phone}
-          onChange={(e) => setPhone(e.target.value)}
+          onChange={(e) => {
+            setPhone(e.target.value)
+            setErrors((x) => ({ ...x, phone: undefined }))
+          }}
         />
       </Field>
       <Button type="submit" size="lg" className="w-full">

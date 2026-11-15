@@ -68,8 +68,12 @@ export function OrderCard({
         <p className="font-bold">{formatEGP(order.totals.total)} كاش</p>
         {order.status === 'cancelled' && order.cancelReason ? <p className="font-semibold text-danger">سبب الإلغاء: {order.cancelReason}</p> : null}
       </CardContent>
-      <CardFooter className="mt-auto flex flex-wrap gap-2">
-        {next ? <Button onClick={onAdvance}>{`نقل إلى: ${statusLabel(next, order.orderType)}`}</Button> : null}
+      <CardFooter className="mt-auto flex flex-wrap items-center gap-2">
+        {next ? (
+          <Button onClick={onAdvance} className="h-auto min-h-11 min-w-0 flex-1 py-2 whitespace-normal">
+            {`نقل إلى: ${statusLabel(next, order.orderType)}`}
+          </Button>
+        ) : null}
         <Button variant="outline" onClick={onOpen}>
           التفاصيل
         </Button>

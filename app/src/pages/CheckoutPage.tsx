@@ -61,7 +61,11 @@ export function CheckoutPage() {
   const zoneId = zone ? zone.id : ''
   const totals = computeTotals(lines, form.orderType, zone?.fee ?? 0, branch.charges)
   const status = getOpenStatus(branch.hours, now, branch.timezone)
-  const set = <K extends keyof CheckoutForm>(key: K, value: CheckoutForm[K]) => setForm((f) => ({ ...f, [key]: value }))
+  const set = <K extends keyof CheckoutForm>(key: K, value: CheckoutForm[K]) => {
+    setForm((f) => ({ ...f, [key]: value }))
+    // A corrected field drops its message right away instead of staying red until the next submit.
+    setErrors((e) => (e[key] ? { ...e, [key]: undefined } : e))
+  }
   const menuPath = `/branch/${branch.id}`
 
   async function onSubmit(e: FormEvent<HTMLFormElement>) {

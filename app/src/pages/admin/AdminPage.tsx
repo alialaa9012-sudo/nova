@@ -109,7 +109,7 @@ export function AdminPage() {
         <AdminNav />
         {/* The tab already names the screen and the banner already says it is a demo. */}
         <h1 className="sr-only">الطلبات</h1>
-        <div className="grid gap-3 rounded-[20px] bg-card p-4 shadow-card">
+        <div className="grid gap-3 rounded-[20px] bg-card p-4 shadow-card lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
             <Field id="f-branch" label="الفرع">
               <SelectInput id="f-branch" value={branchFilter} onChange={(e) => setBranchFilter(e.target.value)}>
@@ -130,7 +130,7 @@ export function AdminPage() {
             </Field>
             </div>
           </div>
-          <div role="group" aria-label="تصفية حسب الحالة" className="flex flex-wrap gap-2">
+          <div role="group" aria-label="تصفية حسب الحالة" className="flex flex-wrap gap-2 lg:pb-1.5">
             {FILTERS.map((f) => (
               <Button
                 key={f.value}

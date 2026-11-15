@@ -6,7 +6,8 @@ export default function App() {
     <>
       <DemoBanner />
       <Outlet />
-      <ScrollRestoration />
+      {/* Fresh loads share the key "default"; key them by path so a new page never opens mid-scroll. */}
+      <ScrollRestoration getKey={(l) => (l.key === 'default' ? l.pathname : l.key)} />
     </>
   )
 }

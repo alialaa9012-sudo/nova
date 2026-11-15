@@ -46,7 +46,7 @@ export function SiteHeader({
         ) : null}
         {logo ? (
           <Link to="/" className="shrink-0 rounded-xl outline-none focus-visible:ring-3 focus-visible:ring-ring/50">
-            <img src={brand.logoUrl} alt="خليها مشاوي" width={brand.logoWidth} height={brand.logoHeight} className={cn('w-auto', wide ? 'h-16' : 'h-24 md:h-28')} />
+            <img src={brand.logoUrl} alt="خليها مشاوي" width={brand.logoWidth} height={brand.logoHeight} className={cn('w-auto', wide ? 'h-11' : 'h-24 md:h-28')} />
           </Link>
         ) : null}
         {title ? <p className="truncate text-lg leading-[26px] font-bold">{title}</p> : null}
