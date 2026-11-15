@@ -23,21 +23,22 @@ afterEach(() => {
 })
 
 describe('home page', () => {
-  it('lists the three branches as open with their hours and marks the demo mode', () => {
+  it('lists the three branches as open, each with its order link, and marks the demo mode', () => {
     renderAt('/')
-    expect(screen.getByRole('heading', { level: 1, name: 'اطلب من خليها مشاوي' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { level: 1, name: 'خليها مشاوي' })).toBeInTheDocument()
+    expect(screen.getByText('الشوي على أصوله')).toBeInTheDocument()
     for (const name of ['فرع العاشر من رمضان', 'فرع الزقازيق', 'فرع التجمع الخامس']) {
       expect(screen.getByRole('heading', { level: 2, name })).toBeInTheDocument()
     }
-    expect(screen.getAllByText('مفتوح الآن حتى 12 منتصف الليل')).toHaveLength(3)
-    expect(screen.getAllByText('الخميس والجمعة:')).toHaveLength(3)
+    expect(screen.getAllByText('مفتوح حتى 12 ليلاً')).toHaveLength(3)
+    expect(screen.getByRole('link', { name: 'اطلب من فرع الزقازيق' })).toHaveAttribute('href', '/branch/zagazig')
     expect(screen.getByRole('note')).toHaveTextContent('نسخة تجريبية')
   })
 
   it('shows when a closed branch opens', () => {
     vi.setSystemTime(new Date('2027-01-04T07:00:00Z')) // 09:00 Cairo
     renderAt('/')
-    expect(screen.getAllByText('مغلق الآن، يفتح 11 صباحاً')).toHaveLength(3)
+    expect(screen.getAllByText('مغلق، يفتح 11 صباحاً')).toHaveLength(3)
   })
 })
 

@@ -1,7 +1,7 @@
 import { cartCount, cartReducer, cartSubtotal, MAX_QTY, type CartLine } from './cart'
 import { branches, findSize, getBranch, getMenu, getZones } from './catalog'
 import { formatEGP } from './format'
-import { formatTimeAr, getOpenStatus, summarizeHours, type WeeklyHours } from './hours'
+import { formatTimeAr, formatTimeShort, getOpenStatus, summarizeHours, type WeeklyHours } from './hours'
 import { canTransition, nextStatus, statusLabel } from './orderStatus'
 import { normalizeEgyptianMobile, toAsciiDigits } from './phone'
 import { computeTotals } from './pricing'
@@ -43,6 +43,14 @@ describe('opening hours', () => {
       { days: 'الخميس والجمعة', text: 'من 11 صباحاً إلى 1 بعد منتصف الليل' },
     ])
     expect(formatTimeAr('18:30')).toBe('6:30 مساءً')
+  })
+
+  it('has a short form for the status badge', () => {
+    expect(formatTimeShort('00:00')).toBe('12 ليلاً')
+    expect(formatTimeShort('01:00')).toBe('1 ليلاً')
+    expect(formatTimeShort('00:30')).toBe('12:30 ليلاً')
+    expect(formatTimeShort('11:00')).toBe('11 صباحاً')
+    expect(formatTimeShort('19:00')).toBe('7 مساءً')
   })
 
   it('handles a week with a day off', () => {

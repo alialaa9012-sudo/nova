@@ -87,6 +87,15 @@ export function formatTimeAr(hhmm: string): string {
   return `${h - 12}${mm} مساءً`
 }
 
+/** Short form for the status badge: "00:00" -> "12 ليلاً", "01:00" -> "1 ليلاً", otherwise as formatTimeAr. */
+export function formatTimeShort(hhmm: string): string {
+  const [h, m] = hhmm.split(':').map(Number)
+  const mm = m ? `:${String(m).padStart(2, '0')}` : ''
+  if (h === 0) return `12${mm} ليلاً`
+  if (h <= 4) return `${h}${mm} ليلاً`
+  return formatTimeAr(hhmm)
+}
+
 /** Groups consecutive days with identical hours: [{ days: 'السبت إلى الأربعاء', text: 'من 11 صباحاً إلى 12 منتصف الليل' }]. */
 export function summarizeHours(hours: WeeklyHours): { days: string; text: string }[] {
   const groups: { keys: DayKey[]; sig: string }[] = []
