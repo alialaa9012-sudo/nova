@@ -12,15 +12,17 @@ test.describe('home page', () => {
     await expect(page).toHaveTitle('خليها مشاوي | اطلب أونلاين')
     await expect(page.locator('html')).toHaveAttribute('dir', 'rtl')
     await expect(page.locator('html')).toHaveAttribute('lang', 'ar')
-    await expect(page.getByRole('heading', { level: 1 })).toHaveText('اطلب من خليها مشاوي')
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText('خليها مشاوي')
+    await expect(page.getByText('الشوي على أصوله')).toBeVisible()
     for (const name of ['فرع العاشر من رمضان', 'فرع الزقازيق', 'فرع التجمع الخامس']) {
       await expect(page.getByRole('heading', { level: 2, name })).toBeVisible()
     }
-    await expect(page.getByText('مفتوح الآن حتى 12 منتصف الليل')).toHaveCount(3)
+    await expect(page.getByText('مفتوح حتى 12 ليلاً')).toHaveCount(3)
     await expect(page.getByRole('note').first()).toContainText('نسخة تجريبية')
     // customers never get a way into the staff board from the site itself
     await expect(page.getByRole('link', { name: 'لوحة الكول سنتر' })).toHaveCount(0)
-    await expect(page.getByRole('img', { name: 'خليها مشاوي' })).toHaveJSProperty('complete', true)
+    // the logo is decorative next to the heading that names the restaurant
+    await expect(page.locator('main img').first()).toHaveJSProperty('complete', true)
   })
 
   test('phones get a bottom navigation, wide screens get the same links in the header', async ({ page, isMobile }) => {
@@ -54,7 +56,7 @@ test.describe('home page', () => {
   test('shows when a closed branch opens', async ({ page }) => {
     await page.clock.setFixedTime(new Date('2027-01-04T07:00:00Z')) // 09:00 Cairo
     await page.goto('/')
-    await expect(page.getByText('مغلق الآن، يفتح 11 صباحاً')).toHaveCount(3)
+    await expect(page.getByText('مغلق، يفتح 11 صباحاً')).toHaveCount(3)
   })
 
   test('opens the chosen branch menu and deep links survive a reload', async ({ page }) => {
