@@ -53,14 +53,19 @@ export function OrderCard({
           </p>
         ) : null}
         {/* The items on the card itself, so the agent can read or key in the order without opening it. */}
-        <ul className="grid gap-0.5 rounded-xl bg-control px-3 py-2">
+        <ul className="grid gap-1 rounded-xl bg-control px-3 py-2">
           {order.lines.map((l, i) => (
-            <li key={i} className="flex justify-between gap-3">
-              <span>
-                {l.qty} × {l.name}
-                {l.sizeLabel ? ` (${l.sizeLabel})` : ''}
-              </span>
-              <span className="shrink-0 tabular-nums">{formatEGP(l.lineTotal)}</span>
+            <li key={i} className="grid gap-1">
+              <div className="flex justify-between gap-3">
+                <span>
+                  {l.qty} × {l.name}
+                  {l.sizeLabel ? ` (${l.sizeLabel})` : ''}
+                </span>
+                <span className="shrink-0 tabular-nums">{formatEGP(l.lineTotal)}</span>
+              </div>
+              {l.note ? (
+                <p className="w-fit rounded-lg bg-gold-soft px-2 py-0.5 text-xs leading-[18px] font-semibold text-[#5a4026] ring-1 ring-gold/40">ملاحظة: {l.note}</p>
+              ) : null}
             </li>
           ))}
         </ul>

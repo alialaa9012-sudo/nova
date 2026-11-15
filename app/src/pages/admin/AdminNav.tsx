@@ -1,4 +1,5 @@
 import { NavLink } from 'react-router'
+import { brand } from '@/lib/catalog'
 import { cn } from '@/lib/utils'
 
 const LINKS = [
@@ -6,28 +7,34 @@ const LINKS = [
   { to: '/admin/zones', label: 'مناطق التوصيل', end: false },
 ]
 
-/** Switches between the screens of the call-center board. */
+/** The staff band: gold logo, the board's name and the switch between its screens. */
 export function AdminNav() {
   return (
-    <nav aria-label="أقسام اللوحة">
-      <ul className="flex gap-1 border-b border-brand-soft">
-        {LINKS.map((link) => (
-          <li key={link.to}>
-            <NavLink
-              to={link.to}
-              end={link.end}
-              className={({ isActive }) =>
-                cn(
-                  '-mb-px block border-b-[3px] px-4 py-2.5 font-bold',
-                  isActive ? 'border-brand text-foreground' : 'border-transparent text-muted-foreground hover:text-foreground',
-                )
-              }
-            >
-              {link.label}
-            </NavLink>
-          </li>
-        ))}
-      </ul>
-    </nav>
+    <header className="bg-[radial-gradient(70%_160%_at_50%_0%,var(--hero-from),var(--hero-to)_80%)] text-band-ink">
+      <div className="mx-auto flex max-w-[1320px] flex-wrap items-center gap-x-4 gap-y-2 px-5 py-2.5 md:px-6 lg:px-8">
+        <img src={brand.logoGoldUrl} alt="خليها مشاوي" width={brand.logoGoldWidth} height={brand.logoGoldHeight} className="h-12 w-auto shrink-0" />
+        <p className="text-lg leading-7 font-extrabold lg:text-xl">لوحة الكول سنتر</p>
+        <nav aria-label="أقسام اللوحة" className="ms-auto lg:ms-5">
+          <ul className="flex gap-1 rounded-full bg-white/6 p-1 ring-1 ring-gold-hi/35">
+            {LINKS.map((link) => (
+              <li key={link.to}>
+                <NavLink
+                  to={link.to}
+                  end={link.end}
+                  className={({ isActive }) =>
+                    cn(
+                      'block rounded-full px-4 py-2 text-sm font-extrabold outline-none focus-visible:ring-3 focus-visible:ring-gold-hi/70',
+                      isActive ? 'bg-linear-to-l from-[#d8b57a] to-gold text-brand' : 'text-band-ink/85 hover:text-band-ink',
+                    )
+                  }
+                >
+                  {link.label}
+                </NavLink>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      </div>
+    </header>
   )
 }

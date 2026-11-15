@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
 import { Field } from '@/components/Field'
 import { SelectInput } from '@/components/SelectInput'
-import { SiteHeader } from '@/components/SiteHeader'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { useNow } from '@/hooks/useNow'
@@ -104,9 +103,8 @@ export function AdminPage() {
   return (
     <>
       <title>لوحة الكول سنتر | خليها مشاوي</title>
-      <SiteHeader wide logo title="لوحة الكول سنتر" />
-      <main className="mx-auto grid max-w-[1280px] gap-4 px-5 pt-2 pb-8 md:px-6">
-        <AdminNav />
+      <AdminNav />
+      <main className="mx-auto grid max-w-[1320px] gap-4 px-5 pt-4 pb-8 md:px-6 lg:px-8">
         {/* The tab already names the screen and the banner already says it is a demo. */}
         <h1 className="sr-only">الطلبات</h1>
         <div className="grid gap-3 rounded-[20px] bg-card p-4 shadow-card lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
@@ -136,7 +134,7 @@ export function AdminPage() {
                 key={f.value}
                 variant="outline"
                 // Dark when active, so staff filters never look like the orange customer actions.
-                className={cn('h-10 bg-control px-4 text-[13px] font-semibold shadow-none', filter === f.value && 'bg-foreground text-white hover:bg-foreground active:bg-foreground')}
+                className={cn('h-10 bg-control px-4 text-[13px] font-semibold shadow-none', filter === f.value && 'bg-brand bg-none text-band-ink ring-1 ring-gold hover:bg-brand active:bg-brand')}
                 aria-pressed={filter === f.value}
                 onClick={() => setFilter(f.value)}
               >

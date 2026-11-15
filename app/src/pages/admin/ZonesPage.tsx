@@ -3,7 +3,6 @@ import { useEffect, useMemo, useState, type FormEvent } from 'react'
 import { toast } from 'sonner'
 import { Field } from '@/components/Field'
 import { SelectInput } from '@/components/SelectInput'
-import { SiteHeader } from '@/components/SiteHeader'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { fieldProps } from '@/lib/a11y'
@@ -135,9 +134,8 @@ export function ZonesPage() {
   return (
     <>
       <title>مناطق التوصيل | خليها مشاوي</title>
-      <SiteHeader wide logo title="لوحة الكول سنتر" />
-      <main className="mx-auto grid max-w-[1280px] gap-4 px-5 pt-2 pb-8 md:px-6">
-        <AdminNav />
+      <AdminNav />
+      <main className="mx-auto grid max-w-[1320px] gap-4 px-5 pt-4 pb-8 md:px-6 lg:px-8">
         <h1 className="sr-only">مناطق التوصيل</h1>
         {api.mode === 'local' ? (
           <p role="note" className="rounded-2xl bg-warning-soft p-3 text-sm font-semibold text-warning-ink">
@@ -147,7 +145,7 @@ export function ZonesPage() {
 
         <div role="group" aria-label="الفرع" className="flex flex-wrap gap-2">
           {branches.map((b) => (
-            <Button key={b.id} size="lg" className={cn('h-11 bg-control shadow-none', b.id === branchId && 'bg-foreground text-white hover:bg-foreground')} variant="outline" aria-pressed={b.id === branchId} onClick={() => chooseBranch(b.id)}>
+            <Button key={b.id} size="lg" className={cn('h-11 bg-control shadow-none', b.id === branchId && 'bg-brand bg-none text-band-ink ring-1 ring-gold hover:bg-brand')} variant="outline" aria-pressed={b.id === branchId} onClick={() => chooseBranch(b.id)}>
               فرع {b.name}
             </Button>
           ))}
