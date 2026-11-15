@@ -1,4 +1,4 @@
-import { render, screen, within } from '@testing-library/react'
+import { cleanup, render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { createMemoryRouter, RouterProvider } from 'react-router'
 import { api } from '@/lib/api'
@@ -271,5 +271,41 @@ describe('menu search and zone picker', () => {
     await user.keyboard('{Escape}')
     await user.click(screen.getByRole('button', { name: /^تأكيد الطلب/ }))
     expect(screen.getByText('اختر المنطقة.')).toBeInTheDocument()
+  })
+})
+
+describe('checkout draft and order number', () => {
+  it('keeps what the customer typed across a reload and clears it once the order is placed', async () => {
+    const user = userEvent.setup()
+    const item = getMenu('ashry')[0].items[0]
+    const cart = JSON.stringify([{ sizeId: item.sizes[0].id, itemId: item.id, name: item.name, sizeLabel: item.sizes[0].label, unitPrice: item.sizes[0].price, qty: 1 }])
+    localStorage.setItem('km.cart.v1.ashry', cart)
+    const first = renderAt('/branch/ashry/checkout')
+    await user.click(screen.getByRole('radio', { name: 'استلام من الفرع' }))
+    await user.type(screen.getByLabelText('الاسم'), 'منى')
+    await user.type(screen.getByLabelText('رقم الموبايل'), '01112345678')
+    first.dispose()
+    cleanup()
+
+    // "reload": a fresh render reads the draft back
+    renderAt('/branch/ashry/checkout')
+    expect(screen.getByLabelText('الاسم')).toHaveValue('منى')
+    expect(screen.getByLabelText('رقم الموبايل')).toHaveValue('01112345678')
+    expect(screen.getByRole('radio', { name: 'استلام من الفرع' })).toBeChecked()
+
+    await user.click(screen.getByRole('button', { name: /^تأكيد الطلب/ }))
+    expect(await screen.findByRole('heading', { name: 'تم إرسال طلبك' })).toBeInTheDocument()
+    expect(localStorage.getItem('km.checkoutDraft.v1.ashry')).toBeNull()
+    // the order number stands on its own with copy and share
+    expect(screen.getByRole('button', { name: 'نسخ رقم الطلب' })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'مشاركة رقم الطلب على واتساب' })).toHaveAttribute('href', expect.stringContaining('A-0001'))
+  })
+
+  it('shows the remembered order above the branches on the home page', () => {
+    localStorage.setItem('km.lastOrder.v1', JSON.stringify({ number: 'Z-0007', phone: '01012345678' }))
+    renderAt('/')
+    const strip = screen.getByRole('link', { name: 'حالة طلبك Z-0007' })
+    const firstBranch = screen.getByRole('heading', { level: 2, name: 'فرع العاشر من رمضان' })
+    expect(strip.compareDocumentPosition(firstBranch) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
   })
 })

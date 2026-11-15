@@ -19,27 +19,34 @@ export function ZoneCombobox({
   zones,
   value,
   onChange,
+  onOpenChange,
   error,
 }: {
   id: string
   zones: DeliveryZone[]
   value: string
   onChange: (zoneId: string) => void
+  /** Told when the list opens or closes, so the page can keep fixed bars out of its way. */
+  onOpenChange?: (open: boolean) => void
   error?: string
 }) {
   const listId = useId()
   const box = useRef<HTMLDivElement>(null)
   const list = useRef<HTMLUListElement>(null)
-  const [text, setText] = useState('')
+  // null = show the chosen zone (also one remembered from a draft); a string = what the customer is typing.
+  const [typed, setText] = useState<string | null>(null)
   const [open, setOpen] = useState(false)
   const [active, setActive] = useState(0)
 
   const selected = zones.find((z) => z.id === value)
+  const text = typed ?? (selected ? display(selected) : '')
   // With a zone chosen and its name untouched, opening shows the whole list again.
   const wanted = selected && text === display(selected) ? '' : searchKey(text)
   const matches = wanted ? zones.filter((z) => searchKey(z.label).includes(wanted)) : zones
   const expanded = open && matches.length > 0
   const current = Math.min(active, matches.length - 1)
+
+  useEffect(() => onOpenChange?.(open), [open, onOpenChange])
 
   useEffect(() => {
     if (expanded) list.current?.children[current]?.scrollIntoView?.({ block: 'nearest' })
@@ -56,7 +63,7 @@ export function ZoneCombobox({
 
   function choose(zone: DeliveryZone) {
     onChange(zone.id)
-    setText(display(zone))
+    setText(null)
     setOpen(false)
   }
 

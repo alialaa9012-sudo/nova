@@ -14,6 +14,8 @@ export function SiteHeader({
   backLabel = 'رجوع',
   wide = false,
   narrow = false,
+  compact = false,
+  checkout = false,
   logo = false,
   children,
 }: {
@@ -24,6 +26,10 @@ export function SiteHeader({
   wide?: boolean
   /** Form pages: same narrow column as their content. */
   narrow?: boolean
+  /** Single small form (tracking): the narrowest column. */
+  compact?: boolean
+  /** Checkout: narrow on phones and tablets, as wide as its two columns from 1024px. */
+  checkout?: boolean
   /** The logo shows on the home page and the staff board only. */
   logo?: boolean
   children?: ReactNode
@@ -31,7 +37,7 @@ export function SiteHeader({
   return (
     // A header that carries the logo is tall, so it scrolls away instead of staying pinned.
     <header className={cn('z-30 bg-background', logo ? 'relative' : 'sticky top-[env(safe-area-inset-top,0px)]')}>
-      <div className={cn('mx-auto flex min-h-[68px] items-center gap-3 px-5 py-3 md:px-6', wide ? 'max-w-[1280px]' : narrow ? 'max-w-3xl' : 'max-w-[1200px]')}>
+      <div className={cn('mx-auto flex min-h-[68px] items-center gap-3 px-5 py-3 md:px-6', wide ? 'max-w-[1280px]' : compact ? 'max-w-md' : checkout ? 'max-w-3xl lg:max-w-[1100px]' : narrow ? 'max-w-3xl' : 'max-w-[1200px]')}>
         {backTo ? (
           <Link to={backTo} className={headerButton}>
             <ArrowRight className="size-5" aria-hidden="true" />

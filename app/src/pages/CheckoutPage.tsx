@@ -14,7 +14,8 @@ import { useNow } from '@/hooks/useNow'
 import { fieldProps } from '@/lib/a11y'
 import { api, errorMessage } from '@/lib/api'
 import type { DeliveryZone } from '@/lib/catalog'
-import { emptyCheckoutForm, validateCheckout, type CheckoutErrors, type CheckoutForm } from '@/lib/checkout'
+import { validateCheckout, type CheckoutErrors, type CheckoutForm } from '@/lib/checkout'
+import { clearDraft, loadDraft, saveDraft } from '@/lib/checkoutDraft'
 import { formatEGP } from '@/lib/format'
 import { formatTimeAr, getOpenStatus } from '@/lib/hours'
 import { rememberOrder } from '@/lib/lastOrder'
@@ -48,12 +49,16 @@ export function CheckoutPage() {
       stop()
     }
   }, [branch.id])
-  const [form, setForm] = useState<CheckoutForm>(emptyCheckoutForm)
+  const [form, setForm] = useState<CheckoutForm>(() => loadDraft(branch.id))
+  const [zoneOpen, setZoneOpen] = useState(false)
+  useEffect(() => saveDraft(branch.id, form), [branch.id, form])
   const [errors, setErrors] = useState<CheckoutErrors>({})
   const [submitting, setSubmitting] = useState(false)
   const [serverError, setServerError] = useState<string | null>(null)
 
+  // A remembered zone that no longer exists (removed by the admin) simply counts as not chosen.
   const zone = zones.find((z) => z.id === form.zoneId)
+  const zoneId = zone ? zone.id : ''
   const totals = computeTotals(lines, form.orderType, zone?.fee ?? 0, branch.charges)
   const status = getOpenStatus(branch.hours, now, branch.timezone)
   const set = <K extends keyof CheckoutForm>(key: K, value: CheckoutForm[K]) => setForm((f) => ({ ...f, [key]: value }))
@@ -61,7 +66,7 @@ export function CheckoutPage() {
 
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
-    const found = validateCheckout(form)
+    const found = validateCheckout({ ...form, zoneId })
     setErrors(found)
     const first = Object.keys(found)[0]
     if (first) {
@@ -76,7 +81,7 @@ export function CheckoutPage() {
         orderType: form.orderType,
         customerName: form.name,
         phone: form.phone,
-        zoneId: form.orderType === 'delivery' ? form.zoneId : undefined,
+        zoneId: form.orderType === 'delivery' ? zoneId : undefined,
         street: form.street,
         building: form.building,
         apartment: form.apartment,
@@ -85,6 +90,7 @@ export function CheckoutPage() {
         lines: lines.map((l) => ({ sizeId: l.sizeId, qty: l.qty })),
       })
       dispatch({ type: 'clear' })
+      clearDraft(branch.id)
       rememberOrder(order.number, order.phone)
       navigate(`/order/${order.number}`, { state: { phone: order.phone, justPlaced: true } })
     } catch (err) {
@@ -113,11 +119,13 @@ export function CheckoutPage() {
   return (
     <>
       <title>{`إتمام الطلب · فرع ${branch.name} | خليها مشاوي`}</title>
-      <SiteHeader narrow backTo={menuPath} backLabel="رجوع للمنيو" title={`فرع ${branch.name}`} />
+      <SiteHeader checkout backTo={menuPath} backLabel="رجوع للمنيو" title={`فرع ${branch.name}`} />
       {/* The bottom padding keeps the last card clear of the fixed confirm bar. */}
-      <main className={cn('mx-auto max-w-3xl px-5 pt-2', blocked ? 'pb-56' : 'pb-32')}>
+      <main className={cn('mx-auto max-w-3xl px-5 pt-2 lg:max-w-[1100px] lg:pb-12', blocked ? 'pb-56' : 'pb-32')}>
         <h1 className="text-[26px] leading-9 font-extrabold">إتمام الطلب</h1>
-        <form noValidate onSubmit={onSubmit} className="mt-4 grid gap-4">
+        {/* From 1024px: the form on one side, the summary and the confirm button kept in view on the other. */}
+        <form noValidate onSubmit={onSubmit} className="mt-4 grid gap-4 lg:grid-cols-[minmax(0,1fr)_380px] lg:items-start lg:gap-6">
+          <div className="grid gap-4">
           <section aria-labelledby="type-title" className={cn(card, 'gap-3')}>
             <h2 id="type-title" className="font-bold">
               طريقة الاستلام
@@ -171,7 +179,7 @@ export function CheckoutPage() {
                 عنوان التوصيل
               </h2>
               <Field id="zoneId" label="المنطقة" error={errors.zoneId}>
-                <ZoneCombobox id="zoneId" zones={zones} value={form.zoneId} onChange={(zoneId) => set('zoneId', zoneId)} error={errors.zoneId} />
+                <ZoneCombobox id="zoneId" zones={zones} value={zoneId} onChange={(id) => set('zoneId', id)} onOpenChange={setZoneOpen} error={errors.zoneId} />
               </Field>
               <p className="text-xs leading-[18px] text-muted-foreground">
                 منطقتك غير موجودة في القائمة؟ اتصل بالفرع على{' '}
@@ -206,6 +214,9 @@ export function CheckoutPage() {
             </Field>
           </section>
 
+          </div>
+
+          <div className="grid gap-4 lg:sticky lg:top-[84px]">
           <section aria-labelledby="summary-title" className={cn(card, 'gap-3')}>
             <h2 id="summary-title" className="font-bold">
               ملخص الطلب
@@ -224,7 +235,13 @@ export function CheckoutPage() {
           </section>
 
           {/* Always in reach: the confirm button with anything that stops the order right above it. */}
-          <div className="fixed inset-x-0 bottom-0 z-20 bg-linear-to-t from-background from-75% to-transparent px-4 pt-8 pb-[max(1rem,env(safe-area-inset-bottom,0px))]">
+          {/* On phones the bar is fixed and steps aside while the zone list is open, so it never covers it. */}
+          <div
+            className={cn(
+              'fixed inset-x-0 bottom-0 z-20 bg-linear-to-t from-background from-75% to-transparent px-4 pt-8 pb-[max(1rem,env(safe-area-inset-bottom,0px))] lg:static lg:bg-none lg:p-0',
+              zoneOpen && 'max-lg:hidden',
+            )}
+          >
             <div className="mx-auto grid max-w-3xl gap-2">
               {!status.isOpen ? (
                 <p role="alert" className="rounded-2xl bg-closed-soft p-3 text-sm font-semibold text-closed-ink">
@@ -240,6 +257,7 @@ export function CheckoutPage() {
                 {submitting ? 'جاري إرسال الطلب…' : `تأكيد الطلب · ${formatEGP(totals.total)}`}
               </Button>
             </div>
+          </div>
           </div>
         </form>
       </main>

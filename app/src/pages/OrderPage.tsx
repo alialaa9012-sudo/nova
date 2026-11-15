@@ -1,6 +1,7 @@
 import { Banknote, MessageCircle, Phone } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { Link, useLocation, useParams } from 'react-router'
+import { OrderNumberCard } from '@/components/OrderNumberCard'
 import { OrderSummary } from '@/components/OrderSummary'
 import { SiteHeader } from '@/components/SiteHeader'
 import { StatusTimeline } from '@/components/StatusTimeline'
@@ -99,6 +100,7 @@ export function OrderPage() {
             طلب رقم <span dir="ltr">{order.number}</span>
           </h1>
         )}
+        <OrderNumberCard number={order.number} />
 
         <section aria-labelledby="status-title" className="grid gap-3 rounded-[20px] bg-card p-4 shadow-card">
           <h2 id="status-title" className="font-bold">
@@ -137,7 +139,7 @@ export function OrderPage() {
 
         <div className="flex flex-wrap gap-2">
           {branch ? (
-            <Button asChild className="h-12 min-w-40 flex-1">
+            <Button asChild variant="outline" className="h-12 min-w-40 flex-1">
               <Link to={`/branch/${branch.id}`}>اطلب مرة أخرى</Link>
             </Button>
           ) : null}

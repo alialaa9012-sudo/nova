@@ -8,7 +8,7 @@ export function TrackPage() {
   return (
     <>
       <title>تتبع طلبك | خليها مشاوي</title>
-      <SiteHeader narrow backTo="/" backLabel="الصفحة الرئيسية" title="تتبع طلبك" />
+      <SiteHeader compact backTo="/" backLabel="الصفحة الرئيسية" />
       <main className="mx-auto grid max-w-md gap-4 px-5 pt-2 pb-28 lg:pb-8">
         <h1 className="text-[26px] leading-9 font-extrabold">تتبع طلبك</h1>
         <p className="text-sm leading-[22px] text-muted-foreground">اكتب رقم الطلب ورقم الموبايل الذي طلبت به.</p>

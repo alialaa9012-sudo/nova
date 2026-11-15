@@ -1,4 +1,4 @@
-import { MapPin, MessageCircle, Phone, Search } from 'lucide-react'
+import { ChevronLeft, MapPin, MessageCircle, Phone, Search } from 'lucide-react'
 import { Link } from 'react-router'
 import { BottomNav } from '@/components/BottomNav'
 import { HeroBanner } from '@/components/HeroBanner'
@@ -15,7 +15,7 @@ const iconLink = 'grid size-12 shrink-0 place-items-center rounded-full bg-contr
 function BranchCard({ branch, now }: { branch: Branch; now: Date }) {
   return (
     <article className="flex h-full flex-col gap-3 rounded-[20px] bg-card p-4 shadow-card">
-      <div className="flex flex-wrap items-start justify-between gap-2">
+      <div className="grid gap-2">
         <h2 className="text-lg leading-[26px] font-bold">فرع {branch.name}</h2>
         <OpenBadge branch={branch} now={now} />
       </div>
@@ -28,7 +28,7 @@ function BranchCard({ branch, now }: { branch: Branch; now: Date }) {
         ))}
       </ul>
       <div className="mt-auto flex items-center gap-2 pt-1">
-        <Button asChild className="h-auto min-h-12 min-w-0 flex-1 px-4 py-2 text-center whitespace-normal">
+        <Button asChild className="h-auto min-h-14 min-w-0 flex-1 px-4 py-2 text-center whitespace-normal">
           <Link to={`/branch/${branch.id}`}>اطلب من فرع {branch.name}</Link>
         </Button>
         <a href={`tel:${branch.phones[0]}`} aria-label="اتصال" className={iconLink}>
@@ -66,38 +66,31 @@ export function HomePage() {
       <main className="mx-auto max-w-[1200px] px-5 pt-2 pb-6 md:px-6">
         <h1 className="text-[26px] leading-9 font-extrabold">اطلب من خليها مشاوي</h1>
         <p className="mt-1 text-sm leading-[22px] text-muted-foreground">اختر الفرع الأقرب لك لتظهر قائمة طعامه وأسعاره ومناطق توصيله.</p>
-        <HeroBanner banners={heroBanners} onBrowse={() => document.getElementById('branches')?.scrollIntoView({ behavior: 'smooth' })} />
-        <ul id="branches" className="mt-6 grid scroll-mt-24 gap-4 md:grid-cols-2 lg:grid-cols-3">
+        {previous ? (
+          <Link
+            to={`/order/${previous.number}`}
+            state={{ phone: previous.phone }}
+            className="mt-5 flex min-h-14 items-center gap-3 rounded-[20px] border border-gold bg-card px-4 py-3 shadow-card outline-none hover:bg-control focus-visible:ring-3 focus-visible:ring-ring/50"
+          >
+            <Search className="size-5 shrink-0 text-gold-deep" aria-hidden="true" />
+            <span className="flex-1 font-bold">حالة طلبك {previous.number}</span>
+            <ChevronLeft className="size-5 shrink-0 text-muted-foreground" aria-hidden="true" />
+          </Link>
+        ) : null}
+        <HeroBanner
+          banners={heroBanners}
+          onBrowse={() => {
+            const calm = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+            document.getElementById('branches')?.scrollIntoView({ behavior: calm ? 'auto' : 'smooth' })
+          }}
+        />
+        <ul id="branches" className="mt-6 grid scroll-mt-24 gap-4 lg:grid-cols-3">
           {branches.map((b) => (
             <li key={b.id}>
               <BranchCard branch={b} now={now} />
             </li>
           ))}
         </ul>
-        <section aria-labelledby="help-title" className="mt-6 grid gap-3 rounded-[20px] bg-card p-4 shadow-card">
-          <h2 id="help-title" className="text-base leading-6 font-bold">
-            طلبت قبل كده؟
-          </h2>
-          <div className="flex flex-wrap gap-2">
-            {previous ? (
-              <Button asChild className="h-12">
-                <Link to={`/order/${previous.number}`} state={{ phone: previous.phone }}>
-                  حالة طلبك {previous.number}
-                </Link>
-              </Button>
-            ) : null}
-            <Button asChild variant="outline" className="h-12 bg-control">
-              <Link to="/track">
-                <Search aria-hidden="true" /> تتبع طلب
-              </Link>
-            </Button>
-            <Button asChild variant="outline" className="h-12 bg-control">
-              <a href={brand.whatsappUrl} target="_blank" rel="noopener noreferrer">
-                <MessageCircle aria-hidden="true" /> واتساب <span dir="ltr">{brand.whatsappNumber}</span>
-              </a>
-            </Button>
-          </div>
-        </section>
       </main>
       <footer className="mx-auto max-w-[1200px] px-5 pb-28 text-center text-xs leading-[18px] text-muted-foreground lg:pb-8">الدفع كاش عند الاستلام.</footer>
       <BottomNav />
