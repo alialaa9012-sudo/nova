@@ -110,7 +110,7 @@ export function AdminPage() {
         {/* The tab already names the screen and the banner already says it is a demo. */}
         <h1 className="sr-only">الطلبات</h1>
         <div className="grid gap-3 rounded-[20px] bg-card p-4 shadow-card">
-          <div className="grid gap-3 sm:grid-cols-3">
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
             <Field id="f-branch" label="الفرع">
               <SelectInput id="f-branch" value={branchFilter} onChange={(e) => setBranchFilter(e.target.value)}>
                 <option value="all">كل الفروع</option>
@@ -124,9 +124,11 @@ export function AdminPage() {
             <Field id="f-date" label="التاريخ">
               <Input id="f-date" type="date" value={date} onChange={(e) => setDate(e.target.value)} />
             </Field>
+            <div className="col-span-2 sm:col-span-1">
             <Field id="f-search" label="بحث برقم الطلب أو الموبايل">
               <Input id="f-search" type="search" dir="ltr" className="text-end" value={query} onChange={(e) => setQuery(e.target.value)} />
             </Field>
+            </div>
           </div>
           <div role="group" aria-label="تصفية حسب الحالة" className="flex flex-wrap gap-2">
             {FILTERS.map((f) => (

@@ -22,9 +22,19 @@ const emptyForm: ZoneForm = { type: DEFAULT_ZONE_TYPE, name: '', fee: '' }
 const FEE_ERROR = `اكتب رسوم التوصيل رقماً صحيحاً من 0 إلى ${MAX_ZONE_FEE} جنيه.`
 
 /** What the branch file says about a zone that has no single fee yet. */
+/**
+ * What the branch file says about a zone that has no single fee yet. The two notes the import
+ * generates ("سعران…" and "مدى…") are rebuilt from the numbers, because «40 و45» in a right-to-left
+ * line renders as "45g 40". Notes written by the restaurant are shown as they are.
+ */
 function pendingHint(zone: PendingZone): string {
   const oneFee = zone.feeMin === zone.feeMax
-  if (!zone.note) return `في الملف: ${oneFee ? formatEGP(zone.feeMin) : `${zone.feeMin} أو ${formatEGP(zone.feeMax)}`}`
+  const generated = !zone.note || zone.note.startsWith('سعران') || zone.note.startsWith('مدى')
+  if (generated) {
+    if (oneFee) return `في الملف: ${formatEGP(zone.feeMin)}`
+    const range = zone.note.startsWith('مدى')
+    return range ? `في الملف: من ${zone.feeMin} إلى ${formatEGP(zone.feeMax)}` : `في الملف: ${zone.feeMin} أو ${formatEGP(zone.feeMax)}`
+  }
   return oneFee ? `${formatEGP(zone.feeMin)} · ${zone.note}` : zone.note
 }
 
