@@ -37,6 +37,10 @@ export interface Brand {
   logoUrl: string
   logoWidth: number
   logoHeight: number
+  /** The gold logo on a transparent background, for the dark bands. */
+  logoGoldUrl: string
+  logoGoldWidth: number
+  logoGoldHeight: number
 }
 
 export interface MenuSize {
@@ -111,6 +115,7 @@ interface RawBranches {
     name_ar: string
     whatsapp: { number: string; url: string }
     logo: { url_path: string; width: number; height: number }
+    logo_gold: { url_path: string; width: number; height: number }
   }
   branches: {
     id: BranchId
@@ -137,6 +142,9 @@ export const brand: Brand = {
   logoUrl: import.meta.env.BASE_URL + raw.brand.logo.url_path.replace(/^\//, ''),
   logoWidth: raw.brand.logo.width,
   logoHeight: raw.brand.logo.height,
+  logoGoldUrl: import.meta.env.BASE_URL + raw.brand.logo_gold.url_path.replace(/^\//, ''),
+  logoGoldWidth: raw.brand.logo_gold.width,
+  logoGoldHeight: raw.brand.logo_gold.height,
 }
 
 export const branches: Branch[] = raw.branches.map((b) => ({

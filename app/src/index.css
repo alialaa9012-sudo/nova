@@ -2,6 +2,7 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 @import "@fontsource-variable/cairo";
+@import "@fontsource/amiri/arabic-700.css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -35,10 +36,17 @@
     --color-danger-ink: var(--danger-ink);
     --color-closed-soft: var(--closed-soft);
     --color-closed-ink: var(--closed-ink);
-    --shadow-card: 0 4px 16px rgb(74 38 14 / 0.08);
-    --shadow-nav: 0 8px 24px rgb(74 38 14 / 0.14);
-    --shadow-cta: 0 6px 16px rgb(217 58 11 / 0.3);
+    --shadow-card: 0 1px 0 rgb(176 138 79 / 0.12), 0 8px 22px rgb(60 40 20 / 0.06);
+    --shadow-nav: 0 12px 30px rgb(60 40 20 / 0.16);
+    --shadow-cta: 0 8px 18px rgb(43 29 19 / 0.25);
     --font-heading: var(--font-sans);
+    /* Item, branch and category names: the Naskh face, closest to the printed menu and the logo. */
+    --font-naskh: 'Amiri', 'Cairo Variable', serif;
+    --color-gold-hi: var(--gold-hi);
+    --color-gold-soft: var(--gold-soft);
+    --color-band: var(--band);
+    --color-band-ink: var(--band-ink);
+    --color-band-muted: var(--band-muted);
     --font-sans: 'Cairo Variable', system-ui, sans-serif;
     --color-sidebar-ring: var(--sidebar-ring);
     --color-sidebar-border: var(--sidebar-border);
@@ -81,61 +89,67 @@
 }
 
 :root {
+    /* «خليها مشاوي» identity: cream paper, the logo's ink brown for actions, its gold for frames and accents. */
     /* Page and surfaces */
-    --background: #fceddf;            /* page */
-    --foreground: #1a1511;            /* text */
-    --card: #fef9f5;
-    --card-foreground: #1a1511;
-    --popover: #fef9f5;
-    --popover-foreground: #1a1511;
+    --background: #f6efe6;            /* page */
+    --foreground: #24180f;            /* text */
+    --card: #fffcf8;
+    --card-foreground: #24180f;
+    --popover: #fffcf8;
+    --popover-foreground: #24180f;
     --surface: #ffffff;               /* inputs and dialogs */
-    --control: #fdf5ec;               /* header buttons, search field */
-    --chip-idle: #f5f5f5;             /* idle size chips, quantity stepper */
-    --nav: #fefcfa;                   /* bottom navigation */
+    --control: #f3eadf;               /* header buttons, chips, steppers */
+    --chip-idle: #f3eadf;
+    --nav: #fffcf8;                   /* bottom navigation */
 
-    /* Brand: measured #dd3d0e, darkened so white text reaches 4.6:1 */
-    --brand: #d93a0b;
-    --brand-pressed: #c2350b;
-    --brand-text: #b8330a;            /* brand-coloured text on light backgrounds */
-    --brand-soft: #fcc494;
-    --brand-tint: #fbe6d1;
-    --hero-from: #380201;
-    --hero-to: #a31a07;
-    --badge-a: #ab2016;
-    --badge-b: #f0aa37;
-    --badge-c: #d6461a;
-    --discount: #bc2618;
+    /* Actions: the logo's ink brown; cream text on it is 13:1 */
+    --brand: #2e1f14;
+    --brand-pressed: #1e140d;
+    --brand-text: #7a5526;            /* gold-brown text on light backgrounds, 5.8:1 on the page */
+    --brand-soft: #f1e3cb;            /* gold wash: selected, notes */
+    --brand-tint: #f3eadf;
+    --hero-from: #4a3220;             /* dark bands: checkout, order, tracking, staff board */
+    --hero-to: #1e140d;
+    --band: #1e140d;
+    --band-ink: #f6e7c8;
+    --band-muted: #d9c8ae;            /* 10:1 on the band */
+    --badge-a: #8a1f04;
+    --badge-b: #c98a3a;
+    --badge-c: #7a5526;
+    --discount: #8a1f04;
 
-    /* Logo touches: the muted gold of the logo frame (measured from logo.png). Lines and frames only, never text. */
-    --gold: #b09878;
-    --gold-deep: #8a7150;             /* 4.4:1 on cards, for small gold marks that must stay visible */
+    /* The logo's gold */
+    --gold: #b08a4f;                  /* frames and ornaments, never small text */
+    --gold-deep: #8a6630;             /* 4.6:1 on the page, for small gold marks */
+    --gold-hi: #d6b276;               /* gold on the dark band and on brown buttons */
+    --gold-soft: #f1e3cb;
     --line: #938679;                  /* field borders and outlined controls: 3.4:1 on cards and white */
 
-    /* States: one warm set for the whole app instead of stock Tailwind greens, ambers and stones */
-    --success: #1f6b45;               /* solid (white text 6.5:1), done steps */
-    --success-soft: #ddf1e3;
-    --success-ink: #1c5b3a;           /* text on success-soft, 6.8:1 */
+    /* States */
+    --success: #1f6b45;
+    --success-soft: #e7f3ea;
+    --success-ink: #1e6b43;           /* 5.7:1 on success-soft */
     --warning-soft: #fbefc9;
-    --warning-ink: #4a2c06;           /* 11:1 */
-    --danger: #b42318;                /* error text 6.3:1 on cards, white on it 6.6:1 */
+    --warning-ink: #4a2c06;
+    --danger: #b42318;
     --danger-soft: #fde9e5;
     --danger-ink: #8f1d13;
-    --closed-soft: #ece2d6;           /* closed branch, cancelled, calm order age */
-    --closed-ink: #3d3127;            /* 9.9:1; do not put muted text on closed-soft */
+    --closed-soft: #f1e7da;           /* closed branch, cancelled, calm order age */
+    --closed-ink: #6b5340;            /* 5.8:1 on closed-soft */
 
     /* shadcn roles mapped onto the palette */
     --primary: var(--brand);
-    --primary-foreground: #ffffff;
+    --primary-foreground: #f6e7c8;
     --secondary: var(--card);
-    --secondary-foreground: #1a1511;
+    --secondary-foreground: #24180f;
     --muted: var(--chip-idle);
-    --muted-foreground: #6b6560;      /* 5.0:1 on the page */
+    --muted-foreground: #6e6157;      /* 5.2:1 on the page */
     --accent: var(--brand-tint);
-    --accent-foreground: #1a1511;
+    --accent-foreground: #24180f;
     --destructive: var(--danger);
-    --border: oklch(0.922 0 0);
+    --border: #eadbc6;
     --input: var(--line);
-    --ring: var(--brand);
+    --ring: var(--gold-deep);
     --chart-1: oklch(0.87 0 0);
     --chart-2: oklch(0.556 0 0);
     --chart-3: oklch(0.439 0 0);
@@ -164,8 +178,8 @@
     @apply font-sans;
     /* Browser surfaces carry the palette too. */
     accent-color: var(--brand);
-    caret-color: var(--brand);
-    scrollbar-color: var(--brand-soft) transparent;
+    caret-color: var(--gold-deep);
+    scrollbar-color: var(--gold) transparent;
     }
   ::selection {
     background: var(--brand-soft);
