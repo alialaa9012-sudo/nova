@@ -48,7 +48,12 @@ export function CartSheet({
       }
     >
       {lines.length === 0 ? (
-        <p className="py-6 text-center text-muted-foreground">السلة فارغة.</p>
+        <div className="grid justify-items-center gap-3 py-6 text-center">
+          <p className="text-muted-foreground">السلة فارغة.</p>
+          <Button variant="outline" onClick={() => onOpenChange(false)}>
+            العودة للمنيو
+          </Button>
+        </div>
       ) : (
         <ul className="divide-y divide-brand-tint">
           {lines.map((l) => {

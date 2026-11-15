@@ -36,7 +36,6 @@ export function ModalSheet({
             'duration-200 data-open:animate-in data-open:fade-in-0 data-open:slide-in-from-bottom-10 data-closed:animate-out data-closed:fade-out-0 data-closed:slide-out-to-bottom-10',
           )}
         >
-          <div aria-hidden="true" className="absolute inset-x-0 top-2 z-10 mx-auto h-1 w-10 rounded-full bg-chip md:hidden" />
           <div className="min-h-0 flex-1 overflow-y-auto">
             {image ? <img src={image} alt="" className="h-[220px] w-full object-cover" /> : null}
             <div className={cn('relative bg-card', image && '-mt-7 rounded-t-[28px]')}>

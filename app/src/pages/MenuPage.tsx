@@ -1,13 +1,14 @@
-import { Search, ShoppingBag } from 'lucide-react'
-import { useMemo, useState } from 'react'
+import { Search, ShoppingBag, X } from 'lucide-react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { toast } from 'sonner'
 import { CartSheet } from '@/components/CartSheet'
 import { CategoryBar } from '@/components/CategoryBar'
-import { ItemCard } from '@/components/ItemCard'
+import { ItemCard, ItemRow } from '@/components/ItemCard'
 import { ItemSheet } from '@/components/ItemSheet'
 import { OpenBadge } from '@/components/OpenBadge'
 import { PromoStrip } from '@/components/PromoStrip'
 import { headerButton, SiteHeader } from '@/components/SiteHeader'
+import { Button } from '@/components/ui/button'
 import { useActiveSection } from '@/hooks/useActiveSection'
 import { useNow } from '@/hooks/useNow'
 import { cartCount, cartSubtotal } from '@/lib/cart'
@@ -18,8 +19,8 @@ import { searchKey } from '@/lib/text'
 import { useBranch } from '@/state/branch-context'
 import { useCart } from '@/state/cart-context'
 
-/** Height covered by the sticky header and category bar, in pixels. */
-const STICKY_OFFSET = 132
+/** Header height (68px) plus the sticky category bar, measured at run time below. */
+const HEADER = 68
 
 export function MenuPage() {
   const branch = useBranch()
@@ -29,6 +30,8 @@ export function MenuPage() {
   const [selected, setSelected] = useState<MenuItem | null>(null)
   const [cartOpen, setCartOpen] = useState(false)
   const [query, setQuery] = useState('')
+  const sticky = useRef<HTMLDivElement>(null)
+  const [stickyHeight, setStickyHeight] = useState(56)
 
   const wanted = searchKey(query)
   const shown = useMemo(
@@ -39,7 +42,17 @@ export function MenuPage() {
     [menu, wanted],
   )
   const sectionIds = useMemo(() => shown.map((c) => c.id), [shown])
-  const activeId = useActiveSection(sectionIds, STICKY_OFFSET)
+  const offset = HEADER + stickyHeight + 8
+  const activeId = useActiveSection(sectionIds, offset)
+
+  // The category bar's real height decides where a section lands under the sticky bars.
+  useEffect(() => {
+    const el = sticky.current
+    if (!el || typeof ResizeObserver !== 'function') return
+    const observer = new ResizeObserver(() => setStickyHeight(el.offsetHeight))
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
 
   const status = getOpenStatus(branch.hours, now, branch.timezone)
   const closedMessage = status.isOpen
@@ -87,26 +100,58 @@ export function MenuPage() {
             placeholder="ابحث عن صنف…"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            className="h-12 w-full rounded-full bg-control ps-12 pe-4 text-base shadow-card outline-none placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-brand"
+            className="h-12 w-full rounded-full bg-control ps-12 pe-12 text-base shadow-card outline-none placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-brand"
           />
+          {query ? (
+            <button
+              type="button"
+              onClick={() => {
+                setQuery('')
+                document.getElementById('menu-search')?.focus()
+              }}
+              className="absolute end-1 top-1/2 grid size-10 -translate-y-1/2 place-items-center rounded-full text-muted-foreground outline-none hover:bg-brand-tint hover:text-foreground focus-visible:ring-2 focus-visible:ring-brand"
+            >
+              <X className="size-5" aria-hidden="true" />
+              <span className="sr-only">مسح البحث</span>
+            </button>
+          ) : null}
         </div>
         <PromoStrip strip={getMenuStrip(branch.id)} />
-        <div className="sticky top-[calc(68px+env(safe-area-inset-top,0px))] z-20 mt-1 bg-background">
+        <div ref={sticky} className="sticky top-[calc(68px+env(safe-area-inset-top,0px))] z-20 mt-1 bg-background">
           <CategoryBar categories={shown} activeId={activeId} onSelect={goToSection} />
         </div>
-        {shown.length === 0 ? <p className="py-10 text-center text-muted-foreground">لا يوجد صنف بهذا الاسم.</p> : null}
-        {shown.map((category) => (
-          <section key={category.id} id={category.id} aria-labelledby={`${category.id}-title`} className="scroll-mt-[132px] pt-6 first-of-type:pt-3">
-            <h2 id={`${category.id}-title`} className="mb-3 text-lg leading-[26px] font-bold">
-              {category.name}
-            </h2>
-            <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
-              {category.items.map((item) => (
-                <ItemCard key={item.id} item={item} phone={branch.phones[0]} onAdd={() => setSelected(item)} />
-              ))}
-            </ul>
-          </section>
-        ))}
+        {shown.length === 0 ? (
+          <div className="grid justify-items-center gap-3 py-10 text-center">
+            <p className="text-muted-foreground">لا يوجد صنف بهذا الاسم.</p>
+            <Button variant="outline" onClick={() => setQuery('')}>
+              مسح البحث
+            </Button>
+          </div>
+        ) : null}
+        {shown.map((category) => {
+          // A section switches to photo cards as soon as one of its items has a photo.
+          const photos = category.items.some((i) => i.image)
+          return (
+            <section key={category.id} id={category.id} aria-labelledby={`${category.id}-title`} className="pt-6 first-of-type:pt-3" style={{ scrollMarginTop: offset }}>
+              <h2 id={`${category.id}-title`} className="mb-3 text-lg leading-[26px] font-bold">
+                {category.name}
+              </h2>
+              {photos ? (
+                <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+                  {category.items.map((item) => (
+                    <ItemCard key={item.id} item={item} phone={branch.phones[0]} onAdd={() => setSelected(item)} />
+                  ))}
+                </ul>
+              ) : (
+                <ul className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+                  {category.items.map((item) => (
+                    <ItemRow key={item.id} item={item} phone={branch.phones[0]} onAdd={() => setSelected(item)} />
+                  ))}
+                </ul>
+              )}
+            </section>
+          )
+        })}
       </main>
 
       {count > 0 ? (
