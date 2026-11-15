@@ -5,6 +5,7 @@ import type { DeliveryZone } from '@/lib/catalog'
 import { formatEGP } from '@/lib/format'
 import { searchKey } from '@/lib/text'
 import { cn } from '@/lib/utils'
+import { rowInput } from './form-styles'
 
 const display = (zone: DeliveryZone) => `${zone.label} · ${formatEGP(zone.fee)}`
 /** Space the open list needs under the field, in pixels (its 280px limit plus a margin). */
@@ -21,6 +22,7 @@ export function ZoneCombobox({
   onChange,
   onOpenChange,
   error,
+  bare = false,
 }: {
   id: string
   zones: DeliveryZone[]
@@ -29,6 +31,8 @@ export function ZoneCombobox({
   /** Told when the list opens or closes, so the page can keep fixed bars out of its way. */
   onOpenChange?: (open: boolean) => void
   error?: string
+  /** Inside a row of fields: no box of its own and no search icon (the row has its icon). */
+  bare?: boolean
 }) {
   const listId = useId()
   const box = useRef<HTMLDivElement>(null)
@@ -70,7 +74,7 @@ export function ZoneCombobox({
   return (
     // The scroll margin leaves room for the sticky header and the field's own label.
     <div ref={box} className="relative scroll-mt-28">
-      <Search className="pointer-events-none absolute start-4 top-[26px] size-5 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
+      {bare ? null : <Search className="pointer-events-none absolute start-4 top-[26px] size-5 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />}
       <input
         {...fieldProps(id, error)}
         role="combobox"
@@ -106,7 +110,11 @@ export function ZoneCombobox({
             setOpen(false)
           }
         }}
-        className="h-[52px] w-full rounded-2xl border border-input bg-surface ps-12 pe-4 text-base outline-none placeholder:text-muted-foreground focus-visible:border-brand focus-visible:ring-1 focus-visible:ring-brand aria-invalid:border-destructive aria-invalid:ring-1 aria-invalid:ring-destructive"
+        className={cn(
+          bare
+            ? rowInput
+            : 'h-[52px] w-full rounded-2xl border border-input bg-surface ps-12 pe-4 text-base outline-none placeholder:text-muted-foreground focus-visible:border-gold focus-visible:ring-2 focus-visible:ring-gold/40 aria-invalid:border-destructive aria-invalid:ring-1 aria-invalid:ring-destructive',
+        )}
       />
       {expanded ? (
         <ul
@@ -125,7 +133,7 @@ export function ZoneCombobox({
               // Keep the focus in the field, so choosing with a tap or click does not close the list first.
               onMouseDown={(e) => e.preventDefault()}
               onClick={() => choose(zone)}
-              className={cn('flex min-h-12 cursor-pointer items-center justify-between gap-3 rounded-xl px-3 text-[15px]', i === current && 'bg-brand-tint')}
+              className={cn('flex min-h-12 cursor-pointer items-center justify-between gap-3 rounded-xl px-3 text-[15px]', i === current && 'bg-gold-soft')}
             >
               <span>{zone.label}</span>
               <span className="shrink-0 text-sm leading-5 font-bold tabular-nums">{formatEGP(zone.fee)}</span>

@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router'
+import { BandHeader, BandSheet } from '@/components/BandHeader'
 import { BottomNav } from '@/components/BottomNav'
-import { SiteHeader } from '@/components/SiteHeader'
 import { TrackForm } from '@/components/TrackForm'
 
 export function TrackPage() {
@@ -8,14 +8,13 @@ export function TrackPage() {
   return (
     <>
       <title>تتبع طلبك | خليها مشاوي</title>
-      <SiteHeader compact backTo="/" backLabel="الصفحة الرئيسية" />
-      <main className="mx-auto grid max-w-md gap-4 px-5 pt-2 pb-28 lg:pb-8">
-        <h1 className="text-[26px] leading-9 font-extrabold">تتبع طلبك</h1>
-        <p className="text-sm leading-[22px] text-muted-foreground">اكتب رقم الطلب ورقم الموبايل الذي طلبت به.</p>
-        <div className="rounded-[20px] bg-card p-4 shadow-card">
-          <TrackForm onDone={(number, phone) => navigate(`/order/${number}`, { state: { phone } })} />
-        </div>
-      </main>
+      <BandHeader backTo="/" backLabel="الصفحة الرئيسية">
+        <h1 className="mt-6 text-[28px] leading-10 font-extrabold lg:text-[32px] lg:leading-[44px]">تتبع طلبك</h1>
+        <p className="mt-1 text-sm leading-[22px] text-band-muted">اكتب رقم الطلب ورقم الموبايل الذي طلبت به.</p>
+      </BandHeader>
+      <BandSheet className="pt-4 pb-28 lg:pb-12">
+        <TrackForm onDone={(number, phone) => navigate(`/order/${number}`, { state: { phone } })} />
+      </BandSheet>
       <BottomNav />
     </>
   )
