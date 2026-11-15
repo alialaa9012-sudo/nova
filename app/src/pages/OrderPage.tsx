@@ -1,10 +1,9 @@
-import { Banknote, Check, MessageCircle, Phone, RotateCcw } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { Banknote, Check, MessageCircle, Phone, RotateCcw, Search } from 'lucide-react'
+import { useEffect, useState, type ReactNode } from 'react'
 import { Link, useLocation, useParams } from 'react-router'
 import { BandHeader, BandSheet } from '@/components/BandHeader'
 import { OrderNumberCard } from '@/components/OrderNumberCard'
 import { OrderSummary } from '@/components/OrderSummary'
-import { SiteHeader } from '@/components/SiteHeader'
 import { StatusTimeline } from '@/components/StatusTimeline'
 import { TrackForm } from '@/components/TrackForm'
 import { Button } from '@/components/ui/button'
@@ -38,20 +37,27 @@ export function OrderPage() {
     }
   }, [number, phone])
 
-  const header = <SiteHeader narrow backTo="/" backLabel="الصفحة الرئيسية" title={`طلب ${number}`} />
+  /** The dark band with the page's own title and line, for the states before the order shows. */
+  const band = (title: ReactNode, line?: string) => (
+    <BandHeader backTo="/" backLabel="الصفحة الرئيسية">
+      <h1 className="mt-6 text-[26px] leading-9 font-extrabold lg:text-[32px] lg:leading-[44px]">{title}</h1>
+      {line ? <p className="mt-1 text-sm leading-[22px] text-band-muted">{line}</p> : null}
+    </BandHeader>
+  )
 
   if (!phone) {
     return (
       <>
         <title>{`طلب ${number} | خليها مشاوي`}</title>
-        {header}
-        <main className="mx-auto grid max-w-md gap-4 px-5 py-8">
-          <h1 className="text-2xl font-extrabold">
+        {band(
+          <>
             طلب رقم <span dir="ltr">{number}</span>
-          </h1>
-          <p className="text-muted-foreground">اكتب رقم الموبايل الذي طلبت به لعرض حالة الطلب.</p>
+          </>,
+          'اكتب رقم الموبايل الذي طلبت به لعرض حالة الطلب.',
+        )}
+        <BandSheet className="pt-4 pb-12">
           <TrackForm fixedNumber={number} onDone={(_n, p) => setPhone(p)} />
-        </main>
+        </BandSheet>
       </>
     )
   }
@@ -59,10 +65,16 @@ export function OrderPage() {
   if (order === undefined) {
     return (
       <>
-        {header}
-        <main className="mx-auto max-w-3xl px-4 py-12 text-center" aria-busy="true">
-          <h1 className="text-xl font-bold">جاري تحميل الطلب…</h1>
-        </main>
+        {band(
+          <>
+            طلب رقم <span dir="ltr">{number}</span>
+          </>,
+        )}
+        <BandSheet className="pt-8 pb-12 text-center" >
+          <p aria-busy="true" className="text-[15px] font-bold text-muted-foreground">
+            جاري تحميل الطلب…
+          </p>
+        </BandSheet>
       </>
     )
   }
@@ -71,14 +83,14 @@ export function OrderPage() {
     return (
       <>
         <title>الطلب غير موجود | خليها مشاوي</title>
-        {header}
-        <main className="mx-auto grid max-w-md gap-4 px-5 py-8 text-center">
-          <h1 className="text-2xl font-bold">لم نجد هذا الطلب</h1>
-          <p className="text-muted-foreground">تأكد من رقم الطلب ورقم الموبايل. التتبع متاح لطلبات آخر 3 أيام.</p>
-          <Button asChild size="lg" className="mx-auto">
-            <Link to="/track">تتبع طلب آخر</Link>
+        {band('لم نجد هذا الطلب', 'تأكد من رقم الطلب ورقم الموبايل. التتبع متاح لطلبات آخر 3 أيام.')}
+        <BandSheet className="pt-5 pb-12">
+          <Button asChild size="lg" className="h-14 w-full text-base">
+            <Link to="/track">
+              <Search aria-hidden="true" /> تتبع طلب آخر
+            </Link>
           </Button>
-        </main>
+        </BandSheet>
       </>
     )
   }

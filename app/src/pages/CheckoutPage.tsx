@@ -5,7 +5,6 @@ import { BandHeader, BandSheet } from '@/components/BandHeader'
 import { fieldGroup, groupTitle, rowInput } from '@/components/form-styles'
 import { IconField } from '@/components/IconField'
 import { OrderSummary } from '@/components/OrderSummary'
-import { SiteHeader } from '@/components/SiteHeader'
 import { ZoneCombobox } from '@/components/ZoneCombobox'
 import { Button } from '@/components/ui/button'
 import { RadioGroup } from 'radix-ui'
@@ -107,14 +106,15 @@ export function CheckoutPage() {
     return (
       <>
         <title>إتمام الطلب | خليها مشاوي</title>
-        <SiteHeader narrow backTo={menuPath} backLabel="رجوع للمنيو" title="إتمام الطلب" />
-        <main className="mx-auto grid max-w-3xl gap-4 px-5 py-12 text-center">
-          <h1 className="text-2xl font-bold">السلة فارغة</h1>
-          <p className="text-muted-foreground">أضف أصنافاً من المنيو أولاً.</p>
-          <Button asChild size="lg" className="mx-auto">
+        <BandHeader backTo={menuPath} backLabel="رجوع للمنيو" branchName={branch.name}>
+          <h1 className="mt-6 text-[26px] leading-9 font-extrabold lg:text-[32px] lg:leading-[44px]">السلة فارغة</h1>
+          <p className="mt-1 text-sm leading-[22px] text-band-muted">أضف أصنافاً من المنيو أولاً.</p>
+        </BandHeader>
+        <BandSheet className="pt-5 pb-12">
+          <Button asChild size="lg" className="h-14 w-full text-base">
             <Link to={menuPath}>العودة للمنيو</Link>
           </Button>
-        </main>
+        </BandSheet>
       </>
     )
   }
