@@ -1,5 +1,6 @@
 // Demo backend: keeps orders in this browser only and applies the same rules as the
 // database function place_order. Replaced by the Supabase backend in production.
+import { cleanNote } from '../cart'
 import { branches, findSize, getBranch, getZones, type BranchId, type DeliveryZone } from '../catalog'
 import { cairoDate } from '../format'
 import { getOpenStatus } from '../hours'
@@ -145,6 +146,7 @@ export function createLocalApi(options: { store: KeyValueStore; now?: () => Date
           unitPrice: found.size.price,
           qty: line.qty,
           lineTotal: round2(found.size.price * line.qty),
+          note: cleanNote(line.note),
         }
       })
 

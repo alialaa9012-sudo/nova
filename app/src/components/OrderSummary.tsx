@@ -1,3 +1,4 @@
+import { MessageSquareText } from 'lucide-react'
 import { formatEGP } from '@/lib/format'
 import type { OrderType, Totals } from '@/lib/pricing'
 import { cn } from '@/lib/utils'
@@ -8,6 +9,7 @@ export interface SummaryLine {
   sizeLabel: string
   qty: number
   lineTotal: number
+  note?: string
 }
 
 function Row({ label, value, strong }: { label: string; value: string; strong?: boolean }) {
@@ -38,16 +40,27 @@ export function OrderSummary({
     <div className="grid gap-3">
       <ul className="grid gap-2">
         {lines.map((l) => (
-          <li key={l.key} className="flex justify-between gap-3 text-sm leading-5">
-            <span>
-              {l.qty} × {l.name}
-              {l.sizeLabel ? ` (${l.sizeLabel})` : ''}
-            </span>
-            <span className="shrink-0 font-semibold tabular-nums">{formatEGP(l.lineTotal)}</span>
+          <li key={l.key} className="grid gap-1 text-sm leading-5">
+            <div className="flex justify-between gap-3">
+              <span>
+                {l.qty} × {l.name}
+                {l.sizeLabel ? ` (${l.sizeLabel})` : ''}
+              </span>
+              <span className="shrink-0 font-semibold tabular-nums">{formatEGP(l.lineTotal)}</span>
+            </div>
+            {l.note ? (
+              <p className="flex w-fit items-start gap-1.5 rounded-lg bg-gold-soft px-2 py-1 text-xs leading-[18px] text-[#5a4026]">
+                <MessageSquareText className="mt-px size-3.5 shrink-0 text-gold-deep" aria-hidden="true" />
+                <span>
+                  <span className="sr-only">ملاحظة: </span>
+                  {l.note}
+                </span>
+              </p>
+            ) : null}
           </li>
         ))}
       </ul>
-      <hr className="border-brand-tint" />
+      <hr className="border-dashed border-gold/40" />
       <dl className="grid gap-1.5 text-sm leading-5">
         <Row label="المجموع" value={formatEGP(totals.subtotal)} />
         {orderType === 'delivery' ? (

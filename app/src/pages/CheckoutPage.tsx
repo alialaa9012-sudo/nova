@@ -14,6 +14,7 @@ import { useNow } from '@/hooks/useNow'
 import { fieldProps } from '@/lib/a11y'
 import { api, errorMessage } from '@/lib/api'
 import type { DeliveryZone } from '@/lib/catalog'
+import { lineKey } from '@/lib/cart'
 import { validateCheckout, type CheckoutErrors, type CheckoutForm } from '@/lib/checkout'
 import { clearDraft, loadDraft, saveDraft } from '@/lib/checkoutDraft'
 import { formatEGP } from '@/lib/format'
@@ -91,7 +92,7 @@ export function CheckoutPage() {
         apartment: form.apartment,
         landmark: form.landmark,
         notes: form.notes,
-        lines: lines.map((l) => ({ sizeId: l.sizeId, qty: l.qty })),
+        lines: lines.map((l) => ({ sizeId: l.sizeId, qty: l.qty, note: l.note })),
       })
       dispatch({ type: 'clear' })
       clearDraft(branch.id)
@@ -226,7 +227,7 @@ export function CheckoutPage() {
               ملخص الطلب
             </h2>
             <OrderSummary
-              lines={lines.map((l) => ({ key: l.sizeId, name: l.name, sizeLabel: l.sizeLabel, qty: l.qty, lineTotal: l.unitPrice * l.qty }))}
+              lines={lines.map((l) => ({ key: lineKey(l), name: l.name, sizeLabel: l.sizeLabel, qty: l.qty, lineTotal: l.unitPrice * l.qty, note: l.note }))}
               totals={totals}
               orderType={form.orderType}
               taxPercent={branch.charges.tax_percent}

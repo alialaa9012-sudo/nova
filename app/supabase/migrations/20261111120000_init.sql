@@ -154,7 +154,8 @@ create table public.order_items (
   size_label_snapshot text not null default '',
   unit_price numeric(10, 2) not null,
   qty int not null check (qty between 1 and 50),
-  line_total numeric(10, 2) not null
+  line_total numeric(10, 2) not null,
+  note text check (note is null or char_length(note) <= 120) -- the customer's note on this item
 );
 create index order_items_order_idx on public.order_items (order_id);
 
@@ -355,8 +356,10 @@ begin
   returning id into v_order_id;
 
   -- second pass: store the lines with name and price snapshots
-  insert into order_items (order_id, item_id, size_id, name_snapshot, size_label_snapshot, unit_price, qty, line_total)
-  select v_order_id, i.id, sz.id, i.name_ar, sz.label, sz.price, (l ->> 'qty')::int, sz.price * (l ->> 'qty')::int
+  -- (the item note is single-spaced and cut to 120 characters, as in the app)
+  insert into order_items (order_id, item_id, size_id, name_snapshot, size_label_snapshot, unit_price, qty, line_total, note)
+  select v_order_id, i.id, sz.id, i.name_ar, sz.label, sz.price, (l ->> 'qty')::int, sz.price * (l ->> 'qty')::int,
+    nullif(btrim(left(btrim(regexp_replace(coalesce(l ->> 'note', ''), '\s+', ' ', 'g')), 120)), '')
   from jsonb_array_elements(p -> 'items') with ordinality as t(l, ord)
   join menu_item_sizes sz on sz.id = (l ->> 'size_id')::bigint
   join menu_items i on i.id = sz.item_id
@@ -380,7 +383,7 @@ as $$
     'order_type', o.order_type, 'status', o.status, 'created_at', o.created_at,
     'subtotal', o.subtotal, 'delivery_fee', o.delivery_fee, 'tax_amount', o.tax_amount, 'total', o.total,
     'items', (select jsonb_agg(jsonb_build_object('name', name_snapshot, 'size', size_label_snapshot,
-                'qty', qty, 'line_total', line_total) order by id)
+                'qty', qty, 'line_total', line_total, 'note', note) order by id)
               from order_items where order_id = o.id),
     'history', (select jsonb_agg(jsonb_build_object('status', to_status, 'at', changed_at) order by changed_at, id)
                 from order_status_history where order_id = o.id))

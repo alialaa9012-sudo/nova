@@ -56,7 +56,8 @@ describe('ordering', () => {
 
     await user.click(await screen.findByRole('button', { name: /عرض السلة \(2\) · 680 ج.م/ }))
     const cart = await screen.findByRole('dialog', { name: 'السلة' })
-    expect(within(cart).getByText('صدور فراخ (نص)')).toBeInTheDocument()
+    expect(within(cart).getByText('صدور فراخ')).toBeInTheDocument()
+    expect(within(cart).getByText('نص · 340 ج.م')).toBeInTheDocument()
     await user.click(within(cart).getByRole('link', { name: 'إتمام الطلب' }))
 
     expect(await screen.findByRole('heading', { level: 1, name: 'إتمام الطلب' })).toBeInTheDocument()
@@ -71,6 +72,34 @@ describe('ordering', () => {
     expect(within(timeline).getByText('طلب جديد').closest('li')).toHaveAttribute('aria-current', 'step')
     expect(within(timeline).getByText('جاهز للاستلام')).toBeInTheDocument()
     expect(localStorage.getItem('km.cart.v1.ashry')).toBe('[]')
+  })
+
+  it('carries a note on an item from the item window to the cart and into the placed order', async () => {
+    const user = userEvent.setup()
+    renderAt('/branch/ashry')
+    await user.click(screen.getByRole('button', { name: 'أضف صدور فراخ' }))
+    const sheet = await screen.findByRole('dialog', { name: 'صدور فراخ' })
+    await user.click(within(sheet).getByRole('button', { name: /أضف ملاحظة على الصنف/ }))
+    await user.type(within(sheet).getByLabelText(/ملاحظة على الصنف/), 'من غير شطة')
+    expect(within(sheet).getByText('10 / 120')).toBeInTheDocument()
+    await user.click(within(sheet).getByRole('button', { name: /^أضف للسلة/ }))
+    // the same item without a note is its own line
+    await user.click(screen.getByRole('button', { name: 'أضف صدور فراخ' }))
+    await user.click(within(await screen.findByRole('dialog', { name: 'صدور فراخ' })).getByRole('button', { name: /^أضف للسلة/ }))
+
+    await user.click(await screen.findByRole('button', { name: /عرض السلة \(2\)/ }))
+    const cart = await screen.findByRole('dialog', { name: 'السلة' })
+    expect(within(cart).getAllByText('صدور فراخ')).toHaveLength(2)
+    expect(within(cart).getByText('من غير شطة')).toBeInTheDocument()
+    await user.click(within(cart).getByRole('link', { name: 'إتمام الطلب' }))
+
+    await user.click(await screen.findByRole('radio', { name: 'استلام من الفرع' }))
+    await user.type(screen.getByLabelText('الاسم'), 'منى')
+    await user.type(screen.getByLabelText('رقم الموبايل'), '01112345678')
+    await user.click(screen.getByRole('button', { name: /^تأكيد الطلب/ }))
+    expect(await screen.findByRole('heading', { name: 'تم إرسال طلبك' })).toBeInTheDocument()
+    const [order] = await api.listOrders()
+    expect(order.lines.map((l) => l.note)).toEqual(['من غير شطة', undefined])
   })
 
   it('validates delivery details and shows the zone fee and Tagamoa tax before ordering', async () => {

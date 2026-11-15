@@ -151,8 +151,9 @@ describe('placing orders', () => {
       building: '12',
       apartment: '3',
       items: [
-        { size_id: await sizeId('tagamoa', 'صدور فراخ', 'ربع'), qty: 1, unit_price: 1 }, // a tampered price is ignored
-        { size_id: await sizeId('tagamoa', 'كفتة فراخ', 'ربع'), qty: 2 },
+        // a tampered price is ignored; the item note is cleaned and kept
+        { size_id: await sizeId('tagamoa', 'صدور فراخ', 'ربع'), qty: 1, unit_price: 1, note: '  من غير   شطة ' },
+        { size_id: await sizeId('tagamoa', 'كفتة فراخ', 'ربع'), qty: 2, note: 'x'.repeat(200) },
       ],
     }
     expect(await place(delivery)).toMatchObject({
@@ -167,14 +168,17 @@ describe('placing orders', () => {
     expect(await place(await pickup('ashry', '01112345678'))).toMatchObject({ order_number: 'A-0001', tax_amount: 0, total: 170 })
     expect((await place({ ...delivery, phone: '01212345678' })).order_number).toBe('T-0002')
 
-    const lines = await db.query<{ name_snapshot: string; unit_price: string; qty: number }>(
-      `select name_snapshot, unit_price::text, qty from order_items oi join orders o on o.id = oi.order_id
+    const lines = await db.query<{ name_snapshot: string; unit_price: string; qty: number; note: string | null }>(
+      `select name_snapshot, unit_price::text, qty, note from order_items oi join orders o on o.id = oi.order_id
        where o.order_number = 'T-0001' order by oi.id`,
     )
-    expect(lines.rows.map((l) => [l.name_snapshot, Number(l.unit_price), l.qty])).toEqual([
-      ['صدور فراخ', 250, 1],
-      ['كفتة فراخ', 190, 2],
+    expect(lines.rows.map((l) => [l.name_snapshot, Number(l.unit_price), l.qty, l.note])).toEqual([
+      ['صدور فراخ', 250, 1, 'من غير شطة'],
+      ['كفتة فراخ', 190, 2, 'x'.repeat(120)],
     ])
+    // the customer sees the note again when tracking the order
+    const tracked = await db.query<{ t: { items: { note: string | null }[] } }>(`select track_order('T-0001', '01012345678') as t`)
+    expect(tracked.rows[0].t.items[0].note).toBe('من غير شطة')
   })
 
   it('refuses closed or paused branches, hidden zones, booking-only items and bad input', async () => {

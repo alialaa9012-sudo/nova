@@ -53,7 +53,8 @@ describe('item photos in app/menu-images', () => {
     rerender(<ul><ItemCard item={sample} phone="0100" onAdd={() => {}} /></ul>)
     expect(container.querySelector('img')).toBeNull()
     expect(screen.getByRole('button', { name: 'أضف صدور فراخ' })).toBeInTheDocument()
-    expect(screen.getByText(/170 ج\.م/)).toBeInTheDocument()
+    // prices and sizes show when the item is opened, not on the card
+    expect(screen.queryByText(/ج\.م/)).toBeNull()
   })
 })
 

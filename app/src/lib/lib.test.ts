@@ -1,4 +1,4 @@
-import { cartCount, cartReducer, cartSubtotal, MAX_QTY, type CartLine } from './cart'
+import { cartCount, cartReducer, cleanNote, lineKey, MAX_NOTE, cartSubtotal, MAX_QTY, type CartLine } from './cart'
 import { branches, findSize, getBranch, getMenu, getZones } from './catalog'
 import { formatEGP } from './format'
 import { formatTimeAr, formatTimeShort, getOpenStatus, summarizeHours, type WeeklyHours } from './hours'
@@ -167,11 +167,27 @@ describe('cart', () => {
     expect(s).toHaveLength(1)
     expect(cartCount(s)).toBe(3)
     expect(cartSubtotal(s)).toBe(510)
-    s = cartReducer(s, { type: 'setQty', sizeId: 'w1-1', qty: 999 })
+    s = cartReducer(s, { type: 'setQty', key: lineKey(line), qty: 999 })
     expect(s[0].qty).toBe(MAX_QTY)
-    s = cartReducer(s, { type: 'setQty', sizeId: 'w1-1', qty: 0 })
+    s = cartReducer(s, { type: 'setQty', key: lineKey(line), qty: 0 })
     expect(s).toEqual([])
     expect(cartReducer([{ ...line, qty: 1 }], { type: 'clear' })).toEqual([])
+  })
+
+  it('keeps the same item with a different note on its own line', () => {
+    let s: CartLine[] = []
+    s = cartReducer(s, { type: 'add', line, qty: 1 })
+    s = cartReducer(s, { type: 'add', line: { ...line, note: '  من غير   شطة ' }, qty: 1 })
+    s = cartReducer(s, { type: 'add', line: { ...line, note: 'من غير شطة' }, qty: 2 })
+    expect(s).toHaveLength(2)
+    expect(s[1]).toMatchObject({ note: 'من غير شطة', qty: 3 })
+    s = cartReducer(s, { type: 'remove', key: lineKey({ sizeId: 'w1-1', note: 'من غير شطة' }) })
+    expect(s).toEqual([{ ...line, note: undefined, qty: 1 }])
+  })
+
+  it('cleans notes and caps them at 120 characters', () => {
+    expect(cleanNote('   ')).toBeUndefined()
+    expect(cleanNote('a'.repeat(200))).toHaveLength(MAX_NOTE)
   })
 })
 

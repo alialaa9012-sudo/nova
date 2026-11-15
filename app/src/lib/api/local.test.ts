@@ -49,6 +49,14 @@ describe('local demo backend', () => {
     expect((await api.placeOrder({ ...tagamoaDelivery(), phone: '01112345678' })).number).toBe('T-0002')
   })
 
+  it('keeps the customer\'s note on each item, cleaned like the database does', async () => {
+    const { api } = setup()
+    const input = tagamoaDelivery()
+    input.lines = [{ ...input.lines[0], note: '  من غير   شطة ' }, input.lines[1]]
+    const order = await api.placeOrder(input)
+    expect(order.lines.map((l) => l.note)).toEqual(['من غير شطة', undefined])
+  })
+
   it('applies the same refusals as the database', async () => {
     const { api, setClock } = setup()
     const base = tagamoaDelivery()

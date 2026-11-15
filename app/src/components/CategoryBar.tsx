@@ -8,8 +8,9 @@ const arrow =
   'absolute top-1/2 z-10 hidden size-9 -translate-y-1/2 place-items-center rounded-full bg-card text-foreground shadow-nav outline-none hover:bg-control focus-visible:ring-3 focus-visible:ring-ring/50 lg:grid'
 
 /**
- * Horizontal category chips. The active chip is filled and kept in view. A fade at each edge shows
- * there are more chips; from 1024px arrow buttons scroll the bar, since a mouse cannot swipe it.
+ * The categories as words in the Naskh face, with gold diamonds between them; the active one is a
+ * brown pill framed in gold, kept in view. Phones swipe the row (a fade at each edge shows there is
+ * more); from 1024px every category is shown on wrapped rows.
  */
 export function CategoryBar({
   categories,
@@ -70,14 +71,15 @@ export function CategoryBar({
     <nav aria-label="أقسام المنيو" className="relative">
       <div
         ref={bar}
-        className="-mx-5 overflow-x-auto px-5 py-2 [scrollbar-width:none] md:-mx-6 md:px-6 lg:mx-0 lg:px-0"
+        className="-mx-4 overflow-x-auto px-4 py-2 [scrollbar-width:none] md:-mx-6 md:px-6 lg:mx-0 lg:overflow-visible lg:px-0 lg:[mask-image:none]!"
         style={{ maskImage: fade, WebkitMaskImage: fade }}
       >
-        <ul className="flex w-max gap-2">
-          {categories.map((c) => {
+        <ul className="flex w-max items-center gap-x-1 lg:w-auto lg:flex-wrap lg:gap-y-2.5">
+          {categories.map((c, i) => {
             const active = c.id === activeId
             return (
-              <li key={c.id}>
+              <li key={c.id} className="flex items-center gap-x-1">
+                {i > 0 ? <span className="mx-1 size-1.5 rotate-45 bg-gold/70" aria-hidden="true" /> : null}
                 <a
                   href={`#${c.id}`}
                   aria-current={active ? 'true' : undefined}
@@ -86,11 +88,13 @@ export function CategoryBar({
                     onSelect(c.id)
                   }}
                   className={cn(
-                    'flex h-10 items-center rounded-full px-4 text-[13px] leading-[18px] font-semibold whitespace-nowrap outline-none focus-visible:ring-3 focus-visible:ring-ring/50',
-                    active ? 'bg-primary text-primary-foreground' : 'bg-card text-foreground shadow-card hover:bg-control',
+                    'relative flex h-10 items-center rounded-full px-2 font-naskh text-[19px] leading-none font-bold whitespace-nowrap outline-none focus-visible:ring-3 focus-visible:ring-ring/50 lg:h-11 lg:text-[21px]',
+                    active
+                      ? 'bg-linear-to-br from-[#3a271a] to-brand px-[18px] text-primary-foreground ring-1 ring-gold before:absolute before:start-[7px] before:size-[5px] before:rotate-45 before:bg-gold-hi after:absolute after:end-[7px] after:size-[5px] after:rotate-45 after:bg-gold-hi'
+                      : 'text-muted-foreground hover:text-foreground',
                   )}
                 >
-                  {c.name}
+                  <span className="pb-1">{c.name}</span>
                 </a>
               </li>
             )

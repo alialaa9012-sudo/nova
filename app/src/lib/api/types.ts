@@ -13,7 +13,8 @@ export interface PlaceOrderInput {
   apartment?: string
   landmark?: string
   notes?: string
-  lines: { sizeId: string; qty: number }[]
+  /** note: the customer's note on that item, at most 120 characters. */
+  lines: { sizeId: string; qty: number; note?: string }[]
 }
 
 export interface NewZoneInput {
@@ -30,6 +31,8 @@ export interface OrderLine {
   unitPrice: number
   qty: number
   lineTotal: number
+  /** The customer's note on this item, if any. */
+  note?: string
 }
 
 export interface StatusEvent {

@@ -1,19 +1,24 @@
-import { Utensils } from 'lucide-react'
+import { createElement } from 'react'
+import { itemIcon } from '@/lib/itemIcon'
 import { cn } from '@/lib/utils'
 
 /**
- * The 4:3 photo slot of an item. Without a photo (only in sections where other items have one)
- * it shows a quiet placeholder framed in the logo's gold.
+ * The photo slot of an item. Without a photo it shows the item's sign in the logo's gold,
+ * inside a frame shaped like the logo's arch.
  */
-export function ItemImage({ src, className }: { src?: string; className?: string }) {
+export function ItemImage({ src, name, category, className, iconClassName }: { src?: string; name: string; category: string; className?: string; iconClassName?: string }) {
   return (
-    <div className={cn('grid aspect-[4/3] w-full place-items-center overflow-hidden bg-brand-tint', className)}>
+    <div
+      className={cn(
+        'relative grid w-full place-items-center overflow-hidden bg-[radial-gradient(circle_at_50%_60%,#fbf1e2,#f1e3cb_75%)] text-gold',
+        !src && 'after:pointer-events-none after:absolute after:inset-1.5 after:rounded-t-[14px] after:rounded-b-[40px] after:border after:border-gold/30',
+        className,
+      )}
+    >
       {src ? (
         <img src={src} alt="" loading="lazy" decoding="async" className="size-full object-cover" />
       ) : (
-        <span className="grid size-14 place-items-center rounded-t-full rounded-b-xl border border-gold/70">
-          <Utensils className="size-6 text-gold-deep/70" aria-hidden="true" />
-        </span>
+        createElement(itemIcon(name, category), { className: cn('size-12 stroke-[1.4]', iconClassName), 'aria-hidden': true })
       )}
     </div>
   )

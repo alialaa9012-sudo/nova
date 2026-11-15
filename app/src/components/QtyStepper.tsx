@@ -2,7 +2,7 @@ import { Minus, Plus } from 'lucide-react'
 import { MAX_QTY } from '@/lib/cart'
 import { cn } from '@/lib/utils'
 
-const round = 'grid shrink-0 place-items-center rounded-full outline-none hover:bg-black/5 focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-45'
+const round = 'grid shrink-0 place-items-center rounded-xl bg-chip outline-none hover:bg-gold-soft focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-45'
 
 export function QtyStepper({
   value,
@@ -22,9 +22,9 @@ export function QtyStepper({
   /** Smaller pill for rows of the cart. */
   compact?: boolean
 }) {
-  const button = cn(round, compact ? 'size-8' : 'size-9')
+  const button = cn(round, compact ? 'size-[30px] rounded-[10px]' : 'size-[42px]')
   return (
-    <div className={cn('inline-flex shrink-0 items-center gap-1 rounded-full bg-chip px-1.5', compact ? 'h-10' : 'h-12')}>
+    <div className={cn('inline-flex shrink-0 items-center gap-0.5 rounded-2xl bg-card p-[5px] ring-1 ring-border', compact ? 'h-10' : 'h-14')}>
       <button type="button" className={button} aria-label={decreaseLabel} disabled={value <= min} onClick={() => onChange(value - 1)}>
         <Minus className="size-4" aria-hidden="true" />
       </button>
