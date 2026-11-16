@@ -1,0 +1,681 @@
+[
+  {
+    "area": "responsive",
+    "feature": "home",
+    "test": "no horizontal overflow at 1440px",
+    "result": "pass",
+    "detail": ""
+  },
+  {
+    "area": "responsive",
+    "feature": "menu",
+    "test": "no horizontal overflow at 1440px",
+    "result": "pass",
+    "detail": ""
+  },
+  {
+    "area": "responsive",
+    "feature": "track",
+    "test": "no horizontal overflow at 1440px",
+    "result": "pass",
+    "detail": ""
+  },
+  {
+    "area": "responsive",
+    "feature": "404",
+    "test": "no horizontal overflow at 1440px",
+    "result": "pass",
+    "detail": ""
+  },
+  {
+    "area": "responsive",
+    "feature": "admin",
+    "test": "no horizontal overflow at 1440px",
+    "result": "pass",
+    "detail": ""
+  },
+  {
+    "area": "responsive",
+    "feature": "zones",
+    "test": "no horizontal overflow at 1440px",
+    "result": "pass",
+    "detail": ""
+  },
+  {
+    "area": "responsive",
+    "feature": "checkout",
+    "test": "no horizontal overflow at 1440px",
+    "result": "pass",
+    "detail": ""
+  },
+  {
+    "area": "responsive",
+    "feature": "order",
+    "test": "no horizontal overflow at 1440px",
+    "result": "pass",
+    "detail": ""
+  },
+  {
+    "area": "responsive",
+    "feature": "home",
+    "test": "no horizontal overflow at 1280px",
+    "result": "pass",
+    "detail": ""
+  },
+  {
+    "area": "responsive",
+    "feature": "menu",
+    "test": "no horizontal overflow at 1280px",
+    "result": "pass",
+    "detail": ""
+  },
+  {
+    "area": "responsive",
+    "feature": "track",
+    "test": "no horizontal overflow at 1280px",
+    "result": "pass",
+    "detail": ""
+  },
+  {
+    "area": "responsive",
+    "feature": "404",
+    "test": "no horizontal overflow at 1280px",
+    "result": "pass",
+    "detail": ""
+  },
+  {
+    "area": "responsive",
+    "feature": "admin",
+    "test": "no horizontal overflow at 1280px",
+    "result": "pass",
+    "detail": ""
+  },
+  {
+    "area": "responsive",
+    "feature": "zones",
+    "test": "no horizontal overflow at 1280px",
+    "result": "pass",
+    "detail": ""
+  },
+  {
+    "area": "responsive",
+    "feature": "checkout",
+    "test": "no horizontal overflow at 1280px",
+    "result": "pass",
+    "detail": ""
+  },
+  {
+    "area": "responsive",
+    "feature": "order",
+    "test": "no horizontal overflow at 1280px",
+    "result": "pass",
+    "detail": ""
+  },
+  {
+    "area": "responsive",
+    "feature": "home",
+    "test": "no horizontal overflow at 768px",
+    "result": "pass",
+    "detail": ""
+  },
+  {
+    "area": "responsive",
+    "feature": "menu",
+    "test": "no horizontal overflow at 768px",
+    "result": "pass",
+    "detail": ""
+  },
+  {
+    "area": "responsive",
+    "feature": "track",
+    "test": "no horizontal overflow at 768px",
+    "result": "pass",
+    "detail": ""
+  },
+  {
+    "area": "responsive",
+    "feature": "404",
+    "test": "no horizontal overflow at 768px",
+    "result": "pass",
+    "detail": ""
+  },
+  {
+    "area": "responsive",
+    "feature": "admin",
+    "test": "no horizontal overflow at 768px",
+    "result": "pass",
+    "detail": ""
+  },
+  {
+    "area": "responsive",
+    "feature": "zones",
+    "test": "no horizontal overflow at 768px",
+    "result": "pass",
+    "detail": ""
+  },
+  {
+    "area": "responsive",
+    "feature": "checkout",
+    "test": "no horizontal overflow at 768px",
+    "result": "pass",
+    "detail": ""
+  },
+  {
+    "area": "responsive",
+    "feature": "order",
+    "test": "no horizontal overflow at 768px",
+    "result": "pass",
+    "detail": ""
+  },
+  {
+    "area": "responsive",
+    "feature": "home",
+    "test": "no horizontal overflow at 390px",
+    "result": "pass",
+    "detail": ""
+  },
+  {
+    "area": "responsive",
+    "feature": "menu",
+    "test": "no horizontal overflow at 390px",
+    "result": "pass",
+    "detail": ""
+  },
+  {
+    "area": "responsive",
+    "feature": "track",
+    "test": "no horizontal overflow at 390px",
+    "result": "pass",
+    "detail": ""
+  },
+  {
+    "area": "responsive",
+    "feature": "404",
+    "test": "no horizontal overflow at 390px",
+    "result": "pass",
+    "detail": ""
+  },
+  {
+    "area": "responsive",
+    "feature": "admin",
+    "test": "no horizontal overflow at 390px",
+    "result": "pass",
+    "detail": ""
+  },
+  {
+    "area": "responsive",
+    "feature": "zones",
+    "test": "no horizontal overflow at 390px",
+    "result": "pass",
+    "detail": ""
+  },
+  {
+    "area": "responsive",
+    "feature": "checkout",
+    "test": "no horizontal overflow at 390px",
+    "result": "pass",
+    "detail": ""
+  },
+  {
+    "area": "responsive",
+    "feature": "order",
+    "test": "no horizontal overflow at 390px",
+    "result": "pass",
+    "detail": ""
+  },
+  {
+    "area": "responsive",
+    "feature": "home",
+    "test": "no horizontal overflow at 360px",
+    "result": "pass",
+    "detail": ""
+  },
+  {
+    "area": "responsive",
+    "feature": "menu",
+    "test": "no horizontal overflow at 360px",
+    "result": "pass",
+    "detail": ""
+  },
+  {
+    "area": "responsive",
+    "feature": "track",
+    "test": "no horizontal overflow at 360px",
+    "result": "pass",
+    "detail": ""
+  },
+  {
+    "area": "responsive",
+    "feature": "404",
+    "test": "no horizontal overflow at 360px",
+    "result": "pass",
+    "detail": ""
+  },
+  {
+    "area": "responsive",
+    "feature": "admin",
+    "test": "no horizontal overflow at 360px",
+    "result": "pass",
+    "detail": ""
+  },
+  {
+    "area": "responsive",
+    "feature": "zones",
+    "test": "no horizontal overflow at 360px",
+    "result": "pass",
+    "detail": ""
+  },
+  {
+    "area": "responsive",
+    "feature": "checkout",
+    "test": "no horizontal overflow at 360px",
+    "result": "pass",
+    "detail": ""
+  },
+  {
+    "area": "responsive",
+    "feature": "order",
+    "test": "no horizontal overflow at 360px",
+    "result": "pass",
+    "detail": ""
+  },
+  {
+    "area": "home",
+    "feature": "branches",
+    "test": "three branches with open badge, call and map links",
+    "result": "pass",
+    "detail": "badges=3, tel links=3, map links=3"
+  },
+  {
+    "area": "home",
+    "feature": "bottom nav",
+    "test": "WhatsApp link opens wa.me in a new tab, tracking link routes",
+    "result": "pass",
+    "detail": "href=https://wa.me/201061005627"
+  },
+  {
+    "area": "home",
+    "feature": "closed state",
+    "test": "at 09:00 all branches show «مغلق، يفتح 11 صباحاً»",
+    "result": "pass",
+    "detail": ""
+  },
+  {
+    "area": "home",
+    "feature": "promo content",
+    "test": "hero banner and promo strip hidden while data files are empty",
+    "result": "pass",
+    "detail": "no banner rendered (data/promotions.json empty)"
+  },
+  {
+    "area": "menu",
+    "feature": "categories",
+    "test": "category bar highlights the section in view and taps scroll to it",
+    "result": "pass",
+    "detail": ""
+  },
+  {
+    "area": "menu",
+    "feature": "categories",
+    "test": "all 17 categories reachable by swiping the bar",
+    "result": "pass",
+    "detail": "16 categories"
+  },
+  {
+    "area": "menu",
+    "feature": "search",
+    "test": "search tolerates spelling variants (كفته→كفتة) and offers a clear button",
+    "result": "pass",
+    "detail": ""
+  },
+  {
+    "area": "menu",
+    "feature": "search",
+    "test": "no result shows a message and a clear action",
+    "result": "pass",
+    "detail": ""
+  },
+  {
+    "area": "menu",
+    "feature": "advance booking",
+    "test": "items that need 24h booking show a call link instead of «+» (Tagamoa كتف)",
+    "result": "pass",
+    "detail": "1 call links"
+  },
+  {
+    "area": "menu",
+    "feature": "item sheet",
+    "test": "single-size item opens without a size group; qty capped at 50",
+    "result": "pass",
+    "detail": "qty=50 أضف للسلة ·\n1,750 ج.م"
+  },
+  {
+    "area": "menu",
+    "feature": "item note",
+    "test": "note capped at 120 characters with a live counter",
+    "result": "pass",
+    "detail": "len=120 counter=120 / 120"
+  },
+  {
+    "area": "menu",
+    "feature": "cart",
+    "test": "adding shows a toast, the cart badge and the floating cart bar",
+    "result": "fail",
+    "detail": "bar=1 badge=2"
+  },
+  {
+    "area": "menu",
+    "feature": "cart",
+    "test": "quantity +/-, remove, and empty state with a way back",
+    "result": "pass",
+    "detail": ""
+  },
+  {
+    "area": "menu",
+    "feature": "cart",
+    "test": "cart survives a reload and browser back/forward",
+    "result": "pass",
+    "detail": ""
+  },
+  {
+    "area": "menu",
+    "feature": "cart",
+    "test": "the cart is kept per branch (Ashry cart not shown at Zagazig)",
+    "result": "pass",
+    "detail": ""
+  },
+  {
+    "area": "menu",
+    "feature": "collapse",
+    "test": "while scrolling the logo and search hide and a slim branch row stays",
+    "result": "pass",
+    "detail": ""
+  },
+  {
+    "area": "menu",
+    "feature": "closed branch",
+    "test": "closed message shown; cart can be prepared but checkout is blocked",
+    "result": "pass",
+    "detail": ""
+  },
+  {
+    "area": "checkout",
+    "feature": "validation",
+    "test": "empty submit shows field errors and focuses the first one",
+    "result": "pass",
+    "detail": ""
+  },
+  {
+    "area": "checkout",
+    "feature": "validation",
+    "test": "rejects a wrong phone and accepts Arabic digits",
+    "result": "pass",
+    "detail": ""
+  },
+  {
+    "area": "checkout",
+    "feature": "validation",
+    "test": "long name (>80) and long notes (>500) are refused",
+    "result": "pass",
+    "detail": ""
+  },
+  {
+    "area": "checkout",
+    "feature": "zone picker",
+    "test": "typing filters zones, keyboard chooses one, fee and 14% tax appear",
+    "result": "pass",
+    "detail": "options=2 value=اللوتس الشمالية · 75 ج.م"
+  },
+  {
+    "area": "checkout",
+    "feature": "draft",
+    "test": "typed details survive a reload (draft)",
+    "result": "pass",
+    "detail": ""
+  },
+  {
+    "area": "checkout",
+    "feature": "pickup",
+    "test": "switching to pickup hides the address and shows the branch address",
+    "result": "pass",
+    "detail": "tax rows while pickup=1"
+  },
+  {
+    "area": "checkout",
+    "feature": "double submit",
+    "test": "two rapid taps on confirm create one order only",
+    "result": "fail",
+    "detail": "locator.click: Timeout 30000ms exceeded."
+  },
+  {
+    "area": "checkout",
+    "feature": "after order",
+    "test": "the cart is cleared and the draft is gone; back button does not resubmit",
+    "result": "pass",
+    "detail": "back lands on /branch/tagamoa/checkout"
+  },
+  {
+    "area": "checkout",
+    "feature": "rate limit",
+    "test": "a 4th order from the same phone within 10 minutes is refused with a clear message",
+    "result": "pass",
+    "detail": "وصلتنا عدة طلبات من نفس الرقم خلال دقائق. انتظر قليلاً أو اتصل بالفرع."
+  },
+  {
+    "area": "order",
+    "feature": "confirmation",
+    "test": "number, status steps, details with the item note, cash notice",
+    "result": "pass",
+    "detail": ""
+  },
+  {
+    "area": "order",
+    "feature": "copy & share",
+    "test": "copy puts the number on the clipboard; share is a wa.me link",
+    "result": "pass",
+    "detail": ""
+  },
+  {
+    "area": "order",
+    "feature": "refresh",
+    "test": "reloading the order page keeps showing the order (phone remembered)",
+    "result": "pass",
+    "detail": ""
+  },
+  {
+    "area": "order",
+    "feature": "home strip",
+    "test": "the home page shows a link to the current order",
+    "result": "pass",
+    "detail": ""
+  },
+  {
+    "area": "order",
+    "feature": "privacy",
+    "test": "opening the order link on another device asks for the phone; wrong phone is refused",
+    "result": "pass",
+    "detail": ""
+  },
+  {
+    "area": "track",
+    "feature": "form",
+    "test": "validation messages, lowercase and Arabic digits accepted, finds the order",
+    "result": "pass",
+    "detail": ""
+  },
+  {
+    "area": "track",
+    "feature": "window",
+    "test": "an order older than 3 days is no longer trackable",
+    "result": "pass",
+    "detail": ""
+  },
+  {
+    "area": "order",
+    "feature": "live update",
+    "test": "a status change on the board reaches the open customer page without a reload",
+    "result": "pass",
+    "detail": ""
+  },
+  {
+    "area": "admin",
+    "feature": "access",
+    "test": "the board opens without any login",
+    "result": "partial",
+    "detail": "no authentication in the demo mode (expected until Supabase); must not ship like this"
+  },
+  {
+    "area": "admin",
+    "feature": "cards",
+    "test": "order cards show branch, type, age, customer, items, item note and order notes",
+    "result": "pass",
+    "detail": ""
+  },
+  {
+    "area": "admin",
+    "feature": "filters",
+    "test": "branch, status and search filters narrow the list",
+    "result": "fail",
+    "detail": "zagazig=2 search=2 empty=1"
+  },
+  {
+    "area": "admin",
+    "feature": "date filter",
+    "test": "the date filter hides orders from another day",
+    "result": "pass",
+    "detail": ""
+  },
+  {
+    "area": "admin",
+    "feature": "status flow",
+    "test": "advance twice, then the pickup order reads «جاهز للاستلام» and the button disappears",
+    "result": "pass",
+    "detail": ""
+  },
+  {
+    "area": "admin",
+    "feature": "details",
+    "test": "the details sheet shows the timeline and saves a Crystal Mind invoice number",
+    "result": "pass",
+    "detail": ""
+  },
+  {
+    "area": "admin",
+    "feature": "cancel",
+    "test": "cancelling requires a reason; «سبب آخر» requires text; the reason shows on the card",
+    "result": "pass",
+    "detail": ""
+  },
+  {
+    "area": "admin",
+    "feature": "new order alert",
+    "test": "a new order placed in another tab appears on the board with a toast",
+    "result": "pass",
+    "detail": ""
+  },
+  {
+    "area": "admin",
+    "feature": "phone board",
+    "test": "the board is usable on a phone (one column, filters collapse)",
+    "result": "pass",
+    "detail": "board renders (empty in this fresh context, as storage is per browser)"
+  },
+  {
+    "area": "zones",
+    "feature": "validation",
+    "test": "empty name, bad fee and duplicate names are refused",
+    "result": "pass",
+    "detail": ""
+  },
+  {
+    "area": "zones",
+    "feature": "add + customer",
+    "test": "an added zone reaches the customer checkout with its fee",
+    "result": "fail",
+    "detail": "locator.waitFor: Error: strict mode violation: getByText(/أُضيفت «مدينتي»/) resolved to 2 elements:"
+  },
+  {
+    "area": "zones",
+    "feature": "pending",
+    "test": "a pending zone (two prices in the file) can be given one price from the list",
+    "result": "fail",
+    "detail": "locator.inputValue: Timeout 30000ms exceeded."
+  },
+  {
+    "area": "zones",
+    "feature": "delete",
+    "test": "deleting needs a confirmation and original file zones cannot be deleted",
+    "result": "fail",
+    "detail": "locator.click: Timeout 30000ms exceeded."
+  },
+  {
+    "area": "zones",
+    "feature": "search",
+    "test": "zone search filters the list and says when nothing matches",
+    "result": "pass",
+    "detail": ""
+  },
+  {
+    "area": "nav",
+    "feature": "404",
+    "test": "unknown address and unknown branch show the not-found page with branch links",
+    "result": "pass",
+    "detail": ""
+  },
+  {
+    "area": "nav",
+    "feature": "deep link",
+    "test": "a deep link to a branch survives a reload (SPA fallback)",
+    "result": "pass",
+    "detail": ""
+  },
+  {
+    "area": "nav",
+    "feature": "back/forward",
+    "test": "browser back and forward move between home, menu and checkout",
+    "result": "pass",
+    "detail": ""
+  },
+  {
+    "area": "a11y",
+    "feature": "keyboard",
+    "test": "Tab reaches the branch order links; Escape closes the item window and focus returns",
+    "result": "partial",
+    "detail": "tabReachedOrder=true focusAfterClose=null"
+  },
+  {
+    "area": "a11y",
+    "feature": "focus trap",
+    "test": "Tab stays inside the open cart window",
+    "result": "pass",
+    "detail": ""
+  },
+  {
+    "area": "a11y",
+    "feature": "reduced motion",
+    "test": "page renders with prefers-reduced-motion",
+    "result": "pass",
+    "detail": ""
+  },
+  {
+    "area": "resilience",
+    "feature": "storage",
+    "test": "the app still works when localStorage is blocked (memory store)",
+    "result": "pass",
+    "detail": ""
+  },
+  {
+    "area": "resilience",
+    "feature": "offline",
+    "test": "the loaded app keeps working offline (no network needed after load)",
+    "result": "pass",
+    "detail": "demo backend is local; real backend failures cannot be tested yet (NOT VERIFIED)"
+  },
+  {
+    "area": "resilience",
+    "feature": "console",
+    "test": "no console errors or page errors across the main journey",
+    "result": "pass",
+    "detail": ""
+  }
+]

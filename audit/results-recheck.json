@@ -1,0 +1,51 @@
+[
+  {
+    "area": "menu",
+    "feature": "cart",
+    "test": "after adding, one cart button is visible and the page did not jump",
+    "result": "fail",
+    "detail": "buttons=2 visible=[true,true] scrollY=0"
+  },
+  {
+    "area": "a11y",
+    "feature": "focus restore",
+    "test": "after Escape, focus goes back to the «+» that opened the item",
+    "result": "fail",
+    "detail": "activeElement=BODY"
+  },
+  {
+    "area": "checkout",
+    "feature": "double submit",
+    "test": "three synchronous clicks on confirm create one order only",
+    "result": "fail",
+    "detail": "3 order(s) stored"
+  },
+  {
+    "area": "admin",
+    "feature": "filters",
+    "test": "branch filter and search (phone or number) narrow the list",
+    "result": "pass",
+    "detail": "all=2 zagazig=1 byPhone=1 byNumber=1"
+  },
+  {
+    "area": "zones",
+    "feature": "add + customer",
+    "test": "an added zone (Arabic-digit fee) reaches the customer with its fee in the total",
+    "result": "pass",
+    "detail": "option=مدينتي\n150 ج.م"
+  },
+  {
+    "area": "zones",
+    "feature": "pending",
+    "test": "«حدد السعر» prefills a pending zone; after pricing it leaves the pending list",
+    "result": "pass",
+    "detail": "مناطق تحتاج سعراً (8) → مناطق تحتاج سعراً (7); prefilled=39 type=مجاورة"
+  },
+  {
+    "area": "zones",
+    "feature": "delete",
+    "test": "deleting needs confirmation, the zone returns to the pending list, file zones have no delete",
+    "result": "pass",
+    "detail": "fileDelete=0 pending=مناطق تحتاج سعراً (8)"
+  }
+]
