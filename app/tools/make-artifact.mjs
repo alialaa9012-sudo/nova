@@ -19,6 +19,11 @@ for (const [name, text] of [['script', script], ['stylesheet', styles]]) {
   if (/url\(\.?\/?assets\//.test(text) || /["']\.\/assets\//.test(text)) throw new Error(`${name} still points at separate asset files`)
 }
 
+// Menu photos stay separate files (all of them inline would pass the page size limit). The script
+// asks for them next to itself, which inside the page means next to the page: publish them there.
+const photos = [...new Set([...script.matchAll(/new URL\(`(menu-[\w-]+\.(?:webp|jpe?g|png))`/g)].map((m) => m[1]))]
+writeFileSync(join(dir, 'artifact-files.json'), JSON.stringify(Object.fromEntries(photos.map((f) => [f, join(dir, 'assets', f)])), null, 1))
+
 const FONT = "'Cairo Variable', 'Geist Variable', sans-serif"
 const page = `<title>تطبيق طلبات خليها مشاوي</title>
 <script>document.documentElement.lang = 'ar'; document.documentElement.dir = 'rtl'</script>
@@ -34,4 +39,4 @@ body { background: var(--background); color: var(--foreground); }
 `
 const out = join(dir, 'khaliha-mashawy-app.html')
 writeFileSync(out, page)
-console.log(`${out}  ${(Buffer.byteLength(page) / 1024).toFixed(0)} KB`)
+console.log(`${out}  ${(Buffer.byteLength(page) / 1024).toFixed(0)} KB, plus ${photos.length} menu photos listed in artifact-files.json`)

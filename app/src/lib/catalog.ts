@@ -59,6 +59,8 @@ export interface MenuItem {
   needsReview: boolean
   /** Photo URL, when a file named after the item exists in app/menu-images. */
   image?: string
+  /** Small copy of the photo (menu-images/thumbs) for cards and the cart; falls back to the photo. */
+  thumb?: string
   /** Short label over the photo, from data/menu_extras.csv. Never invented by the app. */
   badge?: { text: string; style: BadgeStyle }
 }
@@ -176,10 +178,19 @@ const imageFiles = import.meta.glob<string>('../../menu-images/*.{jpg,jpeg,png,w
   query: '?url',
   import: 'default',
 })
+const thumbFiles = import.meta.glob<string>('../../menu-images/thumbs/*.{jpg,jpeg,png,webp}', {
+  eager: true,
+  query: '?url',
+  import: 'default',
+})
 const fileName = (path: string) => path.slice(path.lastIndexOf('/') + 1)
 /** Photo files by the comparison key of their name (without the extension). */
 export const menuImages = new Map(
   Object.entries(imageFiles).map(([path, url]) => [imageKey(fileName(path).replace(/\.[^.]+$/, '')), { url, file: fileName(path) }]),
+)
+/** Small copies of the photos, by the same key. */
+export const menuThumbs = new Map(
+  Object.entries(thumbFiles).map(([path, url]) => [imageKey(fileName(path).replace(/\.[^.]+$/, '')), { url, file: fileName(path) }]),
 )
 
 /** Rows of data/menu_extras.csv keyed by menu file, category and item. */
@@ -244,6 +255,7 @@ function buildMenu(file: string): MenuCategory[] {
         advanceNoticeHours: row.advance_notice_hours ? Number(row.advance_notice_hours) : null,
         needsReview: false,
         image: menuImages.get(imageKey(row.item))?.url,
+        thumb: menuThumbs.get(imageKey(row.item))?.url ?? menuImages.get(imageKey(row.item))?.url,
         badge: extra?.badge ? { text: extra.badge, style: isBadgeStyle(extra.badge_style) ? extra.badge_style : 'a' } : undefined,
       }
       items.set(key, item)

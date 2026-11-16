@@ -62,7 +62,7 @@ export function CartSheet({
             const key = lineKey(l)
             return (
               <li key={key} className="flex items-start gap-3 py-3">
-                <ItemImage src={item?.image} name={l.name} category={item?.category ?? ''} className="size-[58px] shrink-0 rounded-2xl after:hidden" iconClassName="size-7 stroke-[1.5]" />
+                <ItemImage src={item?.thumb ?? item?.image} name={l.name} category={item?.category ?? ''} className="size-[58px] shrink-0 rounded-2xl after:hidden" iconClassName="size-7 stroke-[1.5]" />
                 <div className="min-w-0 flex-1">
                   <p className="font-naskh text-[19px] leading-7 font-bold">{l.name}</p>
                   <p className="text-[12.5px] leading-5 text-muted-foreground tabular-nums">

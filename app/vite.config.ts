@@ -32,6 +32,11 @@ function preloadFonts(): Plugin {
   }
 }
 
+/** Menu photos are named after items in Arabic; their built copies get plain names that any host serves. */
+function assetName(asset: { originalFileNames?: readonly string[] }): string {
+  return asset.originalFileNames?.some((f) => f.includes('menu-images/')) ? 'assets/menu-[hash][extname]' : 'assets/[name]-[hash][extname]'
+}
+
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => ({
   plugins: [react(), tailwindcss(), ...(mode === 'artifact' ? [] : [preloadFonts()])],
@@ -41,5 +46,13 @@ export default defineConfig(({ mode }) => ({
     },
   },
   // The Artifact preview must stay one file, so it keeps the staff screens in the main bundle.
-  build: mode === 'artifact' ? { rolldownOptions: { output: { codeSplitting: false } } } : undefined,
+  // Fonts and the logo are inlined; menu photos stay separate files published next to the page,
+  // or 141 photos would push the single page past the Artifact size limit.
+  build:
+    mode === 'artifact'
+      ? {
+          rolldownOptions: { output: { codeSplitting: false, assetFileNames: assetName } },
+          assetsInlineLimit: (file: string) => !file.includes('/menu-images/'),
+        }
+      : { rolldownOptions: { output: { assetFileNames: assetName } } },
 }))

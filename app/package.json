@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
-    "build:artifact": "tsc -b && vite build --mode artifact --base ./ --outDir dist-artifact --assetsInlineLimit 100000000 && node tools/make-artifact.mjs",
+    "build:artifact": "tsc -b && vite build --mode artifact --base ./ --outDir dist-artifact && node tools/make-artifact.mjs",
     "lint": "eslint .",
     "typecheck": "tsc -b",
     "test": "vitest run",

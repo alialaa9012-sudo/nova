@@ -195,12 +195,12 @@ export function MenuPage() {
             </Button>
           </div>
         ) : null}
-        {shown.map((category) => (
+        {shown.map((category, ci) => (
           <section key={category.id} id={category.id} aria-labelledby={`${category.id}-title`} style={{ scrollMarginTop: offset }}>
             <SectionTitle id={`${category.id}-title`}>{category.name}</SectionTitle>
             <ul className="grid grid-cols-2 gap-2.5 md:grid-cols-4 md:gap-3 lg:grid-cols-5 lg:gap-3.5 xl:grid-cols-6">
-              {category.items.map((item) => (
-                <ItemCard key={item.id} item={item} phone={branch.phones[0]} onAdd={() => setSelected(item)} />
+              {category.items.map((item, ii) => (
+                <ItemCard key={item.id} item={item} phone={branch.phones[0]} onAdd={() => setSelected(item)} priority={ci === 0 && ii < 2} />
               ))}
             </ul>
           </section>

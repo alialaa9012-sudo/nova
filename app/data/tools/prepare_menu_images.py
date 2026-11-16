@@ -3,7 +3,8 @@
 Usage (from app/):  python3 -I data/tools/prepare_menu_images.py <source-folder> menu-images
 
 Each output keeps the source file's name (which must be the item's name) with a .webp
-extension, and stays under the 400 KB limit the tests enforce. Source files are not changed.
+extension, and stays under the 400 KB limit the tests enforce. A 400x300 copy goes to
+<target>/thumbs for the menu cards and the cart. Source files are not changed.
 """
 import pathlib
 import sys
@@ -11,6 +12,7 @@ import sys
 from PIL import Image, ImageOps
 
 SIZE = (800, 600)
+THUMB = (400, 300)
 LIMIT = 400 * 1024
 EXTENSIONS = {".jpg", ".jpeg", ".png", ".webp"}
 
@@ -29,7 +31,10 @@ def main(source: str, target: str) -> None:
             image.save(dest, "WEBP", quality=quality, method=6)
             if dest.stat().st_size <= LIMIT:
                 break
-        print(f"{dest.name}: {dest.stat().st_size // 1024} KB")
+        thumb = out / "thumbs" / dest.name
+        thumb.parent.mkdir(exist_ok=True)
+        image.resize(THUMB, Image.Resampling.LANCZOS).save(thumb, "WEBP", quality=70, method=6)
+        print(f"{dest.name}: {dest.stat().st_size // 1024} KB, thumb {thumb.stat().st_size // 1024} KB")
 
 
 if __name__ == "__main__":

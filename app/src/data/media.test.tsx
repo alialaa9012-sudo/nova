@@ -4,7 +4,7 @@ import { MemoryRouter } from 'react-router'
 import { HeroBanner } from '@/components/HeroBanner'
 import { ItemCard } from '@/components/ItemCard'
 import { PromoStrip } from '@/components/PromoStrip'
-import { branches, getMenu, getMenuStrip, heroBanners, menuImages, type MenuItem } from '@/lib/catalog'
+import { branches, getMenu, getMenuStrip, heroBanners, menuImages, menuThumbs, type MenuItem } from '@/lib/catalog'
 import { imageKey, searchKey } from '@/lib/text'
 import { parseCsv } from './csv'
 
@@ -37,6 +37,11 @@ describe('item photos in app/menu-images', () => {
     const known = new Set(allItems.map((i) => imageKey(i.name)))
     const strays = [...menuImages.entries()].filter(([key]) => !known.has(key)).map(([, photo]) => photo.file)
     expect(strays, 'صور اسمها لا يطابق أي صنف').toEqual([])
+  })
+
+  it('every photo has a small copy in thumbs/ for the cards, and no copy is left without its photo', () => {
+    const photos = [...menuImages.keys()].sort()
+    expect([...menuThumbs.keys()].sort(), 'شغّل data/tools/prepare_menu_images.py لعمل النسخ الصغيرة').toEqual(photos)
   })
 
   it('no photo is heavier than 400 KB', () => {
