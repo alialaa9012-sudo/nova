@@ -1,0 +1,4 @@
+# The menus and branch pages are public; the call-center board is for staff only.
+User-agent: *
+Allow: /
+Disallow: /admin

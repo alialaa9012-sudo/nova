@@ -1,5 +1,5 @@
 import { XIcon } from 'lucide-react'
-import type { ReactNode } from 'react'
+import { useRef, type ReactNode } from 'react'
 import { Dialog } from 'radix-ui'
 import { cn } from '@/lib/utils'
 
@@ -27,11 +27,23 @@ export function ModalSheet({
   footer?: ReactNode
   children: ReactNode
 }) {
+  // The windows open from state, not from a Radix trigger, so remember what had focus and go back to it.
+  const returnTo = useRef<HTMLElement | null>(null)
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 z-50 bg-[#1e140d]/45 duration-100 supports-backdrop-filter:backdrop-blur-xs data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0" />
         <Dialog.Content
+          onOpenAutoFocus={() => {
+            returnTo.current = document.activeElement instanceof HTMLElement ? document.activeElement : null
+          }}
+          onCloseAutoFocus={(e) => {
+            const target = returnTo.current
+            if (target?.isConnected && target.getClientRects().length > 0) {
+              e.preventDefault()
+              target.focus({ preventScroll: true })
+            }
+          }}
           className={cn(
             'fixed inset-x-0 bottom-0 z-50 mx-auto flex max-h-[90svh] w-full flex-col overflow-hidden rounded-t-[28px] bg-card text-foreground shadow-nav outline-none',
             'md:inset-0 md:m-auto md:h-fit md:max-w-[480px] md:rounded-[28px]',

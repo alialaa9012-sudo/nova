@@ -16,6 +16,7 @@ const MESSAGES: Record<string, string> = {
   INVALID_QTY: 'الكمية يجب أن تكون من 1 إلى 50.',
   ITEM_UNAVAILABLE: 'أحد الأصناف لم يعد متاحاً. راجع السلة.',
   ADVANCE_BOOKING_REQUIRED: 'هذا الصنف بالحجز المسبق فقط. اتصل بالفرع.',
+  INVALID_CLIENT_REF: 'حدث خطأ في إرسال الطلب. حدّث الصفحة وحاول مرة أخرى.',
   ORDER_NOT_FOUND: 'الطلب غير موجود.',
   NOT_ALLOWED: 'ليست لديك صلاحية لهذا الإجراء.',
   INVALID_TRANSITION: 'لا يمكن نقل الطلب لهذه الحالة.',

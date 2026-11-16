@@ -8,7 +8,7 @@ import { ItemCard } from '@/components/ItemCard'
 import { ItemSheet } from '@/components/ItemSheet'
 import { OpenBadge } from '@/components/OpenBadge'
 import { PromoStrip } from '@/components/PromoStrip'
-import { headerButton } from '@/components/SiteHeader'
+import { headerButton } from '@/components/header-styles'
 import { Button } from '@/components/ui/button'
 import { useActiveSection } from '@/hooks/useActiveSection'
 import { useNow } from '@/hooks/useNow'
@@ -176,12 +176,12 @@ export function MenuPage() {
         <div ref={sticky} className="sticky top-[env(safe-area-inset-top,0px)] z-20 -mx-4 mt-1 bg-background/95 px-4 backdrop-blur-sm md:-mx-6 md:px-6 lg:mx-0 lg:px-0">
           {collapsed ? (
             <div className="flex items-center gap-2.5 pt-2 lg:hidden">
-              <Link to="/" className={`${headerButton} size-[38px] rounded-xl`}>
+              <Link to="/" className={`${headerButton} size-[38px] rounded-xl after:absolute after:-inset-[3px] after:content-['']`}>
                 <ArrowRight className="size-[18px]" aria-hidden="true" />
                 <span className="sr-only">كل الفروع</span>
               </Link>
               <p className="min-w-0 flex-1 truncate font-naskh text-lg font-bold">فرع {branch.name}</p>
-              {cartButton('size-[38px] rounded-xl')}
+              {cartButton("size-[38px] rounded-xl after:absolute after:-inset-[3px] after:content-['']")}
             </div>
           ) : null}
           <CategoryBar categories={shown} activeId={activeId} onSelect={goToSection} />

@@ -2,7 +2,16 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 @import "@fontsource-variable/cairo";
-@import "@fontsource/amiri/arabic-700.css";
+
+/* Amiri for names, Arabic letters in bold only. woff2 alone: every browser that runs the app reads it,
+   so the build no longer ships the 130 KB .woff copy. The build preloads this file (vite.config.ts). */
+@font-face {
+  font-family: 'Amiri';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 700;
+  src: url('../node_modules/@fontsource/amiri/files/amiri-arabic-700-normal.woff2') format('woff2');
+}
 
 @custom-variant dark (&:is(.dark *));
 

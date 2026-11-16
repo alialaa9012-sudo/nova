@@ -13,6 +13,11 @@ export interface PlaceOrderInput {
   apartment?: string
   landmark?: string
   notes?: string
+  /**
+   * A random id made once per checkout. Sending the same request again (a double tap, or a retry
+   * after a lost response) returns the order already placed instead of placing a second one.
+   */
+  clientRef?: string
   /** note: the customer's note on that item, at most 120 characters. */
   lines: { sizeId: string; qty: number; note?: string }[]
 }
@@ -61,6 +66,8 @@ export interface Order {
   totals: Totals
   cancelReason?: string
   posInvoiceNo?: string
+  /** The checkout's clientRef, kept so a repeated request finds this order. */
+  clientRef?: string
   createdAt: string
   history: StatusEvent[]
 }

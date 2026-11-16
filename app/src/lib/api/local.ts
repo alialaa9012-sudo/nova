@@ -110,6 +110,14 @@ export function createLocalApi(options: { store: KeyValueStore; now?: () => Date
 
     async placeOrder(input: PlaceOrderInput) {
       const at = now()
+      // A repeated checkout returns its order first, even if the branch has closed since (as in SQL).
+      if (input.clientRef) {
+        const placed = read().find((o) => o.clientRef === input.clientRef)
+        if (placed) {
+          if (placed.phone !== normalizeEgyptianMobile(input.phone)) throw new ApiError('INVALID_CLIENT_REF')
+          return placed
+        }
+      }
       const branch = getBranch(input.branchId)
       if (!branch) throw new ApiError('BRANCH_NOT_FOUND')
       if (!getOpenStatus(branch.hours, at, branch.timezone).isOpen) throw new ApiError('BRANCH_CLOSED')
@@ -170,6 +178,7 @@ export function createLocalApi(options: { store: KeyValueStore; now?: () => Date
         notes: clean(input.notes, 500),
         lines,
         totals: computeTotals(lines, input.orderType, deliveryFee, branch.charges),
+        clientRef: input.clientRef,
         createdAt,
         history: [{ from: null, to: 'new', at: createdAt }],
       }

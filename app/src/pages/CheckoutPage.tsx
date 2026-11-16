@@ -1,5 +1,5 @@
 import { Banknote, Bike, Building2, DoorOpen, Landmark, MapPin, Navigation, NotebookPen, Phone, Store, User } from 'lucide-react'
-import { useEffect, useState, type FormEvent } from 'react'
+import { useEffect, useRef, useState, type FormEvent } from 'react'
 import { Link, useNavigate } from 'react-router'
 import { BandHeader, BandSheet } from '@/components/BandHeader'
 import { fieldGroup, groupTitle, rowInput } from '@/components/form-styles'
@@ -28,6 +28,10 @@ const ORDER_TYPES = [
   { value: 'pickup', label: 'استلام من الفرع', icon: Store },
 ] as const
 const card = 'grid rounded-[22px] border border-border bg-card p-4'
+const newClientRef = () =>
+  typeof crypto !== 'undefined' && 'randomUUID' in crypto
+    ? crypto.randomUUID()
+    : 'xxxxxxxx-xxxx-4xxx-8xxx-xxxxxxxxxxxx'.replace(/x/g, () => Math.floor(Math.random() * 16).toString(16))
 
 export function CheckoutPage() {
   const branch = useBranch()
@@ -53,6 +57,10 @@ export function CheckoutPage() {
   useEffect(() => saveDraft(branch.id, form), [branch.id, form])
   const [errors, setErrors] = useState<CheckoutErrors>({})
   const [submitting, setSubmitting] = useState(false)
+  // Set before the first await, so taps that land before React redraws the disabled button are ignored.
+  const inFlight = useRef(false)
+  // One id for this checkout: if the same order is sent twice, the backend returns the first one.
+  const [clientRef] = useState(newClientRef)
   const [serverError, setServerError] = useState<string | null>(null)
 
   // A remembered zone that no longer exists (removed by the admin) simply counts as not chosen.
@@ -76,6 +84,8 @@ export function CheckoutPage() {
       document.getElementById(first)?.focus()
       return
     }
+    if (inFlight.current) return
+    inFlight.current = true
     setSubmitting(true)
     setServerError(null)
     try {
@@ -90,6 +100,7 @@ export function CheckoutPage() {
         apartment: form.apartment,
         landmark: form.landmark,
         notes: form.notes,
+        clientRef,
         lines: lines.map((l) => ({ sizeId: l.sizeId, qty: l.qty, note: l.note })),
       })
       dispatch({ type: 'clear' })
@@ -99,6 +110,7 @@ export function CheckoutPage() {
     } catch (err) {
       setServerError(errorMessage(err))
       setSubmitting(false)
+      inFlight.current = false
     }
   }
 

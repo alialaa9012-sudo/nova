@@ -23,7 +23,7 @@ export function AdminNav() {
                   end={link.end}
                   className={({ isActive }) =>
                     cn(
-                      'block rounded-full px-4 py-2 text-sm font-extrabold outline-none focus-visible:ring-3 focus-visible:ring-gold-hi/70',
+                      'flex min-h-11 items-center rounded-full px-4 text-sm font-extrabold outline-none focus-visible:ring-3 focus-visible:ring-gold-hi/70',
                       isActive ? 'bg-linear-to-l from-[#d8b57a] to-gold text-brand' : 'text-band-ink/85 hover:text-band-ink',
                     )
                   }

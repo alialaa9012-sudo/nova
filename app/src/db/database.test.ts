@@ -224,6 +224,23 @@ describe('placing orders', () => {
     await at('2027-01-04 13:11+02')
     expect((await place(await pickup('ashry', '01011112222'))).order_number).toMatch(/^A-\d{4}$/)
   })
+
+  it('returns the same order when a checkout is sent twice with its client_ref', async () => {
+    await at('2027-01-04 14:00+02')
+    const ref = '0f8fad5b-d9cb-469f-a165-70867728950e'
+    const payload = { ...(await pickup('zagazig', '01033334444')), client_ref: ref }
+    const [a, b] = await Promise.all([place(payload), place(payload)])
+    const again = await place(payload)
+    expect(b.order_id).toBe(a.order_id)
+    expect(again).toEqual(a)
+    const count = await db.query<{ n: number }>('select count(*)::int as n from orders where client_ref = $1', [ref])
+    expect(count.rows[0].n).toBe(1)
+    // The same ref with another phone, or a ref that is not a uuid, is refused.
+    await expect(place({ ...payload, phone: '01033334445' })).rejects.toThrow(/INVALID_CLIENT_REF/)
+    await expect(place({ ...payload, client_ref: 'abc' })).rejects.toThrow(/INVALID_CLIENT_REF/)
+    // Without a ref the call works as before.
+    expect((await place(await pickup('zagazig', '01033334446'))).order_id).not.toBe(a.order_id)
+  })
 })
 
 describe('staff and tracking', () => {

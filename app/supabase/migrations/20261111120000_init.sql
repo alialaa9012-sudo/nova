@@ -134,6 +134,8 @@ create table public.orders (
   payment_method text not null default 'cash' check (payment_method = 'cash'),
   cancel_reason text,
   pos_invoice_no text,
+  -- Random id the app sends with each checkout; a repeated request returns the same order.
+  client_ref uuid unique,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now(),
   unique (order_date, order_number),
@@ -250,7 +252,9 @@ for each row execute function public.touch_updated_at();
 -- ---------------------------------------------------------------- customer functions
 
 -- p: {branch_id, order_type, customer_name, phone, zone_id?, street?, building?,
---     apartment?, landmark?, notes?, items: [{size_id, qty}]}
+--     apartment?, landmark?, notes?, client_ref?, items: [{size_id, qty, note?}]}
+-- client_ref (a uuid made by the app for one checkout) makes the call safe to repeat: a double
+-- tap or a retry after a lost response returns the order already placed instead of a second one.
 -- Errors are raised with a stable code in the message, e.g. BRANCH_CLOSED.
 create function public.place_order(p jsonb) returns jsonb
 language plpgsql security definer set search_path = public
@@ -274,8 +278,27 @@ declare
   v_line jsonb;
   v_qty int;
   v_recent int;
+  v_ref uuid;
+  o orders%rowtype;
   s record;
 begin
+  if coalesce(p ->> 'client_ref', '') <> '' then
+    if p ->> 'client_ref' !~* '^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$' then
+      raise exception 'INVALID_CLIENT_REF';
+    end if;
+    v_ref := (p ->> 'client_ref')::uuid;
+    -- Two requests with the same ref wait for each other; the second then finds the first's order.
+    perform pg_advisory_xact_lock(hashtextextended(v_ref::text, 0));
+    select * into o from orders where client_ref = v_ref;
+    if found then
+      if o.phone <> v_phone then raise exception 'INVALID_CLIENT_REF'; end if;
+      return jsonb_build_object(
+        'order_id', o.id, 'order_number', o.order_number, 'order_date', o.order_date, 'branch_id', o.branch_id,
+        'subtotal', o.subtotal, 'delivery_fee', o.delivery_fee, 'service_amount', o.service_amount,
+        'tax_amount', o.tax_amount, 'total', o.total);
+    end if;
+  end if;
+
   select * into b from branches where id = p ->> 'branch_id' and is_active;
   if not found then raise exception 'BRANCH_NOT_FOUND'; end if;
   if not b.accepting_orders then raise exception 'BRANCH_PAUSED'; end if;
@@ -341,7 +364,7 @@ begin
   insert into orders (
     order_number, order_date, daily_seq, branch_id, order_type, customer_name, phone,
     zone_id, zone_label, street, building, apartment, landmark, notes,
-    subtotal, delivery_fee, service_amount, tax_amount, total, created_at, updated_at)
+    subtotal, delivery_fee, service_amount, tax_amount, total, client_ref, created_at, updated_at)
   values (
     v_number, v_date, v_seq, b.id, v_type, v_name, v_phone,
     case when v_type = 'delivery' then z.id end,
@@ -352,7 +375,7 @@ begin
     case when v_type = 'delivery' then nullif(left(btrim(coalesce(p ->> 'apartment', '')), 50), '') end,
     case when v_type = 'delivery' then nullif(left(btrim(coalesce(p ->> 'landmark', '')), 200), '') end,
     nullif(left(btrim(coalesce(p ->> 'notes', '')), 500), ''),
-    v_sub, v_fee, v_service, v_tax, v_total, v_now, v_now)
+    v_sub, v_fee, v_service, v_tax, v_total, v_ref, v_now, v_now)
   returning id into v_order_id;
 
   -- second pass: store the lines with name and price snapshots

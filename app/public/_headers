@@ -1,0 +1,17 @@
+# Security headers for Cloudflare Pages (also read by Netlify). Applied to every response.
+# connect-src allows the Supabase project (REST + Realtime) the app will use once it is linked.
+/*
+  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self' https://*.supabase.co wss://*.supabase.co; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=()
+  Strict-Transport-Security: max-age=31536000; includeSubDomains
+
+# Built files carry a content hash in their name, so they can be cached for a year.
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# The staff board should never be indexed.
+/admin*
+  X-Robots-Tag: noindex, nofollow

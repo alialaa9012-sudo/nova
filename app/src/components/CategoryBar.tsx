@@ -88,7 +88,7 @@ export function CategoryBar({
                     onSelect(c.id)
                   }}
                   className={cn(
-                    'relative flex h-10 items-center rounded-full px-2 font-naskh text-[19px] leading-none font-bold whitespace-nowrap outline-none focus-visible:ring-3 focus-visible:ring-ring/50 lg:h-11 lg:text-[21px]',
+                    'relative flex h-11 items-center rounded-full px-2 font-naskh text-[19px] leading-none font-bold whitespace-nowrap outline-none focus-visible:ring-3 focus-visible:ring-ring/50 lg:text-[21px]',
                     active
                       ? 'bg-linear-to-br from-[#3a271a] to-brand px-[18px] text-primary-foreground ring-1 ring-gold before:absolute before:start-[7px] before:size-[5px] before:rotate-45 before:bg-gold-hi after:absolute after:end-[7px] after:size-[5px] after:rotate-45 after:bg-gold-hi'
                       : 'text-muted-foreground hover:text-foreground',

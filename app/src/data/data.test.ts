@@ -230,7 +230,7 @@ describe('review sheet and branches', () => {
     expect(brand.whatsapp.url).toBe(`https://wa.me/20${brand.whatsapp.number.slice(1)}`)
     expect(brand.whatsapp.scope).toBe('all_branches')
     // the light, transparent logo is the one the app shows; the dark one stays available
-    expect(brand.logo.url_path).toBe('/brand/logo.png')
+    expect(brand.logo.url_path).toBe('/brand/logo.webp')
     expect(brand.logo.background).toBe('transparent')
     expect(brand.logo.width).toBeGreaterThan(0)
     expect(brand.logo.height).toBeGreaterThan(0)

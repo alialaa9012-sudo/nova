@@ -60,13 +60,14 @@
       "scope": "all_branches"
     },
     "logo": {
-      "file": "public/brand/logo.png",
-      "url_path": "/brand/logo.png",
+      "file": "public/brand/logo.webp",
+      "url_path": "/brand/logo.webp",
+      "png": "/brand/logo.png",
       "width": 530,
       "height": 471,
-      "format": "png",
+      "format": "webp",
       "background": "transparent",
-      "note": "الشعار الفاتح الذي أرسله المالك (PNG شفاف 863×811)، مقصوص الهوامش الفارغة فقط دون تغيير الرسم. يصلح للخلفيات الفاتحة"
+      "note": "الشعار الفاتح الذي أرسله المالك (PNG شفاف 863×811)، مقصوص الهوامش الفارغة فقط دون تغيير الرسم. يصلح للخلفيات الفاتحة. الموقع يعرض نسخة WebP (37 KB بدل 95 KB)، ونسخة PNG باقية لمن يحتاجها خارج الموقع"
     },
     "logo_dark": {
       "file": "public/brand/logo-dark.jpg",

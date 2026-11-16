@@ -8,9 +8,10 @@ import { StatusTimeline } from '@/components/StatusTimeline'
 import { TrackForm } from '@/components/TrackForm'
 import { Button } from '@/components/ui/button'
 import { api, type Order } from '@/lib/api'
-import { brand, getBranch } from '@/lib/catalog'
+import { branches, brand, getBranch } from '@/lib/catalog'
 import { formatCairoDateTime } from '@/lib/format'
 import { lastOrder } from '@/lib/lastOrder'
+import { cn } from '@/lib/utils'
 
 export function OrderPage() {
   const { number = '' } = useParams()
@@ -80,16 +81,32 @@ export function OrderPage() {
   }
 
   if (order === null) {
+    const numberBranch = branches.find((b) => number.toUpperCase().startsWith(`${b.code}-`))
     return (
       <>
         <title>الطلب غير موجود | خليها مشاوي</title>
         {band('لم نجد هذا الطلب', 'تأكد من رقم الطلب ورقم الموبايل. التتبع متاح لطلبات آخر 3 أيام.')}
-        <BandSheet className="pt-5 pb-12">
+        <BandSheet className="grid gap-2 pt-5 pb-12">
           <Button asChild size="lg" className="h-14 w-full text-base">
             <Link to="/track">
               <Search aria-hidden="true" /> تتبع طلب آخر
             </Link>
           </Button>
+          {/* Still stuck: reach the restaurant. The letter of the number names the branch (A-0012 is Ashry). */}
+          <div className="grid grid-cols-2 gap-2">
+            <Button asChild variant="outline" className={cn('h-12', !numberBranch && 'col-span-2')}>
+              <a href={brand.whatsappUrl} target="_blank" rel="noopener noreferrer">
+                <MessageCircle aria-hidden="true" /> واتساب
+              </a>
+            </Button>
+            {numberBranch ? (
+              <Button asChild variant="outline" className="h-12">
+                <a href={`tel:${numberBranch.phones[0]}`}>
+                  <Phone aria-hidden="true" /> اتصل بالفرع
+                </a>
+              </Button>
+            ) : null}
+          </div>
         </BandSheet>
       </>
     )

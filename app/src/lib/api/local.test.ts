@@ -57,6 +57,18 @@ describe('local demo backend', () => {
     expect(order.lines.map((l) => l.note)).toEqual(['من غير شطة', undefined])
   })
 
+  it('returns the same order when a checkout is sent again with its clientRef', async () => {
+    const { api, setClock } = setup()
+    const input = { ...tagamoaDelivery(), clientRef: '0f8fad5b-d9cb-469f-a165-70867728950e' }
+    const [a, b, c] = await Promise.all([api.placeOrder(input), api.placeOrder(input), api.placeOrder(input)])
+    expect(b.id).toBe(a.id)
+    expect(c.id).toBe(a.id)
+    setClock(monday(3)) // the branch has closed since: a retry still gets its order back
+    expect((await api.placeOrder(input)).number).toBe('T-0001')
+    expect(await api.listOrders()).toHaveLength(1)
+    await expect(api.placeOrder({ ...input, phone: '01112345678' })).rejects.toMatchObject({ code: 'INVALID_CLIENT_REF' })
+  })
+
   it('applies the same refusals as the database', async () => {
     const { api, setClock } = setup()
     const base = tagamoaDelivery()

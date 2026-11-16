@@ -128,3 +128,32 @@ test('the open zone list is never hidden behind the confirm bar', async ({ page 
   await options.nth(3).click()
   await expect(zone).toHaveValue(new RegExp(`^${name} · `))
 })
+
+test('three taps on confirm in the same instant still place one order', async ({ page }) => {
+  await page.goto('/branch/ashry')
+  await addToCart(page, 'صدور فراخ', /^ربع/, 'أضف للسلة · 170 ج.م')
+  await page.getByRole('button', { name: /عرض السلة/ }).click()
+  await page.getByRole('dialog', { name: 'السلة' }).getByRole('link', { name: 'إتمام الطلب' }).click()
+  await page.getByRole('radio', { name: 'استلام من الفرع' }).click()
+  await page.getByLabel('الاسم').fill('سارة')
+  await page.getByLabel('رقم الموبايل').fill('01098765432')
+  // Synchronous clicks land before React can redraw the button as disabled.
+  await page.getByRole('button', { name: /^تأكيد الطلب/ }).evaluate((el) => {
+    const button = el as unknown as { click(): void }
+    for (let i = 0; i < 3; i++) button.click()
+  })
+  await expect(page).toHaveURL(/\/order\/A-0001$/)
+  const stored = await page.evaluate(() => JSON.parse(localStorage.getItem('km.demo.orders.v1') ?? '[]').length)
+  expect(stored).toBe(1)
+})
+
+test('closing an item window with Escape puts focus back on the item it came from', async ({ page }) => {
+  await page.goto('/branch/ashry')
+  const plus = page.getByRole('button', { name: 'أضف كفتة فراخ' })
+  await plus.focus()
+  await page.keyboard.press('Enter')
+  await expect(page.getByRole('dialog', { name: 'كفتة فراخ' })).toBeVisible()
+  await page.keyboard.press('Escape')
+  await expect(page.getByRole('dialog', { name: 'كفتة فراخ' })).toBeHidden()
+  await expect(plus).toBeFocused()
+})

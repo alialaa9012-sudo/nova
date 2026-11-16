@@ -134,7 +134,7 @@ export function AdminPage() {
                 key={f.value}
                 variant="outline"
                 // Dark when active, so staff filters never look like the orange customer actions.
-                className={cn('h-10 bg-control px-4 text-[13px] font-semibold shadow-none', filter === f.value && 'bg-brand bg-none text-band-ink ring-1 ring-gold hover:bg-brand active:bg-brand')}
+                className={cn('h-11 bg-control px-4 text-[13px] font-semibold shadow-none', filter === f.value && 'bg-brand bg-none text-band-ink ring-1 ring-gold hover:bg-brand active:bg-brand')}
                 aria-pressed={filter === f.value}
                 onClick={() => setFilter(f.value)}
               >
