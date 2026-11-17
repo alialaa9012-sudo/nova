@@ -9,7 +9,7 @@ import { brand, branches, heroBanners, type Branch } from '@/lib/catalog'
 import { lastOrder } from '@/lib/lastOrder'
 
 const iconLink =
-  'grid size-11 shrink-0 place-items-center rounded-2xl bg-control text-foreground ring-1 ring-border outline-none hover:bg-gold-soft focus-visible:ring-3 focus-visible:ring-ring/50 lg:size-14 [&_svg]:size-[18px] lg:[&_svg]:size-6'
+  'grid size-[clamp(44px,6.4vh,52px)] shrink-0 place-items-center rounded-2xl bg-control text-foreground ring-1 ring-border outline-none hover:bg-gold-soft focus-visible:ring-3 focus-visible:ring-ring/50 lg:size-14 [&_svg]:size-[18px] lg:[&_svg]:size-6'
 
 /** The address without the city, which the branch name already says. */
 function shortAddress(branch: Branch) {
@@ -29,7 +29,7 @@ function BranchCard({ branch, now }: { branch: Branch; now: Date }) {
       </div>
       <p className="mt-0.5 line-clamp-2 text-xs leading-5 text-muted-foreground lg:mt-2 lg:text-[15px]" title={branch.address}>{shortAddress(branch)}</p>
       <div className="mt-auto flex items-center gap-2 pt-[clamp(6px,1.1vh,11px)] lg:gap-2.5 lg:pt-5">
-        <Button asChild className="h-11 min-w-0 flex-1 text-[15px] lg:h-14 lg:text-[19px] lg:[&_svg]:size-5">
+        <Button asChild className="h-[clamp(44px,6.4vh,52px)] min-w-0 flex-1 text-[15px] lg:h-14 lg:text-[19px] lg:[&_svg]:size-5">
           <Link to={`/branch/${branch.id}`} aria-label={`اطلب من فرع ${branch.name}`}>
             <ShoppingBag aria-hidden="true" /> اطلب الآن
           </Link>
@@ -116,9 +116,11 @@ export function HomePage() {
               document.getElementById('branches')?.scrollIntoView({ behavior: calm ? 'auto' : 'smooth' })
             }}
           />
+          {/* On phones the list takes the height left above the bottom bar and shares it between the three
+              cards (up to a limit), so a tall screen gets taller cards instead of an empty band. */}
           <ul
             id="branches"
-            className="mx-auto mt-[clamp(10px,1.8vh,16px)] grid w-full scroll-mt-24 gap-[clamp(8px,1.5vh,14px)] short-phone:mt-3 short-phone:gap-2 md:max-w-[640px] lg:mt-11 lg:max-w-none lg:grid-cols-3 lg:gap-[22px]"
+            className="mx-auto mt-[clamp(10px,1.8vh,16px)] grid w-full scroll-mt-24 gap-[clamp(8px,1.5vh,14px)] short-phone:mt-3 short-phone:gap-2 max-lg:max-h-[34rem] max-lg:flex-1 max-lg:auto-rows-fr md:max-w-[640px] lg:mt-11 lg:max-w-none lg:grid-cols-3 lg:gap-[22px]"
           >
             {branches.map((b) => (
               <li key={b.id} className="min-w-0">
