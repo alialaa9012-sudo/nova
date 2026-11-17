@@ -27,7 +27,7 @@ function BranchCard({ branch, now }: { branch: Branch; now: Date }) {
         <h2 className="min-w-0 text-[17px] leading-[24px] font-bold text-balance lg:text-2xl">فرع {branch.name}</h2>
         <OpenBadge branch={branch} now={now} className="lg:px-3.5 lg:py-1.5 lg:text-[13px]" />
       </div>
-      <p className="mt-[clamp(2px,0.7vh,6px)] line-clamp-2 text-xs leading-5 text-muted-foreground short-phone:line-clamp-1 lg:mt-2 lg:text-[15px]" title={branch.address}>{shortAddress(branch)}</p>
+      <p className="mt-[clamp(2px,0.7vh,6px)] line-clamp-2 text-xs leading-5 text-muted-foreground lg:mt-2 lg:text-[15px]" title={branch.address}>{shortAddress(branch)}</p>
       <div className="mt-auto flex items-center gap-2 pt-[clamp(8px,1.5vh,13px)] lg:gap-2.5 lg:pt-5">
         <Button asChild className="h-11 min-w-0 flex-1 text-[15px] lg:h-14 lg:text-[19px] lg:[&_svg]:size-5">
           <Link to={`/branch/${branch.id}`} aria-label={`اطلب من فرع ${branch.name}`}>
@@ -42,6 +42,21 @@ function BranchCard({ branch, now }: { branch: Branch; now: Date }) {
         </a>
       </div>
     </article>
+  )
+}
+
+/** The slogan in the logo's calligraphic style, between gold hairlines and diamonds like the logo's frame. */
+function Slogan() {
+  const line = 'h-px w-7 from-gold to-transparent lg:w-16'
+  const diamond = 'size-[6px] shrink-0 rotate-45 bg-gold lg:size-2'
+  return (
+    <p className="mx-auto mt-0.5 flex items-center justify-center gap-2 short-phone:justify-start lg:mt-2 lg:gap-3">
+      <span className={`${line} bg-linear-to-r short-phone:hidden`} aria-hidden="true" />
+      <span className={diamond} aria-hidden="true" />
+      <span className="font-naskh text-[19px] leading-7 font-bold text-gold-deep lg:text-[30px] lg:leading-10">الشوي على أصوله</span>
+      <span className={diamond} aria-hidden="true" />
+      <span className={`${line} bg-linear-to-l`} aria-hidden="true" />
+    </p>
   )
 }
 
@@ -65,19 +80,23 @@ export function HomePage() {
             </Link>
           </Button>
         </header>
-        <main id="content" tabIndex={-1} className="outline-none mx-auto flex w-full max-w-[1240px] min-[1700px]:max-w-[1480px] flex-1 flex-col px-5 pt-[clamp(10px,2vh,20px)] pb-28 md:px-6 lg:justify-center lg:px-8 lg:pb-16">
+        <main id="content" tabIndex={-1} className="outline-none mx-auto flex w-full max-w-[1240px] min-[1700px]:max-w-[1480px] flex-1 flex-col px-5 pt-[clamp(10px,2vh,20px)] pb-28 short-phone:pt-2 md:px-6 lg:justify-center lg:px-8 lg:pb-16">
+          {/* On short phones the logo sits beside the name and slogan instead of above them, at the same size,
+              so the three branch cards fit above the bottom bar without being changed. */}
           <div className="relative text-center">
-            <img
-              src={brand.logoUrl}
-              alt=""
-              width={brand.logoWidth}
-              height={brand.logoHeight}
-              className="mx-auto h-[clamp(90px,12.5vh,118px)] w-auto short-phone:h-16 tiny-phone:h-12 lg:h-[clamp(150px,22vh,210px)]"
-            />
-            <h1 className="text-[26px] leading-9 font-extrabold lg:mt-1.5 lg:text-[clamp(44px,6.5vh,58px)] lg:leading-tight">{brand.name}</h1>
-            <p className="mx-auto mt-0.5 flex items-center justify-center gap-3 tiny-phone:hidden text-[15px] leading-6 font-bold text-gold-deep before:h-px before:w-8 before:bg-linear-to-l before:from-gold before:to-transparent after:h-px after:w-8 after:bg-linear-to-r after:from-gold after:to-transparent lg:mt-2 lg:text-2xl lg:before:w-16 lg:after:w-16">
-              الشوي على أصوله
-            </p>
+            <div className="short-phone:flex short-phone:items-center short-phone:justify-center short-phone:gap-3">
+              <img
+                src={brand.logoUrl}
+                alt=""
+                width={brand.logoWidth}
+                height={brand.logoHeight}
+                className="mx-auto h-[clamp(90px,12.5vh,118px)] w-auto short-phone:mx-0 lg:h-[clamp(150px,22vh,210px)]"
+              />
+              <div className="short-phone:text-start">
+                <h1 className="text-[26px] leading-9 font-extrabold lg:mt-1.5 lg:text-[clamp(44px,6.5vh,58px)] lg:leading-tight">{brand.name}</h1>
+                <Slogan />
+              </div>
+            </div>
             <p className="mx-auto mt-[clamp(2px,0.6vh,6px)] max-w-[30ch] text-[13px] leading-[22px] text-muted-foreground short-phone:hidden lg:mt-3 lg:max-w-none lg:text-lg">
               اختر الفرع الأقرب لك لتظهر قائمة طعامه وأسعاره ومناطق توصيله.
             </p>
@@ -86,7 +105,7 @@ export function HomePage() {
             <Link
               to={`/order/${previous.number}`}
               state={{ phone: previous.phone }}
-              className="mx-auto mt-4 flex min-h-12 w-full items-center gap-3 rounded-2xl border border-gold/60 bg-card px-4 py-2.5 shadow-card outline-none hover:bg-control focus-visible:ring-3 focus-visible:ring-ring/50 sm:w-fit sm:min-w-80"
+              className="mx-auto mt-4 flex min-h-12 w-full items-center gap-3 rounded-2xl short-phone:mt-3 short-phone:min-h-11 short-phone:py-2 border border-gold/60 bg-card px-4 py-2.5 shadow-card outline-none hover:bg-control focus-visible:ring-3 focus-visible:ring-ring/50 sm:w-fit sm:min-w-80"
             >
               <PackageSearch className="size-5 shrink-0 text-gold-deep" aria-hidden="true" />
               <span className="flex-1 font-bold">حالة طلبك {previous.number}</span>
@@ -102,7 +121,7 @@ export function HomePage() {
           />
           <ul
             id="branches"
-            className="mx-auto mt-[clamp(10px,1.8vh,16px)] grid w-full scroll-mt-24 gap-[clamp(8px,1.5vh,14px)] md:max-w-[640px] lg:mt-11 lg:max-w-none lg:grid-cols-3 lg:gap-[22px]"
+            className="mx-auto mt-[clamp(10px,1.8vh,16px)] grid w-full scroll-mt-24 gap-[clamp(8px,1.5vh,14px)] short-phone:mt-3 short-phone:gap-2 md:max-w-[640px] lg:mt-11 lg:max-w-none lg:grid-cols-3 lg:gap-[22px]"
           >
             {branches.map((b) => (
               <li key={b.id} className="min-w-0">

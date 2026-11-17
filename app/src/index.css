@@ -15,8 +15,7 @@
 
 @custom-variant dark (&:is(.dark *));
 /* Phones with a short screen: the home page tightens so the three branches fit above the bottom bar. */
-@custom-variant short-phone (@media (max-width: 1023px) and (max-height: 820px));
-@custom-variant tiny-phone (@media (max-width: 1023px) and (max-height: 700px));
+@custom-variant short-phone (@media (max-width: 1023px) and (max-height: 880px));
 
 @theme inline {
     /* Brand palette and elevations (design spec, section 6). */

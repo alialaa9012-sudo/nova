@@ -10,7 +10,7 @@ export function DemoBanner() {
   if (api.mode !== 'local') return null
   return (
     <aside aria-label="تنبيه" className="bg-band px-4 py-1.5 text-center text-xs leading-[18px] font-semibold text-band-ink">
-      نسخة تجريبية: الطلبات تُحفظ على هذا الجهاز فقط ولا تصل إلى المطعم بعد.
+      نسخة تجريبية: الطلبات لا تصل إلى المطعم بعد.
       {SHOW_BOARD_LINK ? (
         <>
           {' '}
