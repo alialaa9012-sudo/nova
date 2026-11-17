@@ -104,7 +104,7 @@ describe('ordering', () => {
 
   it('validates delivery details and shows the zone fee and Tagamoa tax before ordering', async () => {
     const user = userEvent.setup()
-    const item = getMenu('tagamoa')[0].items.find((i) => i.name === 'صدور فراخ')!
+    const item = getMenu('tagamoa').find((c) => c.name === 'المشويات')!.items.find((i) => i.name === 'صدور فراخ')!
     localStorage.setItem(
       'km.cart.v1.tagamoa',
       JSON.stringify([{ sizeId: item.sizes[0].id, itemId: item.id, name: item.name, sizeLabel: 'ربع', unitPrice: 1, qty: 2 }]),
@@ -154,7 +154,7 @@ describe('ordering', () => {
 describe('call-center board', () => {
   it('lists new orders, moves them forward and cancels with a reason', async () => {
     const user = userEvent.setup()
-    const item = getMenu('zagazig')[0].items[0]
+    const item = getMenu('zagazig').find((c) => c.name === 'المشويات')!.items[0]
     await api.placeOrder({
       branchId: 'zagazig',
       orderType: 'pickup',
@@ -217,7 +217,7 @@ describe('delivery zones screen', () => {
     expect(within(list).getAllByRole('listitem')[0]).toHaveTextContent('مدينتي')
 
     // the customer sees it at checkout and the fee joins the total
-    const item = getMenu('tagamoa')[0].items.find((i) => i.name === 'صدور فراخ')!
+    const item = getMenu('tagamoa').find((c) => c.name === 'المشويات')!.items.find((i) => i.name === 'صدور فراخ')!
     localStorage.setItem(
       'km.cart.v1.tagamoa',
       JSON.stringify([{ sizeId: item.sizes[0].id, itemId: item.id, name: item.name, sizeLabel: 'ربع', unitPrice: 250, qty: 1 }]),
@@ -283,7 +283,7 @@ describe('menu search and zone picker', () => {
 
   it('chooses a delivery zone with the keyboard and clears the choice when the text changes', async () => {
     const user = userEvent.setup()
-    const item = getMenu('tagamoa')[0].items.find((i) => i.name === 'صدور فراخ')!
+    const item = getMenu('tagamoa').find((c) => c.name === 'المشويات')!.items.find((i) => i.name === 'صدور فراخ')!
     localStorage.setItem(
       'km.cart.v1.tagamoa',
       JSON.stringify([{ sizeId: item.sizes[0].id, itemId: item.id, name: item.name, sizeLabel: 'ربع', unitPrice: 250, qty: 1 }]),
@@ -317,7 +317,7 @@ describe('menu search and zone picker', () => {
 describe('checkout draft and order number', () => {
   it('keeps what the customer typed across a reload and clears it once the order is placed', async () => {
     const user = userEvent.setup()
-    const item = getMenu('ashry')[0].items[0]
+    const item = getMenu('ashry').find((c) => c.name === 'المشويات')!.items[0]
     const cart = JSON.stringify([{ sizeId: item.sizes[0].id, itemId: item.id, name: item.name, sizeLabel: item.sizes[0].label, unitPrice: item.sizes[0].price, qty: 1 }])
     localStorage.setItem('km.cart.v1.ashry', cart)
     const first = renderAt('/branch/ashry/checkout')

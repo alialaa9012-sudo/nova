@@ -43,7 +43,8 @@ test.describe('home page', () => {
   test('the menu highlights the section in view and search narrows it', async ({ page }) => {
     await page.goto('/branch/ashry')
     const bar = page.getByRole('navigation', { name: 'أقسام المنيو' })
-    await expect(bar.getByRole('link', { name: 'المشويات' })).toHaveAttribute('aria-current', 'true')
+    // Whatever section comes first in the menu is the one highlighted on arrival.
+    await expect(bar.getByRole('link').first()).toHaveAttribute('aria-current', 'true')
     await bar.getByRole('link', { name: 'المشروبات' }).click()
     await expect(bar.getByRole('link', { name: 'المشروبات' })).toHaveAttribute('aria-current', 'true')
     await expect(page.getByRole('heading', { level: 2, name: 'المشروبات' })).toBeInViewport()
@@ -83,7 +84,7 @@ test('the category bar works when the page scrolls inside the body, as in the Ar
   await page.getByRole('heading', { level: 2, name: 'المشويات' }).waitFor()
   await page.addStyleTag({ content: 'html { height: 100%; overflow: hidden } body { height: 100%; overflow-y: auto; margin: 0 }' })
   const bar = page.getByRole('navigation', { name: 'أقسام المنيو' })
-  await expect(bar.getByRole('link', { name: 'المشويات' })).toHaveAttribute('aria-current', 'true')
+  await expect(bar.getByRole('link').first()).toHaveAttribute('aria-current', 'true')
 
   // Tapping a chip selects it and brings its section into view.
   await bar.getByRole('link', { name: 'المشروبات' }).click()

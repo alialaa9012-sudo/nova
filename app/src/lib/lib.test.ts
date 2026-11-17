@@ -135,7 +135,7 @@ describe('catalog', () => {
     expect(sizes('zagazig')).toHaveLength(158)
     expect(sizes('tagamoa')).toHaveLength(158)
     expect(getMenu('ashry').map((c) => c.name)).not.toContain('التسويات')
-    const grill = getMenu('ashry')[0].items.find((i) => i.name === 'صدور فراخ')!
+    const grill = getMenu('ashry').find((c) => c.name === 'المشويات')!.items.find((i) => i.name === 'صدور فراخ')!
     expect(grill.sizes.map((s) => [s.label, s.price])).toEqual([
       ['ربع', 170],
       ['تلت', 235],
