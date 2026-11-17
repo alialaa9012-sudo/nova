@@ -1,4 +1,5 @@
 import { NavLink } from 'react-router'
+import { api } from '@/lib/api'
 import { brand } from '@/lib/catalog'
 import { cn } from '@/lib/utils'
 
@@ -34,6 +35,15 @@ export function AdminNav() {
             ))}
           </ul>
         </nav>
+        {api.auth ? (
+          <button
+            type="button"
+            onClick={() => void api.auth?.signOut()}
+            className="min-h-11 rounded-full px-4 text-sm font-extrabold text-band-ink/85 outline-none hover:text-band-ink focus-visible:ring-3 focus-visible:ring-gold-hi/70"
+          >
+            خروج
+          </button>
+        ) : null}
       </div>
     </header>
   )

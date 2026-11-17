@@ -82,9 +82,22 @@ export class ApiError extends Error {
   }
 }
 
+/** Staff sign-in, present only on the live backend. */
+export interface AuthApi {
+  /** The signed-in staff member, or null. */
+  getSession(): Promise<{ email: string } | null>
+  /** Throws ApiError INVALID_LOGIN for a wrong email or password, NOT_ALLOWED for a non-staff account. */
+  signIn(email: string, password: string): Promise<void>
+  signOut(): Promise<void>
+  /** Called when staff sign in or out (also from another tab). */
+  onChange(callback: (session: { email: string } | null) => void): () => void
+}
+
 export interface OrdersApi {
   /** "local" keeps orders in this browser only (demo); "supabase" is the live backend. */
   readonly mode: 'local' | 'supabase'
+  /** Staff sign-in. Missing on the local demo, where the board is open. */
+  readonly auth?: AuthApi
   placeOrder(input: PlaceOrderInput): Promise<Order>
   trackOrder(number: string, phone: string): Promise<Order | null>
   listOrders(): Promise<Order[]>
