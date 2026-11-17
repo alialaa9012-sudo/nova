@@ -73,17 +73,19 @@ export function OrderCard({
         <p className="font-bold">{formatEGP(order.totals.total)} كاش</p>
         {order.status === 'cancelled' && order.cancelReason ? <p className="font-semibold text-danger">سبب الإلغاء: {order.cancelReason}</p> : null}
       </CardContent>
-      <CardFooter className="mt-auto flex flex-wrap items-center gap-2">
+      {/* Same layout on every card: the next step on its own full row, then details and cancel side by side,
+          so the buttons line up across a row of cards however long the status name is. */}
+      <CardFooter className="mt-auto flex flex-wrap items-stretch gap-2">
         {next ? (
-          <Button onClick={onAdvance} className="h-auto min-h-11 min-w-0 flex-1 py-2 whitespace-normal">
+          <Button onClick={onAdvance} className="h-auto min-h-11 basis-full py-2 whitespace-normal">
             {`نقل إلى: ${statusLabel(next, order.orderType)}`}
           </Button>
         ) : null}
-        <Button variant="outline" onClick={onOpen}>
+        <Button variant="outline" onClick={onOpen} className="min-h-11 flex-1">
           التفاصيل
         </Button>
         {order.status !== 'cancelled' ? (
-          <Button variant="ghost" className="text-danger" onClick={onCancel}>
+          <Button variant="ghost" className="min-h-11 flex-1 text-danger" onClick={onCancel}>
             إلغاء
           </Button>
         ) : null}
