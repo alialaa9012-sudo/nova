@@ -107,8 +107,9 @@ export function AdminPage() {
       <main id="content" tabIndex={-1} className="outline-none mx-auto grid max-w-[1320px] gap-4 px-5 pt-4 pb-8 md:px-6 lg:px-8">
         {/* The tab already names the screen and the banner already says it is a demo. */}
         <h1 className="sr-only">الطلبات</h1>
-        <div className="grid gap-3 rounded-[20px] bg-card p-4 shadow-card lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+        <div className="grid gap-3 rounded-[20px] bg-card p-4 shadow-card lg:grid-cols-[minmax(0,1fr)_auto] lg:items-start">
+          {/* items-start: the date field has a caption under it, so without it the other fields were stretched and their boxes sat at different heights. */}
+          <div className="grid grid-cols-2 items-start gap-3 sm:grid-cols-3">
             <Field id="f-branch" label="الفرع">
               <SelectInput id="f-branch" value={branchFilter} onChange={(e) => setBranchFilter(e.target.value)}>
                 <option value="all">كل الفروع</option>
@@ -131,7 +132,7 @@ export function AdminPage() {
             </Field>
             </div>
           </div>
-          <div role="group" aria-label="تصفية حسب الحالة" className="flex flex-wrap gap-2 lg:pb-1.5">
+          <div role="group" aria-label="تصفية حسب الحالة" className="flex flex-wrap gap-2 lg:pt-[30px]">
             {FILTERS.map((f) => (
               <Button
                 key={f.value}
