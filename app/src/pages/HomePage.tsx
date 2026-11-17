@@ -22,13 +22,13 @@ function shortAddress(branch: Branch) {
  */
 function BranchCard({ branch, now }: { branch: Branch; now: Date }) {
   return (
-    <article className="flex h-full flex-col rounded-[20px] border border-border bg-card px-3.5 py-[clamp(10px,1.6vh,14px)] shadow-card lg:rounded-[28px] lg:p-6">
+    <article className="flex h-full flex-col rounded-[20px] border border-border bg-card px-3.5 py-[clamp(8px,1.2vh,12px)] shadow-card lg:rounded-[28px] lg:p-6">
       <div className="flex items-center justify-between gap-2 lg:flex-col lg:items-start">
         <h2 className="min-w-0 text-[17px] leading-[24px] font-bold text-balance lg:text-2xl">فرع {branch.name}</h2>
         <OpenBadge branch={branch} now={now} className="lg:px-3.5 lg:py-1.5 lg:text-[13px]" />
       </div>
-      <p className="mt-[clamp(2px,0.7vh,6px)] line-clamp-2 text-xs leading-5 text-muted-foreground lg:mt-2 lg:text-[15px]" title={branch.address}>{shortAddress(branch)}</p>
-      <div className="mt-auto flex items-center gap-2 pt-[clamp(8px,1.5vh,13px)] lg:gap-2.5 lg:pt-5">
+      <p className="mt-0.5 line-clamp-2 text-xs leading-5 text-muted-foreground lg:mt-2 lg:text-[15px]" title={branch.address}>{shortAddress(branch)}</p>
+      <div className="mt-auto flex items-center gap-2 pt-[clamp(6px,1.1vh,11px)] lg:gap-2.5 lg:pt-5">
         <Button asChild className="h-11 min-w-0 flex-1 text-[15px] lg:h-14 lg:text-[19px] lg:[&_svg]:size-5">
           <Link to={`/branch/${branch.id}`} aria-label={`اطلب من فرع ${branch.name}`}>
             <ShoppingBag aria-hidden="true" /> اطلب الآن
@@ -87,7 +87,7 @@ export function HomePage() {
               alt=""
               width={brand.logoWidth}
               height={brand.logoHeight}
-              className="mx-auto h-[clamp(90px,12.5vh,118px)] w-auto lg:h-[clamp(150px,22vh,210px)]"
+              className="mx-auto h-[clamp(112px,16vh,140px)] w-auto lg:h-[clamp(150px,22vh,210px)]"
             />
             {/* The logo already shows the name, so the page title is for screen readers and search only. */}
             <h1 className="sr-only">{brand.name}</h1>
@@ -97,17 +97,16 @@ export function HomePage() {
             </p>
           </div>
           {previous ? (
+            // A small pill under the slogan, so it costs one short line and the branches stay in view.
             <Link
               to={`/order/${previous.number}`}
               state={{ phone: previous.phone }}
-              // On short phones it becomes a small badge in the top corner, beside the logo, so it takes no row.
-              className="mx-auto mt-4 flex min-h-12 w-full items-center gap-3 rounded-2xl border border-gold/60 bg-card px-4 py-2.5 shadow-card outline-none hover:bg-control focus-visible:ring-3 focus-visible:ring-ring/50 short-phone:absolute short-phone:end-4 short-phone:top-2 short-phone:mt-0 short-phone:min-h-11 short-phone:w-auto short-phone:gap-1.5 short-phone:rounded-xl short-phone:px-2.5 short-phone:py-1.5 sm:w-fit sm:min-w-80 short-phone:sm:min-w-0"
+              className="relative mx-auto mt-2 flex w-fit items-center gap-1.5 rounded-full border border-gold/60 bg-card px-3 py-1 text-[12.5px] leading-[18px] shadow-sm outline-none after:absolute after:-inset-y-2 after:inset-x-0 after:content-[''] hover:bg-control focus-visible:ring-3 focus-visible:ring-ring/50 lg:mt-4 lg:gap-2 lg:px-5 lg:py-2 lg:text-base"
             >
-              <PackageSearch className="size-5 shrink-0 text-gold-deep" aria-hidden="true" />
-              <span className="flex-1 font-bold short-phone:grid short-phone:text-xs short-phone:leading-4">
-                <span>حالة طلبك</span> <span>{previous.number}</span>
-              </span>
-              <ChevronLeft className="size-5 shrink-0 text-muted-foreground short-phone:hidden" aria-hidden="true" />
+              <PackageSearch className="size-4 shrink-0 text-gold-deep lg:size-5" aria-hidden="true" />
+              <span className="font-bold">طلبك {previous.number}</span>
+              <span className="text-gold-deep">· تابع حالته</span>
+              <ChevronLeft className="size-4 shrink-0 text-muted-foreground" aria-hidden="true" />
             </Link>
           ) : null}
           <HeroBanner

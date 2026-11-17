@@ -344,7 +344,7 @@ describe('checkout draft and order number', () => {
   it('shows the remembered order above the branches on the home page', () => {
     localStorage.setItem('km.lastOrder.v1', JSON.stringify({ number: 'Z-0007', phone: '01012345678' }))
     renderAt('/')
-    const strip = screen.getByRole('link', { name: 'حالة طلبك Z-0007' })
+    const strip = screen.getByRole('link', { name: /^طلبك Z-0007/ })
     const firstBranch = screen.getByRole('heading', { level: 2, name: 'فرع العاشر من رمضان' })
     expect(strip.compareDocumentPosition(firstBranch) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
   })
