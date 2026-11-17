@@ -1,0 +1,11 @@
+[Unlighthouse] √ Successfully connected to http://localhost:4173. (Status: 200).
+[Unlighthouse] i Creating Unlighthouse using config from /home/user/nova/ui-ux-audit/config/unlighthouse.config.ts
+[Unlighthouse] i The url config has been provided with 8 paths for scanning. Disabling sitemap, robots, sampling and crawler.
+[Unlighthouse] √ Unlighthouse has finished scanning http://localhost:4173: 8 routes in 59s.
+[Unlighthouse] i Running score budgets. 50
+[Unlighthouse] √ Score assertions have passed.
+[Unlighthouse] √ Generated jsonExpanded report ./results/unlighthouse/ci-result.json
+[Unlighthouse] i Generating static report.
+[Unlighthouse] √ Static report is ready for uploading: ./results/unlighthouse
+[Unlighthouse] i You can preview the static report using npx sirv-cli ./results/unlighthouse.
+[Unlighthouse] i For deployment demos, see https://unlighthouse.dev/guide/guides/generating-static-reports#interactive-html-reports

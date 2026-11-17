@@ -1,0 +1,16 @@
+import { VIEWPORTS, context, launch, out } from './lib.mjs'
+import { toCheckout } from './states.mjs'
+const b = await launch(); const ctx = await context(b, VIEWPORTS[3]); const p = await ctx.newPage()
+await p.goto('/branch/ashry')
+await p.getByRole('button', { name: 'أضف شوربة عدس', exact: true }).focus()
+await p.keyboard.press('Shift+Tab'); await p.keyboard.press('Tab')
+const li = p.locator('li', { has: p.getByRole('button', { name: 'أضف شوربة عدس', exact: true }) })
+console.log('card focus-within shadow:', await li.evaluate((e) => getComputedStyle(e).boxShadow.slice(0, 80)))
+await li.screenshot({ path: out('screenshots/evidence/focus-card.jpg'), type: 'jpeg', quality: 80 })
+await toCheckout(p)
+await p.getByRole('combobox', { name: 'المنطقة' }).focus()
+await p.keyboard.press('Tab')
+console.log('after zone Tab ->', await p.evaluate(() => { const e = document.activeElement; return e === document.body ? 'BODY' : e.outerHTML.slice(0, 160) }))
+await p.keyboard.press('Tab')
+console.log('next ->', await p.evaluate(() => document.activeElement?.labels?.[0]?.textContent || document.activeElement?.tagName))
+await b.close()

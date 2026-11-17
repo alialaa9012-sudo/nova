@@ -1,0 +1,770 @@
+[
+ {
+  "state": "checkout-closed",
+  "page": "إتمام الطلب",
+  "title": "إتمام الطلب والفرع مغلق (من رابط مباشر؛ زر السلة معطّل)",
+  "vp": "d1366",
+  "ok": true,
+  "ms": 2351,
+  "screenshot": "screenshots/d1366/checkout-closed.jpg",
+  "probe": {
+   "vw": 1366,
+   "vh": 768,
+   "pageHeight": 920,
+   "dir": "rtl",
+   "lang": "ar",
+   "title": "إتمام الطلب · فرع العاشر من رمضان | خليها مشاوي",
+   "docOverflowX": 0,
+   "offscreen": [],
+   "clipped": [],
+   "covered": [],
+   "underSticky": [],
+   "tinyTargets": [
+    {
+     "el": "0554494299",
+     "box": "67x23",
+     "hitW": 61,
+     "hitH": 21
+    }
+   ],
+   "smallTargets": [],
+   "interactiveCount": 14,
+   "sizes": {
+    "12": 15,
+    "13": 4,
+    "14": 10,
+    "16": 5,
+    "18": 1,
+    "20": 1,
+    "30": 1,
+    "32": 1
+   },
+   "minFont": 12,
+   "smallText": [
+    {
+     "text": "الاسم",
+     "size": "11.5px"
+    },
+    {
+     "text": "رقم الموبايل",
+     "size": "11.5px"
+    },
+    {
+     "text": "المنطقة",
+     "size": "11.5px"
+    },
+    {
+     "text": "الشارع",
+     "size": "11.5px"
+    },
+    {
+     "text": "رقم العمارة",
+     "size": "11.5px"
+    },
+    {
+     "text": "الشقة (اختياري)",
+     "size": "11.5px"
+    },
+    {
+     "text": "(اختياري)",
+     "size": "11.5px"
+    },
+    {
+     "text": "علامة مميزة (اختياري)",
+     "size": "11.5px"
+    },
+    {
+     "text": "(اختياري)",
+     "size": "11.5px"
+    },
+    {
+     "text": "ملاحظات على الطلب (اختياري)",
+     "size": "11.5px"
+    }
+   ],
+   "families": {
+    "Cairo Variable": 37,
+    "Amiri": 1
+   },
+   "weights": {
+    "400": 8,
+    "600": 7,
+    "700": 5,
+    "800": 18
+   },
+   "textColors": 9,
+   "colors": {
+    "rgb(246, 231, 200)": 5,
+    "rgb(217, 200, 174)": 2,
+    "rgb(214, 178, 118)": 2,
+    "rgb(46, 31, 20)": 1,
+    "oklab(0.93198 0.00368583 0.0437383 / 0.9)": 1,
+    "rgb(110, 97, 87)": 17,
+    "rgb(36, 24, 15)": 8,
+    "rgb(30, 107, 67)": 1,
+    "rgb(74, 52, 32)": 1
+   },
+   "btnHeights": {
+    "44": 3,
+    "56": 1
+   },
+   "radii": {
+    "18px": 2,
+    "14px": 2
+   },
+   "btnBg": {
+    "oklab(0.999994 0.0000455678 0.0000200868 / 0.08)": 1,
+    "gradient": 2,
+    "rgba(0, 0, 0, 0)": 1
+   },
+   "brokenImages": [],
+   "noAlt": 0,
+   "oversized": [
+    {
+     "src": "/brand/logo-gold.png",
+     "natural": 560,
+     "shown": 72
+    }
+   ],
+   "ltrArabic": [],
+   "leftAligned": [],
+   "h1": 1,
+   "headings": [
+    "H1:إتمام الطلب",
+    "H2:بياناتك",
+    "H2:عنوان التوصيل",
+    "H2:ملاحظات",
+    "H2:ملخص الطلب"
+   ]
+  },
+  "axe": [
+   {
+    "id": "landmark-one-main",
+    "impact": "moderate",
+    "help": "Document should have one main landmark",
+    "nodes": 1,
+    "targets": [
+     "html"
+    ]
+   },
+   {
+    "id": "region",
+    "impact": "moderate",
+    "help": "All page content should be contained by landmarks",
+    "nodes": 1,
+    "targets": [
+     ".bg-band"
+    ]
+   }
+  ],
+  "axeIncomplete": [],
+  "consoleErrors": [],
+  "pageErrors": [],
+  "failed": []
+ },
+ {
+  "state": "checkout-closed",
+  "page": "إتمام الطلب",
+  "title": "إتمام الطلب والفرع مغلق (من رابط مباشر؛ زر السلة معطّل)",
+  "vp": "d1920",
+  "ok": true,
+  "ms": 2340,
+  "screenshot": "screenshots/d1920/checkout-closed.jpg",
+  "probe": {
+   "vw": 1920,
+   "vh": 1080,
+   "pageHeight": 1080,
+   "dir": "rtl",
+   "lang": "ar",
+   "title": "إتمام الطلب · فرع العاشر من رمضان | خليها مشاوي",
+   "docOverflowX": 0,
+   "offscreen": [],
+   "clipped": [],
+   "covered": [],
+   "underSticky": [],
+   "tinyTargets": [
+    {
+     "el": "0554494299",
+     "box": "67x23",
+     "hitW": 61,
+     "hitH": 21
+    }
+   ],
+   "smallTargets": [],
+   "interactiveCount": 14,
+   "sizes": {
+    "12": 15,
+    "13": 4,
+    "14": 10,
+    "16": 5,
+    "18": 1,
+    "20": 1,
+    "30": 1,
+    "32": 1
+   },
+   "minFont": 12,
+   "smallText": [
+    {
+     "text": "الاسم",
+     "size": "11.5px"
+    },
+    {
+     "text": "رقم الموبايل",
+     "size": "11.5px"
+    },
+    {
+     "text": "المنطقة",
+     "size": "11.5px"
+    },
+    {
+     "text": "الشارع",
+     "size": "11.5px"
+    },
+    {
+     "text": "رقم العمارة",
+     "size": "11.5px"
+    },
+    {
+     "text": "الشقة (اختياري)",
+     "size": "11.5px"
+    },
+    {
+     "text": "(اختياري)",
+     "size": "11.5px"
+    },
+    {
+     "text": "علامة مميزة (اختياري)",
+     "size": "11.5px"
+    },
+    {
+     "text": "(اختياري)",
+     "size": "11.5px"
+    },
+    {
+     "text": "ملاحظات على الطلب (اختياري)",
+     "size": "11.5px"
+    }
+   ],
+   "families": {
+    "Cairo Variable": 37,
+    "Amiri": 1
+   },
+   "weights": {
+    "400": 8,
+    "600": 7,
+    "700": 5,
+    "800": 18
+   },
+   "textColors": 9,
+   "colors": {
+    "rgb(246, 231, 200)": 5,
+    "rgb(217, 200, 174)": 2,
+    "rgb(214, 178, 118)": 2,
+    "rgb(46, 31, 20)": 1,
+    "oklab(0.93198 0.00368583 0.0437383 / 0.9)": 1,
+    "rgb(110, 97, 87)": 17,
+    "rgb(36, 24, 15)": 8,
+    "rgb(30, 107, 67)": 1,
+    "rgb(74, 52, 32)": 1
+   },
+   "btnHeights": {
+    "44": 3,
+    "56": 1
+   },
+   "radii": {
+    "18px": 2,
+    "14px": 2
+   },
+   "btnBg": {
+    "oklab(0.999994 0.0000455678 0.0000200868 / 0.08)": 1,
+    "gradient": 2,
+    "rgba(0, 0, 0, 0)": 1
+   },
+   "brokenImages": [],
+   "noAlt": 0,
+   "oversized": [
+    {
+     "src": "/brand/logo-gold.png",
+     "natural": 560,
+     "shown": 72
+    }
+   ],
+   "ltrArabic": [],
+   "leftAligned": [],
+   "h1": 1,
+   "headings": [
+    "H1:إتمام الطلب",
+    "H2:بياناتك",
+    "H2:عنوان التوصيل",
+    "H2:ملاحظات",
+    "H2:ملخص الطلب"
+   ]
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "failed": []
+ },
+ {
+  "state": "checkout-closed",
+  "page": "إتمام الطلب",
+  "title": "إتمام الطلب والفرع مغلق (من رابط مباشر؛ زر السلة معطّل)",
+  "vp": "m360",
+  "ok": true,
+  "ms": 2404,
+  "screenshot": "screenshots/m360/checkout-closed.jpg",
+  "probe": {
+   "vw": 360,
+   "vh": 800,
+   "pageHeight": 1535,
+   "dir": "rtl",
+   "lang": "ar",
+   "title": "إتمام الطلب · فرع العاشر من رمضان | خليها مشاوي",
+   "docOverflowX": 0,
+   "offscreen": [],
+   "clipped": [],
+   "covered": [],
+   "underSticky": [
+    {
+     "el": "رقم العمارة",
+     "by": "الفرع مغلق الآن، ويفتح 11 صباحاً. أكد طل",
+     "sticky": true
+    },
+    {
+     "el": "الشقة (اختياري)",
+     "by": "الفرع مغلق الآن، ويفتح 11 صباحاً. أكد طل",
+     "sticky": true
+    }
+   ],
+   "tinyTargets": [],
+   "smallTargets": [],
+   "interactiveCount": 14,
+   "sizes": {
+    "11": 1,
+    "12": 15,
+    "13": 3,
+    "14": 10,
+    "16": 5,
+    "18": 2,
+    "26": 2
+   },
+   "minFont": 11,
+   "smallText": [
+    {
+     "text": "فرع",
+     "size": "11px"
+    },
+    {
+     "text": "الاسم",
+     "size": "11.5px"
+    },
+    {
+     "text": "رقم الموبايل",
+     "size": "11.5px"
+    },
+    {
+     "text": "المنطقة",
+     "size": "11.5px"
+    },
+    {
+     "text": "الشارع",
+     "size": "11.5px"
+    },
+    {
+     "text": "رقم العمارة",
+     "size": "11.5px"
+    },
+    {
+     "text": "الشقة (اختياري)",
+     "size": "11.5px"
+    },
+    {
+     "text": "(اختياري)",
+     "size": "11.5px"
+    },
+    {
+     "text": "علامة مميزة (اختياري)",
+     "size": "11.5px"
+    },
+    {
+     "text": "(اختياري)",
+     "size": "11.5px"
+    }
+   ],
+   "families": {
+    "Cairo Variable": 37,
+    "Amiri": 1
+   },
+   "weights": {
+    "400": 8,
+    "600": 7,
+    "700": 5,
+    "800": 18
+   },
+   "textColors": 9,
+   "colors": {
+    "rgb(246, 231, 200)": 5,
+    "rgb(217, 200, 174)": 2,
+    "rgb(214, 178, 118)": 2,
+    "rgb(46, 31, 20)": 1,
+    "oklab(0.93198 0.00368583 0.0437383 / 0.9)": 1,
+    "rgb(110, 97, 87)": 17,
+    "rgb(36, 24, 15)": 8,
+    "rgb(30, 107, 67)": 1,
+    "rgb(74, 52, 32)": 1
+   },
+   "btnHeights": {
+    "44": 3,
+    "56": 1
+   },
+   "radii": {
+    "18px": 2,
+    "14px": 2
+   },
+   "btnBg": {
+    "oklab(0.999994 0.0000455678 0.0000200868 / 0.08)": 1,
+    "gradient": 2,
+    "rgba(0, 0, 0, 0)": 1
+   },
+   "brokenImages": [],
+   "noAlt": 0,
+   "oversized": [
+    {
+     "src": "/brand/logo-gold.png",
+     "natural": 560,
+     "shown": 65
+    }
+   ],
+   "ltrArabic": [],
+   "leftAligned": [],
+   "h1": 1,
+   "headings": [
+    "H1:إتمام الطلب",
+    "H2:بياناتك",
+    "H2:عنوان التوصيل",
+    "H2:ملاحظات",
+    "H2:ملخص الطلب"
+   ]
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "failed": []
+ },
+ {
+  "state": "checkout-closed",
+  "page": "إتمام الطلب",
+  "title": "إتمام الطلب والفرع مغلق (من رابط مباشر؛ زر السلة معطّل)",
+  "vp": "m390",
+  "ok": true,
+  "ms": 2346,
+  "screenshot": "screenshots/m390/checkout-closed.jpg",
+  "probe": {
+   "vw": 390,
+   "vh": 844,
+   "pageHeight": 1517,
+   "dir": "rtl",
+   "lang": "ar",
+   "title": "إتمام الطلب · فرع العاشر من رمضان | خليها مشاوي",
+   "docOverflowX": 0,
+   "offscreen": [],
+   "clipped": [],
+   "covered": [],
+   "underSticky": [
+    {
+     "el": "رقم العمارة",
+     "by": "الفرع مغلق الآن، ويفتح 11 صباحاً. أكد طل",
+     "sticky": true
+    },
+    {
+     "el": "الشقة (اختياري)",
+     "by": "الفرع مغلق الآن، ويفتح 11 صباحاً. أكد طل",
+     "sticky": true
+    },
+    {
+     "el": "علامة مميزة (اختياري)",
+     "by": "الفرع مغلق الآن، ويفتح 11 صباحاً. أكد طل",
+     "sticky": true
+    }
+   ],
+   "tinyTargets": [],
+   "smallTargets": [],
+   "interactiveCount": 14,
+   "sizes": {
+    "11": 1,
+    "12": 15,
+    "13": 3,
+    "14": 10,
+    "16": 5,
+    "18": 2,
+    "26": 2
+   },
+   "minFont": 11,
+   "smallText": [
+    {
+     "text": "فرع",
+     "size": "11px"
+    },
+    {
+     "text": "الاسم",
+     "size": "11.5px"
+    },
+    {
+     "text": "رقم الموبايل",
+     "size": "11.5px"
+    },
+    {
+     "text": "المنطقة",
+     "size": "11.5px"
+    },
+    {
+     "text": "الشارع",
+     "size": "11.5px"
+    },
+    {
+     "text": "رقم العمارة",
+     "size": "11.5px"
+    },
+    {
+     "text": "الشقة (اختياري)",
+     "size": "11.5px"
+    },
+    {
+     "text": "(اختياري)",
+     "size": "11.5px"
+    },
+    {
+     "text": "علامة مميزة (اختياري)",
+     "size": "11.5px"
+    },
+    {
+     "text": "(اختياري)",
+     "size": "11.5px"
+    }
+   ],
+   "families": {
+    "Cairo Variable": 37,
+    "Amiri": 1
+   },
+   "weights": {
+    "400": 8,
+    "600": 7,
+    "700": 5,
+    "800": 18
+   },
+   "textColors": 9,
+   "colors": {
+    "rgb(246, 231, 200)": 5,
+    "rgb(217, 200, 174)": 2,
+    "rgb(214, 178, 118)": 2,
+    "rgb(46, 31, 20)": 1,
+    "oklab(0.93198 0.00368583 0.0437383 / 0.9)": 1,
+    "rgb(110, 97, 87)": 17,
+    "rgb(36, 24, 15)": 8,
+    "rgb(30, 107, 67)": 1,
+    "rgb(74, 52, 32)": 1
+   },
+   "btnHeights": {
+    "44": 3,
+    "56": 1
+   },
+   "radii": {
+    "18px": 2,
+    "14px": 2
+   },
+   "btnBg": {
+    "oklab(0.999994 0.0000455678 0.0000200868 / 0.08)": 1,
+    "gradient": 2,
+    "rgba(0, 0, 0, 0)": 1
+   },
+   "brokenImages": [],
+   "noAlt": 0,
+   "oversized": [
+    {
+     "src": "/brand/logo-gold.png",
+     "natural": 560,
+     "shown": 65
+    }
+   ],
+   "ltrArabic": [],
+   "leftAligned": [],
+   "h1": 1,
+   "headings": [
+    "H1:إتمام الطلب",
+    "H2:بياناتك",
+    "H2:عنوان التوصيل",
+    "H2:ملاحظات",
+    "H2:ملخص الطلب"
+   ]
+  },
+  "axe": [
+   {
+    "id": "landmark-one-main",
+    "impact": "moderate",
+    "help": "Document should have one main landmark",
+    "nodes": 1,
+    "targets": [
+     "html"
+    ]
+   },
+   {
+    "id": "region",
+    "impact": "moderate",
+    "help": "All page content should be contained by landmarks",
+    "nodes": 1,
+    "targets": [
+     ".bg-band"
+    ]
+   }
+  ],
+  "axeIncomplete": [],
+  "consoleErrors": [],
+  "pageErrors": [],
+  "failed": []
+ },
+ {
+  "state": "checkout-closed",
+  "page": "إتمام الطلب",
+  "title": "إتمام الطلب والفرع مغلق (من رابط مباشر؛ زر السلة معطّل)",
+  "vp": "t768",
+  "ok": true,
+  "ms": 2284,
+  "screenshot": "screenshots/t768/checkout-closed.jpg",
+  "probe": {
+   "vw": 768,
+   "vh": 1024,
+   "pageHeight": 1499,
+   "dir": "rtl",
+   "lang": "ar",
+   "title": "إتمام الطلب · فرع العاشر من رمضان | خليها مشاوي",
+   "docOverflowX": 0,
+   "offscreen": [],
+   "clipped": [],
+   "covered": [],
+   "underSticky": [
+    {
+     "el": "ملاحظات على الطلب (اختياري)",
+     "by": "الفرع مغلق الآن، ويفتح 11 صباحاً. أكد طل",
+     "sticky": true
+    }
+   ],
+   "tinyTargets": [
+    {
+     "el": "0554494299",
+     "box": "67x23",
+     "hitW": 61,
+     "hitH": 21
+    }
+   ],
+   "smallTargets": [],
+   "interactiveCount": 14,
+   "sizes": {
+    "11": 1,
+    "12": 15,
+    "13": 3,
+    "14": 10,
+    "16": 5,
+    "18": 2,
+    "26": 2
+   },
+   "minFont": 11,
+   "smallText": [
+    {
+     "text": "فرع",
+     "size": "11px"
+    },
+    {
+     "text": "الاسم",
+     "size": "11.5px"
+    },
+    {
+     "text": "رقم الموبايل",
+     "size": "11.5px"
+    },
+    {
+     "text": "المنطقة",
+     "size": "11.5px"
+    },
+    {
+     "text": "الشارع",
+     "size": "11.5px"
+    },
+    {
+     "text": "رقم العمارة",
+     "size": "11.5px"
+    },
+    {
+     "text": "الشقة (اختياري)",
+     "size": "11.5px"
+    },
+    {
+     "text": "(اختياري)",
+     "size": "11.5px"
+    },
+    {
+     "text": "علامة مميزة (اختياري)",
+     "size": "11.5px"
+    },
+    {
+     "text": "(اختياري)",
+     "size": "11.5px"
+    }
+   ],
+   "families": {
+    "Cairo Variable": 37,
+    "Amiri": 1
+   },
+   "weights": {
+    "400": 8,
+    "600": 7,
+    "700": 5,
+    "800": 18
+   },
+   "textColors": 9,
+   "colors": {
+    "rgb(246, 231, 200)": 5,
+    "rgb(217, 200, 174)": 2,
+    "rgb(214, 178, 118)": 2,
+    "rgb(46, 31, 20)": 1,
+    "oklab(0.93198 0.00368583 0.0437383 / 0.9)": 1,
+    "rgb(110, 97, 87)": 17,
+    "rgb(36, 24, 15)": 8,
+    "rgb(30, 107, 67)": 1,
+    "rgb(74, 52, 32)": 1
+   },
+   "btnHeights": {
+    "44": 3,
+    "56": 1
+   },
+   "radii": {
+    "18px": 2,
+    "14px": 2
+   },
+   "btnBg": {
+    "oklab(0.999994 0.0000455678 0.0000200868 / 0.08)": 1,
+    "gradient": 2,
+    "rgba(0, 0, 0, 0)": 1
+   },
+   "brokenImages": [],
+   "noAlt": 0,
+   "oversized": [
+    {
+     "src": "/brand/logo-gold.png",
+     "natural": 560,
+     "shown": 65
+    }
+   ],
+   "ltrArabic": [],
+   "leftAligned": [],
+   "h1": 1,
+   "headings": [
+    "H1:إتمام الطلب",
+    "H2:بياناتك",
+    "H2:عنوان التوصيل",
+    "H2:ملاحظات",
+    "H2:ملخص الطلب"
+   ]
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "failed": []
+ }
+]

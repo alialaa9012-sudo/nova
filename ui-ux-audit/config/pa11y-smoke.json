@@ -1,0 +1,1 @@
+{ "chromeLaunchConfig": { "executablePath": "/opt/pw-browsers/chromium", "args": ["--no-sandbox"] }, "standard": "WCAG2AA", "timeout": 60000 }

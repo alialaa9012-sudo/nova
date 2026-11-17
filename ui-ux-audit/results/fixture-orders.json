@@ -1,0 +1,25 @@
+{
+ "pickupAshry": "A-0001",
+ "deliveryTagamoa": "T-0001",
+ "cancelledZagazig": "Z-0001",
+ "orders": [
+  {
+   "number": "A-0001",
+   "status": "new",
+   "phone": "01000000001",
+   "branch": "ashry"
+  },
+  {
+   "number": "T-0001",
+   "status": "preparing",
+   "phone": "01000000002",
+   "branch": "tagamoa"
+  },
+  {
+   "number": "Z-0001",
+   "status": "cancelled",
+   "phone": "01000000003",
+   "branch": "zagazig"
+  }
+ ]
+}

@@ -1,0 +1,43 @@
+{
+ "defaults": {
+  "standard": "WCAG2AA",
+  "timeout": 60000,
+  "wait": 800,
+  "runners": [
+   "htmlcs",
+   "axe"
+  ],
+  "chromeLaunchConfig": {
+   "executablePath": "/opt/pw-browsers/chromium",
+   "args": [
+    "--no-sandbox"
+   ]
+  },
+  "viewport": {
+   "width": 390,
+   "height": 844,
+   "isMobile": true
+  }
+ },
+ "urls": [
+  "http://localhost:4173/",
+  "http://localhost:4173/branch/ashry",
+  "http://localhost:4173/branch/tagamoa",
+  "http://localhost:4173/branch/zagazig",
+  "http://localhost:4173/branch/ashry/checkout",
+  "http://localhost:4173/track",
+  "http://localhost:4173/order/A-0001",
+  "http://localhost:4173/nope",
+  "http://localhost:4173/branch/cairo",
+  "http://localhost:4173/admin",
+  "http://localhost:4173/admin/zones",
+  {
+   "url": "http://localhost:4173/branch/ashry",
+   "screenCapture": "logs/pa11y-menu-1366.png",
+   "viewport": {
+    "width": 1366,
+    "height": 768
+   }
+  }
+ ]
+}

@@ -1,0 +1,1818 @@
+{
+  "config": {
+    "argv": [
+      "/opt/node22/bin/node",
+      "/home/user/nova/ui-ux-audit/node_modules/.bin/playwright",
+      "test",
+      "--config",
+      "playwright.config.mjs"
+    ],
+    "configFile": "/home/user/nova/ui-ux-audit/playwright.config.mjs",
+    "rootDir": "/home/user/nova/ui-ux-audit/tests",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": true,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 3
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/home/user/nova/ui-ux-audit/logs/functional-artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 3
+        },
+        "id": "desktop",
+        "name": "desktop",
+        "testDir": "/home/user/nova/ui-ux-audit/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "/functional\\.spec\\.mjs/"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "results/functional.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.63.0",
+    "workers": 3,
+    "webServer": {
+      "command": "npm run serve",
+      "url": "http://localhost:4173",
+      "reuseExistingServer": true,
+      "timeout": 120000
+    }
+  },
+  "suites": [
+    {
+      "title": "functional.spec.mjs",
+      "file": "functional.spec.mjs",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "الرئيسية",
+          "file": "functional.spec.mjs",
+          "line": 28,
+          "column": 6,
+          "specs": [
+            {
+              "title": "F01 every «اطلب الآن» opens its own branch menu",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "desktop",
+                  "projectName": "desktop",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1607,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-17T12:57:04.163Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "030c45a8da3ad1f99bb2-9dd0d2c9e4700c92498d",
+              "file": "functional.spec.mjs",
+              "line": 29,
+              "column": 3
+            },
+            {
+              "title": "F02 call and map buttons point to each branch number and Google Maps in a new tab",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "desktop",
+                  "projectName": "desktop",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 544,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-17T12:57:04.217Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "030c45a8da3ad1f99bb2-fe8cbcf940f34988de67",
+              "file": "functional.spec.mjs",
+              "line": 35,
+              "column": 3
+            },
+            {
+              "title": "F03 desktop header: WhatsApp opens wa.me and «تتبع طلب» opens tracking",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "desktop",
+                  "projectName": "desktop",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 695,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-17T12:57:04.182Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "030c45a8da3ad1f99bb2-c465e5b0f7671eeddbc0",
+              "file": "functional.spec.mjs",
+              "line": 42,
+              "column": 3
+            },
+            {
+              "title": "F04 closed branches say when they open and still let customers browse",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "desktop",
+                  "projectName": "desktop",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 930,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-17T12:57:04.939Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "030c45a8da3ad1f99bb2-cb89ff468b0c818b083c",
+              "file": "functional.spec.mjs",
+              "line": 47,
+              "column": 3
+            },
+            {
+              "title": "F05 the «طلبك الحالي» bar opens the remembered order",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "desktop",
+                  "projectName": "desktop",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 703,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-17T12:57:05.044Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "030c45a8da3ad1f99bb2-b24c08f3e46c2846b470",
+              "file": "functional.spec.mjs",
+              "line": 52,
+              "column": 3
+            }
+          ]
+        },
+        {
+          "title": "الرئيسية على الموبايل",
+          "file": "functional.spec.mjs",
+          "line": 59,
+          "column": 6,
+          "specs": [
+            {
+              "title": "F06 bottom bar: home, tracking and WhatsApp",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "desktop",
+                  "projectName": "desktop",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 666,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-17T12:57:05.774Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "030c45a8da3ad1f99bb2-d51050be3c7b032be0df",
+              "file": "functional.spec.mjs",
+              "line": 61,
+              "column": 3
+            }
+          ]
+        },
+        {
+          "title": "المنيو",
+          "file": "functional.spec.mjs",
+          "line": 70,
+          "column": 6,
+          "specs": [
+            {
+              "title": "F07 «كل الفروع» goes back home",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "desktop",
+                  "projectName": "desktop",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 891,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-17T12:57:05.883Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "030c45a8da3ad1f99bb2-93a5ff5e59e68e3621e0",
+              "file": "functional.spec.mjs",
+              "line": 71,
+              "column": 3
+            },
+            {
+              "title": "F08 search narrows by name, tolerates spelling, clears with ×",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "desktop",
+                  "projectName": "desktop",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1014,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-17T12:57:05.920Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "030c45a8da3ad1f99bb2-71c827f1fc1ba0c1b670",
+              "file": "functional.spec.mjs",
+              "line": 74,
+              "column": 3
+            },
+            {
+              "title": "F09 a search with no result says so and offers to clear it",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "desktop",
+                  "projectName": "desktop",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 1018,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-17T12:57:06.477Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "030c45a8da3ad1f99bb2-c33c82cdd14ab7ce55f2",
+              "file": "functional.spec.mjs",
+              "line": 81,
+              "column": 3
+            },
+            {
+              "title": "F10 searching «دجاج» finds chicken dishes listed as «فراخ» (synonym)",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "desktop",
+                  "projectName": "desktop",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "failed",
+                      "duration": 5755,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('button', { name: 'أضف صدور فراخ', exact: true })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByRole('button', { name: 'أضف صدور فراخ', exact: true }) with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('button', { name: 'أضف صدور فراخ', exact: true })\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('button', { name: 'أضف صدور فراخ', exact: true })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByRole('button', { name: 'أضف صدور فراخ', exact: true }) with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('button', { name: 'أضف صدور فراخ', exact: true })\u001b[22m\n\n    at /home/user/nova/ui-ux-audit/tests/functional.spec.mjs:88:84",
+                        "location": {
+                          "file": "/home/user/nova/ui-ux-audit/tests/functional.spec.mjs",
+                          "column": 84,
+                          "line": 88
+                        },
+                        "snippet": "  86 |   test('F10 searching «دجاج» finds chicken dishes listed as «فراخ» (synonym)', async ({ page }) => {\n  87 |     await page.goto('/branch/ashry'); await page.getByRole('searchbox').fill('دجاج')\n> 88 |     await expect(page.getByRole('button', { name: 'أضف صدور فراخ', exact: true })).toBeVisible()\n     |                                                                                    ^\n  89 |   })\n  90 |   test('F11 a category chip scrolls to its section and highlights itself', async ({ page }) => {\n  91 |     await page.goto('/branch/ashry'); const bar = page.getByRole('navigation', { name: 'أقسام المنيو' })"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/home/user/nova/ui-ux-audit/tests/functional.spec.mjs",
+                            "column": 84,
+                            "line": 88
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('button', { name: 'أضف صدور فراخ', exact: true })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByRole('button', { name: 'أضف صدور فراخ', exact: true }) with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('button', { name: 'أضف صدور فراخ', exact: true })\u001b[22m\n\n\n  86 |   test('F10 searching «دجاج» finds chicken dishes listed as «فراخ» (synonym)', async ({ page }) => {\n  87 |     await page.goto('/branch/ashry'); await page.getByRole('searchbox').fill('دجاج')\n> 88 |     await expect(page.getByRole('button', { name: 'أضف صدور فراخ', exact: true })).toBeVisible()\n     |                                                                                    ^\n  89 |   })\n  90 |   test('F11 a category chip scrolls to its section and highlights itself', async ({ page }) => {\n  91 |     await page.goto('/branch/ashry'); const bar = page.getByRole('navigation', { name: 'أقسام المنيو' })\n    at /home/user/nova/ui-ux-audit/tests/functional.spec.mjs:88:84"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-17T12:57:06.816Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/home/user/nova/ui-ux-audit/logs/functional-artifacts/functional-المنيو-F10-sear-439b8-s-listed-as-«فراخ»-synonym--desktop/test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/home/user/nova/ui-ux-audit/logs/functional-artifacts/functional-المنيو-F10-sear-439b8-s-listed-as-«فراخ»-synonym--desktop/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/home/user/nova/ui-ux-audit/tests/functional.spec.mjs",
+                        "column": 84,
+                        "line": 88
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "030c45a8da3ad1f99bb2-f1d63425dfbc8273c265",
+              "file": "functional.spec.mjs",
+              "line": 86,
+              "column": 3
+            },
+            {
+              "title": "F11 a category chip scrolls to its section and highlights itself",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "desktop",
+                  "projectName": "desktop",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1777,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-17T12:57:06.964Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "030c45a8da3ad1f99bb2-87718b6d9bb1e279a25e",
+              "file": "functional.spec.mjs",
+              "line": 90,
+              "column": 3
+            },
+            {
+              "title": "F12 sizes show their prices and the add button follows size and quantity",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "desktop",
+                  "projectName": "desktop",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 1486,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-17T12:57:07.529Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "030c45a8da3ad1f99bb2-e149b110f761a2f416fe",
+              "file": "functional.spec.mjs",
+              "line": 96,
+              "column": 3
+            },
+            {
+              "title": "F13 an item note is optional, counted and capped at 120 characters",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "desktop",
+                  "projectName": "desktop",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1463,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-17T12:57:08.763Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "030c45a8da3ad1f99bb2-bd2348ec00e81dd8cc17",
+              "file": "functional.spec.mjs",
+              "line": 105,
+              "column": 3
+            },
+            {
+              "title": "F14 adding shows a confirmation and the cart bar with count and total",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "desktop",
+                  "projectName": "desktop",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 1410,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-17T12:57:09.031Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "030c45a8da3ad1f99bb2-338cb5c547d7d5c17168",
+              "file": "functional.spec.mjs",
+              "line": 112,
+              "column": 3
+            },
+            {
+              "title": "F15 booking-only items offer a call instead of add",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "desktop",
+                  "projectName": "desktop",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 564,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-17T12:57:10.239Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "030c45a8da3ad1f99bb2-2fd2a89d5cad289264aa",
+              "file": "functional.spec.mjs",
+              "line": 117,
+              "column": 3
+            },
+            {
+              "title": "F16 cart: quantity, total, delete and the empty state",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "desktop",
+                  "projectName": "desktop",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 2877,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-17T12:57:10.453Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "030c45a8da3ad1f99bb2-0bf89b13569ddcd19e54",
+              "file": "functional.spec.mjs",
+              "line": 122,
+              "column": 3
+            },
+            {
+              "title": "F17 the cart survives a reload and stays separate per branch",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "desktop",
+                  "projectName": "desktop",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1775,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-17T12:57:10.817Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "030c45a8da3ad1f99bb2-0086bf91d79fad96081a",
+              "file": "functional.spec.mjs",
+              "line": 129,
+              "column": 3
+            },
+            {
+              "title": "F18 closed branch: cart explains and blocks checkout",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "desktop",
+                  "projectName": "desktop",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 2142,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-17T12:57:12.616Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "030c45a8da3ad1f99bb2-bb46f1ef63af9892c453",
+              "file": "functional.spec.mjs",
+              "line": 134,
+              "column": 3
+            },
+            {
+              "title": "F19 Escape closes the item window and focus returns to the item",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "desktop",
+                  "projectName": "desktop",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 1310,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-17T12:57:13.337Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "030c45a8da3ad1f99bb2-3945b04479427fefa1ec",
+              "file": "functional.spec.mjs",
+              "line": 140,
+              "column": 3
+            }
+          ]
+        },
+        {
+          "title": "الرجوع في الموبايل",
+          "file": "functional.spec.mjs",
+          "line": 147,
+          "column": 6,
+          "specs": [
+            {
+              "title": "F20 the phone Back button closes an open item window instead of leaving the menu",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "desktop",
+                  "projectName": "desktop",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "failed",
+                      "duration": 5976,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected pattern: \u001b[32m/\\/branch\\/ashry$/\u001b[39m\nReceived string:  \u001b[31m\"http://localhost:4173/\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 5000ms\u001b[22m\n\u001b[2m    14 × locator resolved to <html lang=\"ar\" dir=\"rtl\">…</html>\u001b[22m\n\u001b[2m       - unexpected value \"http://localhost:4173/\"\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected pattern: \u001b[32m/\\/branch\\/ashry$/\u001b[39m\nReceived string:  \u001b[31m\"http://localhost:4173/\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 5000ms\u001b[22m\n\u001b[2m    14 × locator resolved to <html lang=\"ar\" dir=\"rtl\">…</html>\u001b[22m\n\u001b[2m       - unexpected value \"http://localhost:4173/\"\u001b[22m\n\n    at /home/user/nova/ui-ux-audit/tests/functional.spec.mjs:153:24",
+                        "location": {
+                          "file": "/home/user/nova/ui-ux-audit/tests/functional.spec.mjs",
+                          "column": 24,
+                          "line": 153
+                        },
+                        "snippet": "  151 |     await page.getByRole('button', { name: 'أضف صدور فراخ', exact: true }).click(); await expect(page.getByRole('dialog')).toBeVisible()\n  152 |     await page.goBack()\n> 153 |     await expect(page).toHaveURL(/\\/branch\\/ashry$/)\n      |                        ^\n  154 |   })\n  155 | })\n  156 |"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/home/user/nova/ui-ux-audit/tests/functional.spec.mjs",
+                            "column": 24,
+                            "line": 153
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected pattern: \u001b[32m/\\/branch\\/ashry$/\u001b[39m\nReceived string:  \u001b[31m\"http://localhost:4173/\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 5000ms\u001b[22m\n\u001b[2m    14 × locator resolved to <html lang=\"ar\" dir=\"rtl\">…</html>\u001b[22m\n\u001b[2m       - unexpected value \"http://localhost:4173/\"\u001b[22m\n\n\n  151 |     await page.getByRole('button', { name: 'أضف صدور فراخ', exact: true }).click(); await expect(page.getByRole('dialog')).toBeVisible()\n  152 |     await page.goBack()\n> 153 |     await expect(page).toHaveURL(/\\/branch\\/ashry$/)\n      |                        ^\n  154 |   })\n  155 | })\n  156 |\n    at /home/user/nova/ui-ux-audit/tests/functional.spec.mjs:153:24"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-17T12:57:13.349Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/home/user/nova/ui-ux-audit/logs/functional-artifacts/functional-الرجوع-في-الموب-e32a7-instead-of-leaving-the-menu-desktop/test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/home/user/nova/ui-ux-audit/logs/functional-artifacts/functional-الرجوع-في-الموب-e32a7-instead-of-leaving-the-menu-desktop/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/home/user/nova/ui-ux-audit/tests/functional.spec.mjs",
+                        "column": 24,
+                        "line": 153
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "030c45a8da3ad1f99bb2-0f86b123145c47c621df",
+              "file": "functional.spec.mjs",
+              "line": 149,
+              "column": 3
+            }
+          ]
+        },
+        {
+          "title": "إتمام الطلب",
+          "file": "functional.spec.mjs",
+          "line": 157,
+          "column": 6,
+          "specs": [
+            {
+              "title": "F21 empty cart: the page says so and leads back to the menu",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "desktop",
+                  "projectName": "desktop",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 674,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-17T12:57:14.772Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "030c45a8da3ad1f99bb2-4331047aacdce24616fd",
+              "file": "functional.spec.mjs",
+              "line": 158,
+              "column": 3
+            },
+            {
+              "title": "F22 missing fields: one clear message each and focus on the first",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "desktop",
+                  "projectName": "desktop",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 1980,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-17T12:57:14.818Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "030c45a8da3ad1f99bb2-f85e9383fffaacee4418",
+              "file": "functional.spec.mjs",
+              "line": 162,
+              "column": 3
+            },
+            {
+              "title": "F23 phone: Arabic digits accepted, wrong prefix refused",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "desktop",
+                  "projectName": "desktop",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 2034,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-17T12:57:15.465Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "030c45a8da3ad1f99bb2-50cc10c8d631602d5ea4",
+              "file": "functional.spec.mjs",
+              "line": 167,
+              "column": 3
+            },
+            {
+              "title": "F24 zone fee and the 14% Tagamoa tax appear before confirming",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "desktop",
+                  "projectName": "desktop",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 1956,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-17T12:57:16.823Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "030c45a8da3ad1f99bb2-6a26b555acf212f96628",
+              "file": "functional.spec.mjs",
+              "line": 174,
+              "column": 3
+            },
+            {
+              "title": "F25 pickup hides the address and shows the branch address",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "desktop",
+                  "projectName": "desktop",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1828,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-17T12:57:17.526Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "030c45a8da3ad1f99bb2-d980f37506d11155b1df",
+              "file": "functional.spec.mjs",
+              "line": 179,
+              "column": 3
+            },
+            {
+              "title": "F26 what was typed survives a reload and the trip back to the menu",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "desktop",
+                  "projectName": "desktop",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 3171,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-17T12:57:18.796Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "030c45a8da3ad1f99bb2-f9154138f5c05b70578d",
+              "file": "functional.spec.mjs",
+              "line": 183,
+              "column": 3
+            },
+            {
+              "title": "F27 an unknown zone has a way out: the branch phone",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "desktop",
+                  "projectName": "desktop",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 2279,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-17T12:57:19.366Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "030c45a8da3ad1f99bb2-99d5bc2ce9bd3b0d0fc8",
+              "file": "functional.spec.mjs",
+              "line": 190,
+              "column": 3
+            },
+            {
+              "title": "F28 a closed branch cannot confirm, and says when to come back",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "desktop",
+                  "projectName": "desktop",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 2052,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-17T12:57:20.136Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "030c45a8da3ad1f99bb2-fabad867ec26a8d94272",
+              "file": "functional.spec.mjs",
+              "line": 195,
+              "column": 3
+            },
+            {
+              "title": "F29 confirming shows the order number, empties the cart and remembers the order",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "desktop",
+                  "projectName": "desktop",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 2975,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-17T12:57:21.669Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "030c45a8da3ad1f99bb2-e9944f5e33e447ebbe95",
+              "file": "functional.spec.mjs",
+              "line": 199,
+              "column": 3
+            },
+            {
+              "title": "F30 a fourth order from one phone within 10 minutes is refused with a clear message",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "desktop",
+                  "projectName": "desktop",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 7750,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-17T12:57:21.990Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "030c45a8da3ad1f99bb2-8a51a2fabdbb0b2bfa82",
+              "file": "functional.spec.mjs",
+              "line": 205,
+              "column": 3
+            },
+            {
+              "title": "F31 double tap on confirm places one order",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "desktop",
+                  "projectName": "desktop",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 2415,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-17T12:57:22.344Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "030c45a8da3ad1f99bb2-af3e86dda93b748e61b2",
+              "file": "functional.spec.mjs",
+              "line": 209,
+              "column": 3
+            }
+          ]
+        },
+        {
+          "title": "صفحة الطلب والتتبع",
+          "file": "functional.spec.mjs",
+          "line": 217,
+          "column": 6,
+          "specs": [
+            {
+              "title": "F32 copy and WhatsApp share of the order number",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "desktop",
+                  "projectName": "desktop",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 2426,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-17T12:57:24.658Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "030c45a8da3ad1f99bb2-dac8b3e6615e0a94cf48",
+              "file": "functional.spec.mjs",
+              "line": 218,
+              "column": 3
+            },
+            {
+              "title": "F33 a status change on the staff board reaches the open order page without reload",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "desktop",
+                  "projectName": "desktop",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 2755,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-17T12:57:24.787Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "030c45a8da3ad1f99bb2-3473c00ab2fdeaf25815",
+              "file": "functional.spec.mjs",
+              "line": 224,
+              "column": 3
+            },
+            {
+              "title": "F34 «اطلب مرة أخرى» returns to the same branch menu",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "desktop",
+                  "projectName": "desktop",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 920,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-17T12:57:27.108Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "030c45a8da3ad1f99bb2-5d3c40daf378f867b682",
+              "file": "functional.spec.mjs",
+              "line": 230,
+              "column": 3
+            },
+            {
+              "title": "F35 an order link without the phone asks for it; a wrong phone finds nothing",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "desktop",
+                  "projectName": "desktop",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 774,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-17T12:57:27.554Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "030c45a8da3ad1f99bb2-2f498db6ee6c17e03657",
+              "file": "functional.spec.mjs",
+              "line": 234,
+              "column": 3
+            },
+            {
+              "title": "F36 tracking: clear errors, then the right number and phone open the order",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "desktop",
+                  "projectName": "desktop",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 788,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-17T12:57:28.083Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "030c45a8da3ad1f99bb2-d5536d039fbaf709a11d",
+              "file": "functional.spec.mjs",
+              "line": 240,
+              "column": 3
+            },
+            {
+              "title": "F37 an unknown address shows the not-found page with branch links",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "desktop",
+                  "projectName": "desktop",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 778,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-17T12:57:28.348Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "030c45a8da3ad1f99bb2-b7a47425dcb4f65f9349",
+              "file": "functional.spec.mjs",
+              "line": 247,
+              "column": 3
+            }
+          ]
+        },
+        {
+          "title": "لوحة الكول سنتر والمناطق",
+          "file": "functional.spec.mjs",
+          "line": 253,
+          "column": 6,
+          "specs": [
+            {
+              "title": "F38 filters by status, branch and search narrow the board",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "desktop",
+                  "projectName": "desktop",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 826,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-17T12:57:28.900Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "030c45a8da3ad1f99bb2-fdfef82249827bbb1d4d",
+              "file": "functional.spec.mjs",
+              "line": 254,
+              "column": 3
+            },
+            {
+              "title": "F39 a new order moves through its statuses on the board",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "desktop",
+                  "projectName": "desktop",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 630,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-17T12:57:29.148Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "030c45a8da3ad1f99bb2-d520c998f91f2dd4c537",
+              "file": "functional.spec.mjs",
+              "line": 262,
+              "column": 3
+            },
+            {
+              "title": "F40 cancelling needs a reason, «سبب آخر» needs words",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "desktop",
+                  "projectName": "desktop",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1239,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-17T12:57:29.748Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "030c45a8da3ad1f99bb2-590a15686da72e6db52a",
+              "file": "functional.spec.mjs",
+              "line": 269,
+              "column": 3
+            },
+            {
+              "title": "F41 details show items with notes, and the POS invoice number is saved",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "desktop",
+                  "projectName": "desktop",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 1840,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-17T12:57:29.763Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "030c45a8da3ad1f99bb2-eb83fa4d3034bd901f30",
+              "file": "functional.spec.mjs",
+              "line": 275,
+              "column": 3
+            },
+            {
+              "title": "F42 a new order placed in another tab appears on the open board",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "desktop",
+                  "projectName": "desktop",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 2695,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-17T12:57:29.796Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "030c45a8da3ad1f99bb2-b8b741847e9b6c6a3c51",
+              "file": "functional.spec.mjs",
+              "line": 284,
+              "column": 3
+            },
+            {
+              "title": "F43 zones: refuse empty and duplicate, accept Arabic digits, reach checkout, delete with confirmation",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "desktop",
+                  "projectName": "desktop",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 2919,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-17T12:57:30.999Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "030c45a8da3ad1f99bb2-8b659252eab1a19de541",
+              "file": "functional.spec.mjs",
+              "line": 289,
+              "column": 3
+            },
+            {
+              "title": "F44 a pending zone can be priced from its button",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "desktop",
+                  "projectName": "desktop",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 780,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-17T12:57:31.624Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "030c45a8da3ad1f99bb2-0208b7209145ecbfeb0e",
+              "file": "functional.spec.mjs",
+              "line": 301,
+              "column": 3
+            },
+            {
+              "title": "F45 the staff board has no sign-in (demo): anyone with the link can see customer data",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "desktop",
+                  "projectName": "desktop",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 1,
+                      "status": "failed",
+                      "duration": 5332,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: /تسجيل الدخول/ })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByRole('heading', { name: /تسجيل الدخول/ }) with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: /تسجيل الدخول/ })\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: /تسجيل الدخول/ })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByRole('heading', { name: /تسجيل الدخول/ }) with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: /تسجيل الدخول/ })\u001b[22m\n\n    at /home/user/nova/ui-ux-audit/tests/functional.spec.mjs:308:71",
+                        "location": {
+                          "file": "/home/user/nova/ui-ux-audit/tests/functional.spec.mjs",
+                          "column": 71,
+                          "line": 308
+                        },
+                        "snippet": "  306 |   test('F45 the staff board has no sign-in (demo): anyone with the link can see customer data', async ({ page }) => {\n  307 |     await seed(page); await page.goto('/admin')\n> 308 |     await expect(page.getByRole('heading', { name: /تسجيل الدخول/ })).toBeVisible()\n      |                                                                       ^\n  309 |   })\n  310 |   test('F46 the demo banner is always visible so testers know orders do not reach the kitchen', async ({ page }) => {\n  311 |     for (const u of ['/', '/branch/ashry', '/track', '/admin']) { await page.goto(u); await expect(page.getByRole('note')).toContainText('نسخة تجريبية') }"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/home/user/nova/ui-ux-audit/tests/functional.spec.mjs",
+                            "column": 71,
+                            "line": 308
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: /تسجيل الدخول/ })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByRole('heading', { name: /تسجيل الدخول/ }) with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: /تسجيل الدخول/ })\u001b[22m\n\n\n  306 |   test('F45 the staff board has no sign-in (demo): anyone with the link can see customer data', async ({ page }) => {\n  307 |     await seed(page); await page.goto('/admin')\n> 308 |     await expect(page.getByRole('heading', { name: /تسجيل الدخول/ })).toBeVisible()\n      |                                                                       ^\n  309 |   })\n  310 |   test('F46 the demo banner is always visible so testers know orders do not reach the kitchen', async ({ page }) => {\n  311 |     for (const u of ['/', '/branch/ashry', '/track', '/admin']) { await page.goto(u); await expect(page.getByRole('note')).toContainText('نسخة تجريبية') }\n    at /home/user/nova/ui-ux-audit/tests/functional.spec.mjs:308:71"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-17T12:57:32.423Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/home/user/nova/ui-ux-audit/logs/functional-artifacts/functional-لوحة-الكول-سنتر-92abb--link-can-see-customer-data-desktop/test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/home/user/nova/ui-ux-audit/logs/functional-artifacts/functional-لوحة-الكول-سنتر-92abb--link-can-see-customer-data-desktop/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/home/user/nova/ui-ux-audit/tests/functional.spec.mjs",
+                        "column": 71,
+                        "line": 308
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "030c45a8da3ad1f99bb2-55408cef962f060dcfce",
+              "file": "functional.spec.mjs",
+              "line": 306,
+              "column": 3
+            },
+            {
+              "title": "F46 the demo banner is always visible so testers know orders do not reach the kitchen",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "desktop",
+                  "projectName": "desktop",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 974,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-17T12:57:32.509Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "030c45a8da3ad1f99bb2-793a32104e2a6779f0e9",
+              "file": "functional.spec.mjs",
+              "line": 310,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-17T12:57:03.380Z",
+    "duration": 34449.671,
+    "expected": 43,
+    "skipped": 0,
+    "unexpected": 3,
+    "flaky": 0
+  }
+}

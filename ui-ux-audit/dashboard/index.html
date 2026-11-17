@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>لوحة نتائج فحص خليها مشاوي</title>
+<style>
+  :root { --bg:#f6efe6; --card:#fffcf8; --ink:#2b1d13; --muted:#6e6157; --line:#e6d9c6; --gold:#b08a4f; --gold-soft:#f3e9da;
+    --crit:#9b1c1c; --high:#c2410c; --med:#a16207; --low:#4b6b4f; --ok:#1e6b43; --bad:#b42318; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg:#17110c; --card:#211913; --ink:#f3e7d3; --muted:#bba892; --line:#3a2c20; --gold:#d6b276; --gold-soft:#2c2118; } }
+  * { box-sizing: border-box }
+  body { margin:0; background:var(--bg); color:var(--ink); font-family:"Cairo","Segoe UI",Tahoma,sans-serif; line-height:1.6 }
+  header { background:linear-gradient(135deg,#3a271a,#1e140d); color:#f6e7c8; padding:24px 16px 28px }
+  .wrap { max-width:1200px; margin:0 auto; padding:0 16px }
+  h1 { margin:0; font-size:26px } h2 { font-size:20px; margin:0 0 12px } h3 { font-size:16px; margin:0 0 6px }
+  .sub { color:#d9c8ae; font-size:14px; margin-top:4px }
+  .verdict { margin-top:14px; background:rgba(255,255,255,.08); border:1px solid rgba(214,178,118,.4); border-radius:14px; padding:10px 14px; font-weight:700 }
+  section { margin:22px auto } .card { background:var(--card); border:1px solid var(--line); border-radius:18px; padding:16px }
+  .grid { display:grid; gap:12px } .g4 { grid-template-columns:repeat(auto-fit,minmax(240px,1fr)) } @media (max-width:560px){ .g4 { grid-template-columns:1fr 1fr } } .g2 { grid-template-columns:repeat(auto-fit,minmax(320px,1fr)) }
+  .kpi .n { font-size:30px; font-weight:800 } .kpi .l { color:var(--muted); font-size:13px }
+  .ring { width:120px; height:120px; border-radius:50%; display:grid; place-items:center; font-size:34px; font-weight:800; color:#f6e7c8 }
+  .hero { display:flex; gap:20px; align-items:center; flex-wrap:wrap }
+  .bar { height:10px; background:var(--gold-soft); border-radius:99px; overflow:hidden } .bar > i { display:block; height:100% }
+  .area { display:grid; grid-template-columns:150px 1fr 40px; gap:10px; align-items:center; padding:6px 0; border-bottom:1px dashed var(--line) }
+  .area details { grid-column:1/-1; font-size:13px; color:var(--muted) } .area summary { cursor:pointer; font-size:12px; color:var(--gold) }
+  table { width:100%; border-collapse:collapse; font-size:14px } th, td { padding:8px; border-bottom:1px solid var(--line); text-align:start; vertical-align:top }
+  th { color:var(--muted); font-weight:700; font-size:13px } .tbl { overflow-x:auto }
+  .sev { display:inline-block; padding:1px 10px; border-radius:99px; color:#fff; font-size:12px; font-weight:700 }
+  .Critical{background:var(--crit)} .High{background:var(--high)} .Medium{background:var(--med)} .Low{background:var(--low)}
+  .ok { color:var(--ok); font-weight:700 } .bad { color:var(--bad); font-weight:700 }
+  .filters button { font:inherit; border:1px solid var(--line); background:var(--card); color:var(--ink); border-radius:99px; padding:4px 14px; cursor:pointer; margin:0 0 8px 6px }
+  .filters button[aria-pressed="true"] { background:var(--ink); color:var(--bg) }
+  .gallery { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:10px } .gallery a { display:block; border-radius:12px; overflow:hidden; border:1px solid var(--line) }
+  .gallery img { width:100%; display:block } .gallery.m { grid-template-columns:repeat(auto-fill,minmax(130px,1fr)) }
+  .links a { display:inline-block; margin:4px 0 4px 10px; color:var(--gold); font-weight:700 }
+  .note { font-size:13px; color:var(--muted) }
+  ul.conf { margin:4px 0 0; padding-inline-start:18px; font-size:13px; color:var(--muted) }
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <h1>لوحة نتائج فحص تجربة الاستخدام: خليها مشاوي</h1>
+  <div class="sub" id="meta"></div>
+  <div class="verdict" id="verdict"></div>
+</div></header>
+<main class="wrap">
+  <section class="card hero">
+    <div class="ring" id="ring"></div>
+    <div><h2>الدرجة الإجمالية</h2><div class="note">متوسط 9 مجالات. كل درجة مبنية على قياس أو اختبار فعلي، والسبب يظهر عند الضغط على «لماذا؟».</div></div>
+  </section>
+  <section class="grid g4" id="kpis"></section>
+  <section class="grid g2">
+    <div class="card"><h2>الدرجات حسب المجال</h2><div id="areas"></div></div>
+    <div class="card"><h2>المشاكل حسب الخطورة</h2><div id="sev"></div><h3 style="margin-top:16px">الصفحات (أقل وزن مشاكل = أفضل)</h3><div class="tbl"><table id="pages"></table></div></div>
+  </section>
+  <section class="card"><h2>نتائج كل مقاس شاشة</h2><div class="tbl"><table id="vps"></table></div></section>
+  <section class="grid g2">
+    <div class="card"><h2>الأداء (Lighthouse)</h2><div class="tbl"><table id="lh"></table></div></div>
+    <div class="card"><h2>نتائج الشخصيات (محاكاة)</h2><div id="personas"></div><p class="note">محاكاة آلية تحتاج تأكيداً باختبار بشري. الوقت تقديري بنموذج KLM.</p></div>
+  </section>
+  <section class="card"><h2>كل المشاكل</h2><div class="filters" id="filters"></div><div class="tbl"><table id="issues"></table></div></section>
+  <section class="card"><h2>لقطات قبل الإصلاح: كمبيوتر 1366</h2><div class="gallery" id="shots"></div>
+    <h3 style="margin-top:16px">موبايل 390</h3><div class="gallery m" id="mshots"></div>
+    <p class="note">كل اللقطات (38 حالة × 5 مقاسات) في مجلد <code>screenshots/</code>، واللوحات المجمعة <code>screenshots/contact-*.jpg</code>.</p></section>
+  <section class="card links"><h2>التقارير</h2>
+    <a href="../reports/EXECUTIVE-SUMMARY.md">الملخص التنفيذي</a><a href="../reports/UI-DESIGN-AUDIT.md">التصميم</a><a href="../reports/UX-USABILITY-AUDIT.md">سهولة الاستخدام</a>
+    <a href="../reports/FUNCTIONAL-TEST-REPORT.md">الاختبار الوظيفي</a><a href="../reports/RESPONSIVE-AUDIT.md">التجاوب</a><a href="../reports/ACCESSIBILITY-REPORT.md">إمكانية الوصول</a>
+    <a href="../reports/PERFORMANCE-REPORT.md">الأداء</a><a href="../reports/CUSTOMER-JOURNEY.md">رحلة العميل</a><a href="../reports/BUGS-AND-ISSUES.md">المشاكل</a>
+    <a href="../reports/IMPROVEMENT-ROADMAP.md">خطة التحسين</a><a href="../pages-inventory.md">جرد الصفحات</a><a href="../results/unlighthouse/index.html">تقرير Unlighthouse</a>
+  </section>
+</main>
+<script src="data.js"></script>
+<script>
+const A = window.AUDIT, $ = (id) => document.getElementById(id), esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]))
+const SEV = { Critical: 'حرجة', High: 'عالية', Medium: 'متوسطة', Low: 'منخفضة' }
+const col = (s) => s >= 85 ? '#1e6b43' : s >= 70 ? '#a16207' : '#b42318'
+$('meta').textContent = `آخر تشغيل: ${A.generated} · ${A.pagesTotal} صفحات · ${A.states} حالة · 5 مقاسات · أدوات محلية مفتوحة المصدر`
+$('verdict').textContent = A.scores.verdict
+$('ring').textContent = A.scores.overall; $('ring').style.background = `conic-gradient(${col(A.scores.overall)} ${A.scores.overall * 3.6}deg, #5a4026 0)`
+const counts = { Critical: 0, High: 0, Medium: 0, Low: 0 }; A.issues.forEach((i) => counts[i.severity]++)
+const kpis = [[`${A.pagesTotal}/${A.pagesTotal}`, 'صفحات مفحوصة'], [A.states, 'حالة مختلفة'], [A.runs, 'لقطة وفحص بصري'], [`${A.functional.passed}/${A.functional.total}`, 'اختبار وظيفي ناجح'], [A.axeRuns, 'فحص axe'], [`${A.coverage.functional}%`, 'نسبة نجاح الاختبارات'], [A.issues.length, 'مشكلة مكتشفة'], [counts.Critical, 'مشكلة حرجة']]
+$('kpis').innerHTML = kpis.map(([n, l]) => `<div class="card kpi"><div class="n">${esc(n)}</div><div class="l">${esc(l)}</div></div>`).join('')
+$('areas').innerHTML = A.scores.areas.map((a) => `<div class="area"><b>${esc(a.ar)}</b><div class="bar"><i style="width:${a.score}%;background:${col(a.score)}"></i></div><b>${a.score}</b><details><summary>لماذا؟</summary>${esc(a.why)}</details></div>`).join('')
+const maxS = Math.max(...Object.values(counts))
+$('sev').innerHTML = Object.entries(counts).map(([s, n]) => `<div class="area" style="grid-template-columns:90px 1fr 30px"><span class="sev ${s}">${SEV[s]}</span><div class="bar"><i class="${s}" style="width:${(n / maxS) * 100}%"></i></div><b>${n}</b></div>`).join('')
+const pages = [...A.pages].sort((a, b) => a.penalty - b.penalty)
+$('pages').innerHTML = '<tr><th>الصفحة</th><th>مشاكل</th><th>الوزن</th></tr>' + pages.map((p, i) => `<tr><td>${i < 3 ? '🟢 ' : i >= pages.length - 3 ? '🔴 ' : ''}${esc(p.page)}</td><td>${p.issues}</td><td>${p.penalty}</td></tr>`).join('')
+$('vps').innerHTML = '<tr><th>المقاس</th><th>تشغيلات</th><th>تمرير أفقي</th><th>خارج الشاشة</th><th>نص مقصوص</th><th>لمس أقل من 24</th><th>لمس أقل من 44</th><th>أخطاء</th></tr>' + A.viewports.map((v) => `<tr><td>${esc(v.vp)}</td><td>${v.runs}</td><td class="${v.overflow ? 'bad' : 'ok'}">${v.overflow}</td><td class="${v.offscreen ? 'bad' : 'ok'}">${v.offscreen}</td><td>${v.clipped}</td><td>${v.tiny}</td><td>${v.small}</td><td class="${v.err ? 'bad' : 'ok'}">${v.err}</td></tr>`).join('')
+$('lh').innerHTML = '<tr><th>الصفحة</th><th>الجهاز</th><th>الأداء</th><th>LCP</th></tr>' + A.lighthouse.map((l) => `<tr><td>${esc(l.page)}</td><td>${esc(l.mode)}</td><td style="color:${col(l.perf)};font-weight:800">${l.perf}</td><td>${esc(l.lcp)}</td></tr>`).join('')
+$('personas').innerHTML = A.personas.map((p) => `<div style="padding:8px 0;border-bottom:1px dashed var(--line)"><b>${esc(p.name)}</b> <span class="note">(${esc(p.vp)})</span>${p.tasks.map((t) => `<div>${t.ok ? '<span class="ok">✔ نجح</span>' : '<span class="bad">✘ فشل</span>'} ${esc(t.goal)} <span class="note">· ${t.clicks} نقرة · ~${t.est} ث</span>${t.confusion.length ? `<ul class="conf">${t.confusion.map((c) => `<li>${esc(c)}</li>`).join('')}</ul>` : ''}</div>`).join('')}</div>`).join('')
+let filter = 'all'
+function drawIssues() {
+  const rows = A.issues.filter((i) => filter === 'all' || i.severity === filter)
+  $('issues').innerHTML = '<tr><th>#</th><th>الخطورة</th><th>الصفحة</th><th>المشكلة</th><th>الحل</th><th>دليل</th></tr>' + rows.map((i) => `<tr><td>${i.id}</td><td><span class="sev ${i.severity}">${SEV[i.severity]}</span></td><td>${esc(i.page)}</td><td><b>${esc(i.title)}</b><div class="note">${esc(i.description)}</div></td><td class="note">${esc(i.fix)}</td><td>${i.screenshot ? `<a href="../${i.screenshot}" target="_blank">لقطة</a>` : '—'}</td></tr>`).join('')
+}
+$('filters').innerHTML = [['all', 'الكل'], ...Object.entries(SEV)].map(([k, v]) => `<button type="button" data-k="${k}" aria-pressed="${k === 'all'}">${v}</button>`).join('')
+$('filters').addEventListener('click', (e) => { const b = e.target.closest('button'); if (!b) return; filter = b.dataset.k; $('filters').querySelectorAll('button').forEach((x) => x.setAttribute('aria-pressed', x === b)); drawIssues() })
+drawIssues()
+$('shots').innerHTML = A.shots.map((s) => `<a href="../${s}" target="_blank"><img src="../${s}" alt="${esc(s.split('/').pop())}" loading="lazy"></a>`).join('')
+$('mshots').innerHTML = A.mobileShots.map((s) => `<a href="../${s}" target="_blank"><img src="../${s}" alt="${esc(s.split('/').pop())}" loading="lazy"></a>`).join('')
+</script>
+</body>
+</html>
