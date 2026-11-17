@@ -197,3 +197,43 @@ describe('formatting', () => {
     expect(formatEGP(1900)).toBe('1,900 ج.م')
   })
 })
+
+describe('search with synonyms', async () => {
+  const { matchesSearch } = await import('./text')
+  it('finds chicken whether the customer types دجاج, فراخ or فرخة', () => {
+    expect(matchesSearch('صدور فراخ', 'دجاج')).toBe(true)
+    expect(matchesSearch('فرخة مشوية', 'دجاج')).toBe(true)
+    expect(matchesSearch('فرخة مسحب', 'فراخ')).toBe(true)
+    expect(matchesSearch('كفتة بقري', 'دجاج')).toBe(false)
+  })
+  it('keeps spelling tolerance and needs every word', () => {
+    expect(matchesSearch('كفتة فراخ', 'كفته دجاج')).toBe(true)
+    expect(matchesSearch('كفتة بقري', 'كفته دجاج')).toBe(false)
+    expect(matchesSearch('أرز بسمتي', 'رز')).toBe(true)
+    expect(matchesSearch('مشروب غازي', 'بيبسي')).toBe(true)
+    expect(matchesSearch('شاي', '')).toBe(true)
+  })
+})
+
+describe('reorder', async () => {
+  const { reorderLines } = await import('./reorder')
+  it('puts past items back at today\'s price and reports those no longer sold', () => {
+    const { lines, missing } = reorderLines('ashry', {
+      lines: [
+        { name: 'صدور فراخ', sizeLabel: 'ربع', unitPrice: 1, qty: 2, lineTotal: 2, note: 'من غير شطة' },
+        { name: 'صنف قديم', sizeLabel: '', unitPrice: 50, qty: 1, lineTotal: 50 },
+      ],
+    })
+    expect(lines).toHaveLength(1)
+    expect(lines[0]).toMatchObject({ name: 'صدور فراخ', sizeLabel: 'ربع', unitPrice: 170, qty: 2, note: 'من غير شطة' })
+    expect(missing).toEqual(['صنف قديم'])
+  })
+})
+
+describe('Arabic dates', async () => {
+  const { formatDateAr } = await import('./format')
+  it('writes the board date in words, so 01/04 is never read as April', () => {
+    expect(formatDateAr('2027-01-04')).toBe('الاثنين، 4 يناير 2027')
+    expect(formatDateAr('')).toBe('')
+  })
+})

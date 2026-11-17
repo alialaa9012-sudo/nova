@@ -227,9 +227,10 @@ test.describe('صفحة الطلب والتتبع', () => {
     await staff.getByRole('button', { name: /^نقل إلى/ }).first().click()
     await expect(page.getByText(/جاري التجهيز/).first()).toBeVisible({ timeout: 8000 })
   })
-  test('F34 «اطلب مرة أخرى» returns to the same branch menu', async ({ page }) => {
+  test('F34 «اطلب مرة أخرى» returns to the same branch with the same items in the open cart', async ({ page }) => {
     await seed(page); await page.goto('/'); await page.getByRole('link', { name: /Z-0001/ }).click()
-    await page.getByRole('link', { name: 'اطلب مرة أخرى' }).click(); await expect(page).toHaveURL(/\/branch\/zagazig$/)
+    await page.getByRole('button', { name: 'اطلب مرة أخرى' }).click(); await expect(page).toHaveURL(/\/branch\/zagazig$/)
+    await expect(page.getByRole('dialog', { name: 'السلة' }).getByText('شيش طاووق').first()).toBeVisible()
   })
   test('F35 an order link without the phone asks for it; a wrong phone finds nothing', async ({ page }) => {
     await seed(page, { 'km.demo.orders.v1': fixture['km.demo.orders.v1'] }); await page.goto('/order/A-0001')
@@ -308,6 +309,6 @@ test.describe('لوحة الكول سنتر والمناطق', () => {
     await expect(page.getByRole('heading', { name: /تسجيل الدخول/ })).toBeVisible()
   })
   test('F46 the demo banner is always visible so testers know orders do not reach the kitchen', async ({ page }) => {
-    for (const u of ['/', '/branch/ashry', '/track', '/admin']) { await page.goto(u); await expect(page.getByRole('note')).toContainText('نسخة تجريبية') }
+    for (const u of ['/', '/branch/ashry', '/track', '/admin']) { await page.goto(u); await expect(page.getByRole('complementary', { name: 'تنبيه' })).toContainText('نسخة تجريبية') }
   })
 })

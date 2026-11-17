@@ -25,7 +25,7 @@ export function IconField({
           <Icon className="size-[19px]" />
         </span>
         <div className="grid min-w-0 flex-1 gap-0.5">
-          <Label htmlFor={id} className="px-1.5 text-[11.5px] leading-4 font-extrabold text-muted-foreground">
+          <Label htmlFor={id} className="px-1.5 text-[13px] leading-[18px] font-extrabold text-muted-foreground">
             {label}
             {optional ? <span className="font-semibold"> (اختياري)</span> : null}
           </Label>

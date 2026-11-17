@@ -157,3 +157,53 @@ test('closing an item window with Escape puts focus back on the item it came fro
   await expect(page.getByRole('dialog', { name: 'كفتة فراخ' })).toBeHidden()
   await expect(plus).toBeFocused()
 })
+
+test('the phone Back button closes an open window instead of leaving the menu', async ({ page }) => {
+  await page.goto('/')
+  await page.getByRole('link', { name: 'اطلب من فرع العاشر من رمضان' }).click()
+  await page.getByRole('button', { name: 'أضف صدور فراخ', exact: true }).click()
+  await expect(page.getByRole('dialog', { name: 'صدور فراخ' })).toBeVisible()
+  await page.goBack()
+  await expect(page.getByRole('dialog')).toBeHidden()
+  await expect(page).toHaveURL(/\/branch\/ashry$/)
+  // Closing with Escape leaves no extra history entry: one Back now goes home.
+  await page.getByRole('button', { name: 'أضف صدور فراخ', exact: true }).click()
+  await page.keyboard.press('Escape')
+  await expect(page.getByRole('dialog')).toBeHidden()
+  await page.goBack()
+  await expect(page).toHaveURL(/\/$/)
+})
+
+test('Back from checkout returns to the menu with the cart closed', async ({ page }) => {
+  await page.goto('/branch/ashry')
+  await addToCart(page, 'صدور فراخ', /^ربع/, 'أضف للسلة · 170 ج.م')
+  await page.getByRole('button', { name: /عرض السلة/ }).click()
+  await page.getByRole('dialog', { name: 'السلة' }).getByRole('link', { name: 'إتمام الطلب' }).click()
+  await expect(page.getByRole('heading', { level: 1, name: 'إتمام الطلب' })).toBeVisible()
+  await page.goBack()
+  await expect(page).toHaveURL(/\/branch\/ashry$/)
+  await expect(page.getByRole('dialog')).toBeHidden()
+  await expect(page.getByRole('button', { name: /عرض السلة/ })).toBeVisible()
+})
+
+test('«اطلب مرة أخرى» puts the same items back in the cart and opens it', async ({ page }) => {
+  await page.goto('/branch/ashry')
+  await addToCart(page, 'صدور فراخ', /^ربع/, 'أضف للسلة · 170 ج.م')
+  await page.getByRole('button', { name: /عرض السلة/ }).click()
+  await page.getByRole('dialog', { name: 'السلة' }).getByRole('link', { name: 'إتمام الطلب' }).click()
+  await page.getByRole('radio', { name: 'استلام من الفرع' }).click()
+  await page.getByLabel('الاسم').fill('سارة')
+  await page.getByLabel('رقم الموبايل').fill('01098765432')
+  await page.getByRole('button', { name: /^تأكيد الطلب/ }).click()
+  await page.getByRole('button', { name: 'اطلب مرة أخرى' }).click()
+  await expect(page).toHaveURL(/\/branch\/ashry$/)
+  const cart = page.getByRole('dialog', { name: 'السلة' })
+  await expect(cart).toBeVisible()
+  await expect(cart.getByText('صدور فراخ').first()).toBeVisible()
+})
+
+test('searching «دجاج» finds the chicken dishes', async ({ page }) => {
+  await page.goto('/branch/ashry')
+  await page.getByRole('searchbox').fill('دجاج')
+  await expect(page.getByRole('button', { name: 'أضف صدور فراخ', exact: true })).toBeVisible()
+})

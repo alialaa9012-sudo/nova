@@ -1,6 +1,6 @@
 import { ArrowRight, Clock, Search, ShoppingBag, X } from 'lucide-react'
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { Link } from 'react-router'
+import { Link, useLocation, useNavigate } from 'react-router'
 import { toast } from 'sonner'
 import { CartSheet } from '@/components/CartSheet'
 import { CategoryBar } from '@/components/CategoryBar'
@@ -16,7 +16,7 @@ import { cartCount, cartSubtotal } from '@/lib/cart'
 import { brand, getMenu, getMenuStrip, type MenuItem } from '@/lib/catalog'
 import { formatEGP } from '@/lib/format'
 import { formatTimeAr, getOpenStatus } from '@/lib/hours'
-import { searchKey } from '@/lib/text'
+import { matchesSearch, searchKey } from '@/lib/text'
 import { useBranch } from '@/state/branch-context'
 import { useCart } from '@/state/cart-context'
 
@@ -57,7 +57,7 @@ function SearchField({ query, setQuery }: { query: string; setQuery: (q: string)
             setQuery('')
             ;(e.currentTarget.previousElementSibling as HTMLInputElement | null)?.focus()
           }}
-          className="absolute end-1 top-1/2 grid size-10 -translate-y-1/2 place-items-center rounded-full text-muted-foreground outline-none hover:bg-gold-soft hover:text-foreground focus-visible:ring-2 focus-visible:ring-gold"
+          className="absolute end-0.5 top-1/2 grid size-11 -translate-y-1/2 place-items-center rounded-full text-muted-foreground outline-none hover:bg-gold-soft hover:text-foreground focus-visible:ring-2 focus-visible:ring-gold"
         >
           <X className="size-5" aria-hidden="true" />
           <span className="sr-only">مسح البحث</span>
@@ -73,7 +73,16 @@ export function MenuPage() {
   const menu = useMemo(() => getMenu(branch.id), [branch.id])
   const { lines, dispatch } = useCart()
   const [selected, setSelected] = useState<MenuItem | null>(null)
-  const [cartOpen, setCartOpen] = useState(false)
+  // Arriving from «اطلب مرة أخرى»: the items are already in the cart, so it opens straight away.
+  const location = useLocation()
+  const navigate = useNavigate()
+  const reordered = (location.state as { reordered?: { added: number; missing: string[] } } | null)?.reordered
+  const [cartOpen, setCartOpen] = useState(() => Boolean(reordered))
+  useEffect(() => {
+    if (!reordered) return
+    navigate(location.pathname, { replace: true, state: null }) // a reload must not reopen it
+    if (reordered.missing.length) toast(`غير متاح الآن: ${reordered.missing.join('، ')}`)
+  }, [reordered, navigate, location.pathname])
   const [query, setQuery] = useState('')
   const sticky = useRef<HTMLDivElement>(null)
   const top = useRef<HTMLDivElement>(null)
@@ -85,9 +94,9 @@ export function MenuPage() {
   const shown = useMemo(
     () =>
       wanted
-        ? menu.map((c) => ({ ...c, items: c.items.filter((i) => searchKey(i.name).includes(wanted)) })).filter((c) => c.items.length > 0)
+        ? menu.map((c) => ({ ...c, items: c.items.filter((i) => matchesSearch(i.name, query)) })).filter((c) => c.items.length > 0)
         : menu,
-    [menu, wanted],
+    [menu, wanted, query],
   )
   const sectionIds = useMemo(() => shown.map((c) => c.id), [shown])
   const offset = stickyHeight + 8
@@ -115,13 +124,18 @@ export function MenuPage() {
     ? null
     : `الفرع مغلق الآن${status.opensAt ? `، ويفتح ${formatTimeAr(status.opensAt)}` : ''}. تقدر تجهز طلبك وتأكده في مواعيد العمل.`
   const cartButton = (size: string) => (
-    <button type="button" className={`${headerButton} ${size} bg-linear-to-br from-[#3a271a] to-brand text-gold-hi ring-0 hover:to-brand-pressed`} onClick={openCart} aria-label={`السلة (${count})`}>
+    <button type="button" className={`${headerButton} ${size} bg-linear-to-br from-[#3a271a] to-brand text-gold-hi ring-0 hover:to-brand-pressed`} onClick={openCart}>
       <ShoppingBag className="size-5" aria-hidden="true" />
+      {/* Name read aloud = «السلة (n)», and it includes the visible number (voice control says what it sees). */}
+      <span className="sr-only">السلة (</span>
       {count > 0 ? (
-        <span aria-hidden="true" className="absolute -start-1.5 -top-1.5 grid h-5 min-w-5 place-items-center rounded-full border-2 border-background bg-gold-hi px-1 text-[11px] leading-[14px] font-extrabold text-brand">
+        <span className="absolute -start-1.5 -top-1.5 grid h-5 min-w-5 place-items-center rounded-full border-2 border-background bg-gold-hi px-1 text-[11px] leading-[14px] font-extrabold text-brand">
           {count}
         </span>
-      ) : null}
+      ) : (
+        <span className="sr-only">0</span>
+      )}
+      <span className="sr-only">)</span>
     </button>
   )
   const count = cartCount(lines)
@@ -140,7 +154,7 @@ export function MenuPage() {
   return (
     <>
       <title>{`منيو فرع ${branch.name} | خليها مشاوي`}</title>
-      <header ref={top} className="mx-auto max-w-[1240px] px-4 md:px-6 lg:px-8">
+      <header ref={top} className="mx-auto max-w-[1240px] min-[1700px]:max-w-[1480px] px-4 md:px-6 lg:px-8">
         {/* Phones: back, logo, branch and cart on one row with the search under it. From 1024px the search sits in that row. */}
         <div className="flex flex-wrap items-center gap-x-2.5 gap-y-2 pt-2.5 pb-1.5 lg:flex-nowrap lg:gap-x-4 lg:pt-3.5">
           <Link to="/" className={headerButton}>
@@ -149,7 +163,7 @@ export function MenuPage() {
           </Link>
           <img src={brand.logoUrl} alt="خليها مشاوي" width={brand.logoWidth} height={brand.logoHeight} className="h-[50px] w-auto shrink-0 lg:h-[76px]" />
           <div className="grid min-w-0 justify-items-start border-s border-border ps-2.5 leading-tight lg:hidden">
-            <span className="text-[11px] font-bold text-muted-foreground" aria-hidden="true">فرع</span>
+            <span className="text-xs font-bold text-muted-foreground" aria-hidden="true">فرع</span>
             <span className="max-w-full truncate font-naskh text-lg font-bold" aria-hidden="true">{branch.name}</span>
             <OpenBadge branch={branch} now={now} className="mt-0.5 bg-transparent p-0 ring-0" />
           </div>
@@ -165,11 +179,16 @@ export function MenuPage() {
           <OpenBadge branch={branch} now={now} className="hidden px-3.5 py-1.5 text-[13px] lg:inline-flex" />
         </div>
       </header>
-      <main className="mx-auto max-w-[1240px] px-4 pb-28 md:px-6 lg:px-8">
+      <main id="content" tabIndex={-1} className="outline-none mx-auto max-w-[1240px] min-[1700px]:max-w-[1480px] px-4 pb-28 md:px-6 lg:px-8">
         {closedMessage ? (
           <p role="status" className="mt-2 flex items-start gap-2.5 rounded-2xl bg-gold-soft px-3.5 py-3 text-[13px] leading-6 font-bold text-[#4a3420] ring-1 ring-gold">
             <Clock className="mt-0.5 size-[18px] shrink-0 text-gold-deep" aria-hidden="true" />
             {closedMessage}
+          </p>
+        ) : null}
+        {branch.charges.tax_percent > 0 ? (
+          <p className="mt-2 text-[13px] leading-5 font-semibold text-muted-foreground">
+            الأسعار لا تشمل ضريبة {branch.charges.tax_percent}٪، وتُضاف عند إتمام الطلب.
           </p>
         ) : null}
         <PromoStrip strip={getMenuStrip(branch.id)} />
@@ -200,7 +219,7 @@ export function MenuPage() {
             <SectionTitle id={`${category.id}-title`}>{category.name}</SectionTitle>
             <ul className="grid grid-cols-2 gap-2.5 md:grid-cols-4 md:gap-3 lg:grid-cols-5 lg:gap-3.5 xl:grid-cols-6">
               {category.items.map((item, ii) => (
-                <ItemCard key={item.id} item={item} phone={branch.phones[0]} onAdd={() => setSelected(item)} priority={ci === 0 && ii < 2} />
+                <ItemCard key={item.id} item={item} phone={branch.phones[0]} onAdd={() => setSelected(item)} priority={ci === 0 && ii < 4} />
               ))}
             </ul>
           </section>
@@ -212,7 +231,6 @@ export function MenuPage() {
           <button
             type="button"
             onClick={openCart}
-            aria-label={`عرض السلة (${count}) · ${formatEGP(cartSubtotal(lines))}`}
             className="pointer-events-auto flex h-[54px] items-center gap-2.5 rounded-full bg-linear-to-l from-[#d8b57a] to-gold ps-2 pe-2 text-[15px] font-extrabold whitespace-nowrap text-brand shadow-[0_12px_26px_rgb(120_85_40/0.35)] outline-none hover:to-gold-deep focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:ring-offset-2 lg:h-[58px] lg:min-w-[420px] lg:justify-between"
           >
             <span className="relative grid size-10 place-items-center rounded-full bg-brand text-gold-hi">
@@ -221,7 +239,8 @@ export function MenuPage() {
                 {count}
               </span>
             </span>
-            <span className="px-1">عرض السلة</span>
+            <span className="px-1">عرض السلة</span>{' '}
+            <span className="sr-only">({count}) ·</span>{' '}
             <span className="rounded-full bg-brand/12 px-3.5 py-2 tabular-nums">{formatEGP(cartSubtotal(lines))}</span>
           </button>
         </div>

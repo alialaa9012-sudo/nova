@@ -121,6 +121,7 @@ export function ZoneCombobox({
           ref={list}
           id={listId}
           role="listbox"
+          tabIndex={-1}
           aria-label="المناطق"
           className="absolute inset-x-0 top-full z-40 mt-1 max-h-[min(280px,40svh)] overflow-y-auto rounded-2xl bg-surface p-1 shadow-nav"
         >

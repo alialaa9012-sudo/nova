@@ -24,10 +24,10 @@ function BranchCard({ branch, now }: { branch: Branch; now: Date }) {
   return (
     <article className="flex h-full flex-col rounded-[20px] border border-border bg-card px-3.5 py-[clamp(10px,1.6vh,14px)] shadow-card lg:rounded-[28px] lg:p-6">
       <div className="flex items-center justify-between gap-2 lg:flex-col lg:items-start">
-        <h2 className="truncate text-[17px] leading-[26px] font-bold lg:text-2xl">فرع {branch.name}</h2>
+        <h2 className="min-w-0 text-[17px] leading-[24px] font-bold text-balance lg:text-2xl">فرع {branch.name}</h2>
         <OpenBadge branch={branch} now={now} className="lg:px-3.5 lg:py-1.5 lg:text-[13px]" />
       </div>
-      <p className="mt-[clamp(2px,0.7vh,6px)] truncate text-xs leading-5 text-muted-foreground lg:mt-2 lg:text-[15px]">{shortAddress(branch)}</p>
+      <p className="mt-[clamp(2px,0.7vh,6px)] line-clamp-2 text-xs leading-5 text-muted-foreground lg:mt-2 lg:text-[15px]" title={branch.address}>{shortAddress(branch)}</p>
       <div className="mt-auto flex items-center gap-2 pt-[clamp(8px,1.5vh,13px)] lg:gap-2.5 lg:pt-5">
         <Button asChild className="h-11 min-w-0 flex-1 text-[15px] lg:h-14 lg:text-[19px] lg:[&_svg]:size-5">
           <Link to={`/branch/${branch.id}`} aria-label={`اطلب من فرع ${branch.name}`}>
@@ -53,7 +53,7 @@ export function HomePage() {
       <title>خليها مشاوي | اطلب أونلاين</title>
       <div className="flex min-h-[calc(100dvh-var(--banner-h,0px))] flex-col">
         {/* From 1024px the bottom navigation is hidden and its links live here. */}
-        <header className="mx-auto hidden w-full max-w-[1240px] items-center justify-end gap-2.5 px-8 pt-4 lg:flex">
+        <header className="mx-auto hidden w-full max-w-[1240px] min-[1700px]:max-w-[1480px] items-center justify-end gap-2.5 px-8 pt-4 lg:flex">
           <Button asChild variant="outline" size="lg">
             <a href={brand.whatsappUrl} target="_blank" rel="noopener noreferrer">
               <MessageCircle aria-hidden="true" /> واتساب
@@ -65,7 +65,7 @@ export function HomePage() {
             </Link>
           </Button>
         </header>
-        <main className="mx-auto flex w-full max-w-[1240px] flex-1 flex-col px-5 pt-[clamp(10px,2vh,20px)] pb-28 md:px-6 lg:justify-center lg:px-8 lg:pb-16">
+        <main id="content" tabIndex={-1} className="outline-none mx-auto flex w-full max-w-[1240px] min-[1700px]:max-w-[1480px] flex-1 flex-col px-5 pt-[clamp(10px,2vh,20px)] pb-28 md:px-6 lg:justify-center lg:px-8 lg:pb-16">
           <div className="relative text-center">
             <img
               src={brand.logoUrl}

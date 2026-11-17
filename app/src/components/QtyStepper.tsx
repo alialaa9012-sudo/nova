@@ -23,7 +23,7 @@ export function QtyStepper({
   compact?: boolean
 }) {
   // The cart's small buttons keep their look but answer a 44px touch, like every other control.
-  const button = cn(round, compact ? "relative size-[30px] rounded-[10px] after:absolute after:-inset-[7px] after:content-['']" : 'size-[42px]')
+  const button = cn(round, compact ? "relative size-[30px] rounded-[10px] after:absolute after:-inset-[7px] after:content-['']" : 'size-11')
   return (
     <div className={cn('inline-flex shrink-0 items-center gap-0.5 rounded-2xl bg-card p-[5px] ring-1 ring-border', compact ? 'h-10' : 'h-14')}>
       <button type="button" className={button} aria-label={decreaseLabel} disabled={value <= min} onClick={() => onChange(value - 1)}>

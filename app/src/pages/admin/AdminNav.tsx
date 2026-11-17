@@ -10,9 +10,9 @@ const LINKS = [
 /** The staff band: gold logo, the board's name and the switch between its screens. */
 export function AdminNav() {
   return (
-    <header className="bg-[radial-gradient(70%_160%_at_50%_0%,var(--hero-from),var(--hero-to)_80%)] text-band-ink">
+    <header className="bg-hero-to bg-[radial-gradient(70%_160%_at_50%_0%,var(--hero-from),var(--hero-to)_80%)] text-band-ink">
       <div className="mx-auto flex max-w-[1320px] flex-wrap items-center gap-x-4 gap-y-2 px-5 py-2.5 md:px-6 lg:px-8">
-        <img src={brand.logoGoldUrl} alt="خليها مشاوي" width={brand.logoGoldWidth} height={brand.logoGoldHeight} className="h-12 w-auto shrink-0" />
+        <img src={brand.logoGoldSmallUrl} alt="خليها مشاوي" width={brand.logoGoldWidth} height={brand.logoGoldHeight} className="h-12 w-auto shrink-0" />
         <p className="text-lg leading-7 font-extrabold lg:text-xl">لوحة الكول سنتر</p>
         <nav aria-label="أقسام اللوحة" className="ms-auto lg:ms-5">
           <ul className="flex gap-1 rounded-full bg-white/6 p-1 ring-1 ring-gold-hi/35">

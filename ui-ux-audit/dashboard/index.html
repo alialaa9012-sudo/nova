@@ -27,7 +27,7 @@
   th { color:var(--muted); font-weight:700; font-size:13px } .tbl { overflow-x:auto }
   .sev { display:inline-block; padding:1px 10px; border-radius:99px; color:#fff; font-size:12px; font-weight:700 }
   .Critical{background:var(--crit)} .High{background:var(--high)} .Medium{background:var(--med)} .Low{background:var(--low)}
-  .ok { color:var(--ok); font-weight:700 } .bad { color:var(--bad); font-weight:700 }
+  .ok { color:var(--ok); font-weight:700 } .bad { color:var(--bad); font-weight:700 } .warn { color:#a16207; font-weight:700 }
   .filters button { font:inherit; border:1px solid var(--line); background:var(--card); color:var(--ink); border-radius:99px; padding:4px 14px; cursor:pointer; margin:0 0 8px 6px }
   .filters button[aria-pressed="true"] { background:var(--ink); color:var(--bg) }
   .gallery { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:10px } .gallery a { display:block; border-radius:12px; overflow:hidden; border:1px solid var(--line) }
@@ -73,14 +73,16 @@
 <script>
 const A = window.AUDIT, $ = (id) => document.getElementById(id), esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]))
 const SEV = { Critical: 'حرجة', High: 'عالية', Medium: 'متوسطة', Low: 'منخفضة' }
+const ST = { fixed: ['أُصلحت', 'ok'], partial: ['جزئياً', 'warn'], open: ['تنتظر المالك', 'bad'] }
+const B = A.scoresBefore ? Object.fromEntries(A.scoresBefore.areas.map((a) => [a.key, a.score])) : {}
 const col = (s) => s >= 85 ? '#1e6b43' : s >= 70 ? '#a16207' : '#b42318'
 $('meta').textContent = `آخر تشغيل: ${A.generated} · ${A.pagesTotal} صفحات · ${A.states} حالة · 5 مقاسات · أدوات محلية مفتوحة المصدر`
 $('verdict').textContent = A.scores.verdict
-$('ring').textContent = A.scores.overall; $('ring').style.background = `conic-gradient(${col(A.scores.overall)} ${A.scores.overall * 3.6}deg, #5a4026 0)`
+$('ring').textContent = A.scores.overall; if (A.scoresBefore) $('ring').title = `قبل الإصلاح: ${A.scoresBefore.overall}`; $('ring').style.background = `conic-gradient(${col(A.scores.overall)} ${A.scores.overall * 3.6}deg, #5a4026 0)`
 const counts = { Critical: 0, High: 0, Medium: 0, Low: 0 }; A.issues.forEach((i) => counts[i.severity]++)
-const kpis = [[`${A.pagesTotal}/${A.pagesTotal}`, 'صفحات مفحوصة'], [A.states, 'حالة مختلفة'], [A.runs, 'لقطة وفحص بصري'], [`${A.functional.passed}/${A.functional.total}`, 'اختبار وظيفي ناجح'], [A.axeRuns, 'فحص axe'], [`${A.coverage.functional}%`, 'نسبة نجاح الاختبارات'], [A.issues.length, 'مشكلة مكتشفة'], [counts.Critical, 'مشكلة حرجة']]
+const kpis = [[`${A.pagesTotal}/${A.pagesTotal}`, 'صفحات مفحوصة'], [A.states, 'حالة مختلفة'], [A.runs, 'لقطة وفحص بصري'], [`${A.functional.passed}/${A.functional.total}`, 'اختبار وظيفي ناجح'], [A.axeRuns, 'فحص axe'], [`${A.coverage.functional}%`, 'نسبة نجاح الاختبارات'], [A.issues.length, 'مشكلة مكتشفة'], [A.issues.filter((i) => i.status === 'fixed').length, 'مشكلة أُصلحت'], [A.issues.filter((i) => i.status === 'open').length, 'تنتظر المالك'], [counts.Critical, 'مشكلة حرجة']]
 $('kpis').innerHTML = kpis.map(([n, l]) => `<div class="card kpi"><div class="n">${esc(n)}</div><div class="l">${esc(l)}</div></div>`).join('')
-$('areas').innerHTML = A.scores.areas.map((a) => `<div class="area"><b>${esc(a.ar)}</b><div class="bar"><i style="width:${a.score}%;background:${col(a.score)}"></i></div><b>${a.score}</b><details><summary>لماذا؟</summary>${esc(a.why)}</details></div>`).join('')
+$('areas').innerHTML = A.scores.areas.map((a) => `<div class="area"><b>${esc(a.ar)}</b><div class="bar"><i style="width:${a.score}%;background:${col(a.score)}"></i></div><b>${a.score}</b><details>${B[a.key] != null ? `<b>قبل الإصلاح: ${B[a.key]}.</b> ` : ''}<summary>لماذا؟</summary>${esc(a.why)}</details></div>`).join('')
 const maxS = Math.max(...Object.values(counts))
 $('sev').innerHTML = Object.entries(counts).map(([s, n]) => `<div class="area" style="grid-template-columns:90px 1fr 30px"><span class="sev ${s}">${SEV[s]}</span><div class="bar"><i class="${s}" style="width:${(n / maxS) * 100}%"></i></div><b>${n}</b></div>`).join('')
 const pages = [...A.pages].sort((a, b) => a.penalty - b.penalty)
@@ -90,10 +92,10 @@ $('lh').innerHTML = '<tr><th>الصفحة</th><th>الجهاز</th><th>الأد�
 $('personas').innerHTML = A.personas.map((p) => `<div style="padding:8px 0;border-bottom:1px dashed var(--line)"><b>${esc(p.name)}</b> <span class="note">(${esc(p.vp)})</span>${p.tasks.map((t) => `<div>${t.ok ? '<span class="ok">✔ نجح</span>' : '<span class="bad">✘ فشل</span>'} ${esc(t.goal)} <span class="note">· ${t.clicks} نقرة · ~${t.est} ث</span>${t.confusion.length ? `<ul class="conf">${t.confusion.map((c) => `<li>${esc(c)}</li>`).join('')}</ul>` : ''}</div>`).join('')}</div>`).join('')
 let filter = 'all'
 function drawIssues() {
-  const rows = A.issues.filter((i) => filter === 'all' || i.severity === filter)
-  $('issues').innerHTML = '<tr><th>#</th><th>الخطورة</th><th>الصفحة</th><th>المشكلة</th><th>الحل</th><th>دليل</th></tr>' + rows.map((i) => `<tr><td>${i.id}</td><td><span class="sev ${i.severity}">${SEV[i.severity]}</span></td><td>${esc(i.page)}</td><td><b>${esc(i.title)}</b><div class="note">${esc(i.description)}</div></td><td class="note">${esc(i.fix)}</td><td>${i.screenshot ? `<a href="../${i.screenshot}" target="_blank">لقطة</a>` : '—'}</td></tr>`).join('')
+  const rows = A.issues.filter((i) => filter === 'all' || i.severity === filter || i.status === filter)
+  $('issues').innerHTML = '<tr><th>#</th><th>الخطورة</th><th>الصفحة</th><th>المشكلة</th><th>الحل</th><th>الحالة</th><th>دليل</th></tr>' + rows.map((i) => `<tr><td>${i.id}</td><td><span class="sev ${i.severity}">${SEV[i.severity]}</span></td><td>${esc(i.page)}</td><td><b>${esc(i.title)}</b><div class="note">${esc(i.description)}</div></td><td class="note">${esc(i.fix)}</td><td><b class="${ST[i.status][1]}">${ST[i.status][0]}</b><div class="note">${esc(i.done || '')}${i.needs ? ` المطلوب: ${esc(i.needs)}` : ''}</div></td><td>${i.screenshot ? `<a href="../${i.screenshot}" target="_blank">لقطة</a>` : '—'}</td></tr>`).join('')
 }
-$('filters').innerHTML = [['all', 'الكل'], ...Object.entries(SEV)].map(([k, v]) => `<button type="button" data-k="${k}" aria-pressed="${k === 'all'}">${v}</button>`).join('')
+$('filters').innerHTML = [['all', 'الكل'], ...Object.entries(SEV), ...Object.entries(ST).map(([k, v]) => [k, v[0]])].map(([k, v]) => `<button type="button" data-k="${k}" aria-pressed="${k === 'all'}">${v}</button>`).join('')
 $('filters').addEventListener('click', (e) => { const b = e.target.closest('button'); if (!b) return; filter = b.dataset.k; $('filters').querySelectorAll('button').forEach((x) => x.setAttribute('aria-pressed', x === b)); drawIssues() })
 drawIssues()
 $('shots').innerHTML = A.shots.map((s) => `<a href="../${s}" target="_blank"><img src="../${s}" alt="${esc(s.split('/').pop())}" loading="lazy"></a>`).join('')

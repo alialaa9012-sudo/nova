@@ -9,7 +9,7 @@ export function DemoBanner() {
   const onBoard = useLocation().pathname.startsWith('/admin')
   if (api.mode !== 'local') return null
   return (
-    <div role="note" className="bg-band px-4 py-1.5 text-center text-xs leading-[18px] font-semibold text-band-ink">
+    <aside aria-label="تنبيه" className="bg-band px-4 py-1.5 text-center text-xs leading-[18px] font-semibold text-band-ink">
       نسخة تجريبية: الطلبات تُحفظ على هذا الجهاز فقط ولا تصل إلى المطعم بعد.
       {SHOW_BOARD_LINK ? (
         <>
@@ -19,6 +19,6 @@ export function DemoBanner() {
           </Link>
         </>
       ) : null}
-    </div>
+    </aside>
   )
 }

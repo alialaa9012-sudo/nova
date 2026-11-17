@@ -1,6 +1,7 @@
 import { XIcon } from 'lucide-react'
 import { useRef, type ReactNode } from 'react'
 import { Dialog } from 'radix-ui'
+import { useBackToClose } from '@/hooks/useBackToClose'
 import { cn } from '@/lib/utils'
 
 /**
@@ -29,6 +30,7 @@ export function ModalSheet({
 }) {
   // The windows open from state, not from a Radix trigger, so remember what had focus and go back to it.
   const returnTo = useRef<HTMLElement | null>(null)
+  useBackToClose(open, () => onOpenChange(false))
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Portal>

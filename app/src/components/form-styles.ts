@@ -8,4 +8,4 @@ export const groupTitle = 'mx-1.5 mt-4 mb-2 block text-[13px] leading-5 font-ext
 
 /** An input inside a row: no box of its own, a soft gold field while focused. */
 export const rowInput =
-  'h-9 w-full min-w-0 rounded-lg bg-transparent px-1.5 text-[15.5px] font-bold text-foreground outline-none placeholder:font-normal placeholder:text-muted-foreground focus-visible:bg-control focus-visible:ring-2 focus-visible:ring-gold/45 aria-invalid:bg-danger-soft aria-invalid:ring-2 aria-invalid:ring-destructive/50'
+  'h-11 w-full min-w-0 rounded-lg bg-control/70 px-2.5 text-[15.5px] font-bold text-foreground outline-none placeholder:font-normal placeholder:text-muted-foreground focus-visible:bg-control focus-visible:ring-2 focus-visible:ring-gold/45 aria-invalid:bg-danger-soft aria-invalid:ring-2 aria-invalid:ring-destructive/50'

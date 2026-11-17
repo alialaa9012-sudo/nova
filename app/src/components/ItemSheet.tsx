@@ -83,7 +83,7 @@ export function ItemSheet({
                 setNote('')
                 setNoteOpen(false)
               }}
-              className="ms-auto rounded-lg px-2 py-1 text-[13px] font-bold text-danger outline-none hover:bg-danger-soft focus-visible:ring-3 focus-visible:ring-ring/50"
+              className="ms-auto inline-flex min-h-11 items-center rounded-lg px-3 text-[13px] font-bold text-danger outline-none hover:bg-danger-soft focus-visible:ring-3 focus-visible:ring-ring/50"
             >
               حذف <span className="sr-only">الملاحظة</span>
             </button>
@@ -99,7 +99,7 @@ export function ItemSheet({
               aria-describedby="item-note-count"
               className="block min-h-[84px] w-full resize-none rounded-2xl border-2 border-gold bg-surface px-3.5 pt-3 pb-6 text-[15px] leading-6 outline-none focus-visible:ring-2 focus-visible:ring-gold/40"
             />
-            <span id="item-note-count" className="pointer-events-none absolute start-3.5 bottom-2 text-[11px] text-muted-foreground tabular-nums" dir="ltr">
+            <span id="item-note-count" className="pointer-events-none absolute start-3.5 bottom-2 text-xs text-muted-foreground tabular-nums" dir="ltr">
               {note.length} / {MAX_NOTE}
             </span>
           </div>

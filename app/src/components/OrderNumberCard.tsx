@@ -20,7 +20,7 @@ export function OrderNumberCard({ number }: { number: string }) {
   }
 
   const action =
-    'grid size-[38px] place-items-center rounded-xl bg-white/8 text-band-ink ring-1 ring-gold-hi/40 outline-none hover:bg-white/14 focus-visible:ring-3 focus-visible:ring-gold-hi/70'
+    "relative grid size-[38px] place-items-center rounded-xl bg-white/8 text-band-ink ring-1 ring-gold-hi/40 outline-none after:absolute after:-inset-[3px] after:content-[''] hover:bg-white/14 focus-visible:ring-3 focus-visible:ring-gold-hi/70"
   return (
     <div className="mt-3.5 flex items-center gap-2.5 border-t border-gold-hi/30 pt-3.5">
       <p className="grid flex-1 leading-tight">

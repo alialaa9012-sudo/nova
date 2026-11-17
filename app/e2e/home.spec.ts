@@ -18,7 +18,7 @@ test.describe('home page', () => {
       await expect(page.getByRole('heading', { level: 2, name })).toBeVisible()
     }
     await expect(page.getByText('مفتوح حتى 12 ليلاً')).toHaveCount(3)
-    await expect(page.getByRole('note').first()).toContainText('نسخة تجريبية')
+    await expect(page.getByRole('complementary', { name: 'تنبيه' })).toContainText('نسخة تجريبية')
     // customers never get a way into the staff board from the site itself
     await expect(page.getByRole('link', { name: 'لوحة الكول سنتر' })).toHaveCount(0)
     // the logo is decorative next to the heading that names the restaurant

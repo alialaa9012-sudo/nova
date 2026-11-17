@@ -17,6 +17,13 @@ export function formatCairoDateTime(iso: string): string {
   return dateTime.format(new Date(iso))
 }
 
+const longDate = new Intl.DateTimeFormat('ar-EG-u-nu-latn', { timeZone: 'UTC', weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })
+
+/** "2027-01-04" -> "الاثنين، 4 يناير 2027": the date picker shows the browser's own format, this one cannot be misread. */
+export function formatDateAr(ymd: string): string {
+  return /^\d{4}-\d{2}-\d{2}$/.test(ymd) ? longDate.format(new Date(`${ymd}T00:00:00Z`)) : ''
+}
+
 /** Calendar date (YYYY-MM-DD) of an instant in Cairo. */
 export function cairoDate(date: Date): string {
   return new Intl.DateTimeFormat('en-CA', { timeZone: 'Africa/Cairo' }).format(date)

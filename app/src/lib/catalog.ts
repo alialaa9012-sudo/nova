@@ -39,6 +39,8 @@ export interface Brand {
   logoHeight: number
   /** The gold logo on a transparent background, for the dark bands. */
   logoGoldUrl: string
+  /** Small gold logo for the dark bands, where it shows at about 60 pixels. */
+  logoGoldSmallUrl: string
   logoGoldWidth: number
   logoGoldHeight: number
 }
@@ -145,6 +147,7 @@ export const brand: Brand = {
   logoWidth: raw.brand.logo.width,
   logoHeight: raw.brand.logo.height,
   logoGoldUrl: import.meta.env.BASE_URL + raw.brand.logo_gold.url_path.replace(/^\//, ''),
+  logoGoldSmallUrl: import.meta.env.BASE_URL + 'brand/logo-gold-sm.png',
   logoGoldWidth: raw.brand.logo_gold.width,
   logoGoldHeight: raw.brand.logo_gold.height,
 }

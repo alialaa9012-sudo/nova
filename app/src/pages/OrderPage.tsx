@@ -1,6 +1,6 @@
 import { Banknote, Check, MessageCircle, Phone, RotateCcw, Search } from 'lucide-react'
 import { useEffect, useState, type ReactNode } from 'react'
-import { Link, useLocation, useParams } from 'react-router'
+import { Link, useLocation, useNavigate, useParams } from 'react-router'
 import { BandHeader, BandSheet } from '@/components/BandHeader'
 import { OrderNumberCard } from '@/components/OrderNumberCard'
 import { OrderSummary } from '@/components/OrderSummary'
@@ -10,11 +10,15 @@ import { Button } from '@/components/ui/button'
 import { api, type Order } from '@/lib/api'
 import { branches, brand, getBranch } from '@/lib/catalog'
 import { formatCairoDateTime } from '@/lib/format'
+import { cartReducer } from '@/lib/cart'
 import { lastOrder } from '@/lib/lastOrder'
+import { reorderLines } from '@/lib/reorder'
+import { loadCart, saveCart } from '@/state/cart-context'
 import { cn } from '@/lib/utils'
 
 export function OrderPage() {
   const { number = '' } = useParams()
+  const navigate = useNavigate()
   const location = useLocation()
   const navState = location.state as { phone?: string; justPlaced?: boolean } | null
   const remembered = lastOrder()
@@ -113,6 +117,14 @@ export function OrderPage() {
   }
 
   const branch = getBranch(order.branchId)
+  // Puts the same items back in this branch's cart (today's prices) and opens the cart there.
+  function reorder(branchId: NonNullable<typeof branch>['id']) {
+    if (!order) return
+    const { lines, missing } = reorderLines(branchId, order)
+    const merged = lines.reduce((cart, l) => cartReducer(cart, { type: 'add', line: { ...l }, qty: l.qty }), loadCart(branchId))
+    saveCart(branchId, merged)
+    navigate(`/branch/${branchId}`, { state: { reordered: { added: lines.length, missing } } })
+  }
   const card = 'grid gap-2.5 rounded-[22px] border border-border bg-card p-3.5 lg:p-4'
   return (
     <>
@@ -192,10 +204,8 @@ export function OrderPage() {
               </Button>
             ) : null}
             {branch ? (
-              <Button asChild className="col-span-2 h-12">
-                <Link to={`/branch/${branch.id}`}>
-                  <RotateCcw aria-hidden="true" /> اطلب مرة أخرى
-                </Link>
+              <Button className="col-span-2 h-12" onClick={() => reorder(branch.id)}>
+                <RotateCcw aria-hidden="true" /> اطلب مرة أخرى
               </Button>
             ) : null}
           </div>

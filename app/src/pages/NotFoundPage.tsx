@@ -7,7 +7,7 @@ export function NotFoundPage() {
   return (
     <>
       <title>الصفحة غير موجودة | خليها مشاوي</title>
-      <main className="mx-auto grid max-w-xl px-4 pt-5 pb-12 md:px-6">
+      <main id="content" tabIndex={-1} className="outline-none mx-auto grid max-w-xl px-4 pt-5 pb-12 md:px-6">
         <div className="text-center">
           <Link to="/" className="inline-block rounded-xl outline-none focus-visible:ring-3 focus-visible:ring-ring/50">
             <img src={brand.logoUrl} alt="خليها مشاوي" width={brand.logoWidth} height={brand.logoHeight} className="mx-auto h-[110px] w-auto" />

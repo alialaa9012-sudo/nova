@@ -32,7 +32,7 @@ describe('home page', () => {
     }
     expect(screen.getAllByText('مفتوح حتى 12 ليلاً')).toHaveLength(3)
     expect(screen.getByRole('link', { name: 'اطلب من فرع الزقازيق' })).toHaveAttribute('href', '/branch/zagazig')
-    expect(screen.getByRole('note')).toHaveTextContent('نسخة تجريبية')
+    expect(screen.getByRole('complementary', { name: 'تنبيه' })).toHaveTextContent('نسخة تجريبية')
   })
 
   it('shows when a closed branch opens', () => {

@@ -33,6 +33,9 @@ export function CartSheet({
             <span className="text-[15px] leading-5 font-extrabold">المجموع</span>
             <span className="text-[22px] leading-[30px] font-extrabold tabular-nums">{formatEGP(cartSubtotal(lines))}</span>
           </p>
+          {branch.charges.tax_percent > 0 ? (
+            <p className="-mt-2 text-xs leading-5 text-muted-foreground">لا يشمل ضريبة {branch.charges.tax_percent}٪ ورسوم التوصيل.</p>
+          ) : null}
           {closedMessage ? <p className="text-sm font-semibold text-danger">{closedMessage}</p> : null}
           {lines.length > 0 && !closedMessage ? (
             <Button asChild size="lg" className="h-14 w-full text-base">

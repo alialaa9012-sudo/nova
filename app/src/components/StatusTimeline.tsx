@@ -55,7 +55,7 @@ export function StatusTimeline({ order, horizontal = false }: { order: Order; ho
                 {done ? <Check className="size-4 stroke-[2.6]" aria-hidden="true" /> : i + 1}
               </span>
               <p className={cn('text-xs leading-[18px] font-extrabold', !done && 'text-muted-foreground')}>{statusLabel(status, order.orderType)}</p>
-              {at ? <p className="-mt-1 text-[11px] leading-4 text-muted-foreground">{formatCairoDateTime(at)}</p> : null}
+              {at ? <p className="-mt-1 text-xs leading-4 text-muted-foreground">{formatCairoDateTime(at)}</p> : null}
             </li>
           )
         })}

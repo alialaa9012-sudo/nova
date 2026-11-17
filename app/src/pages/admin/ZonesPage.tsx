@@ -135,7 +135,7 @@ export function ZonesPage() {
     <>
       <title>مناطق التوصيل | خليها مشاوي</title>
       <AdminNav />
-      <main className="mx-auto grid max-w-[1320px] gap-4 px-5 pt-4 pb-8 md:px-6 lg:px-8">
+      <main id="content" tabIndex={-1} className="outline-none mx-auto grid max-w-[1320px] gap-4 px-5 pt-4 pb-8 md:px-6 lg:px-8">
         <h1 className="sr-only">مناطق التوصيل</h1>
         {api.mode === 'local' ? (
           <p role="note" className="rounded-2xl bg-warning-soft p-3 text-sm font-semibold text-warning-ink">

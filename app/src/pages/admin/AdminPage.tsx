@@ -8,7 +8,7 @@ import { useNow } from '@/hooks/useNow'
 import { api, errorMessage, type Order } from '@/lib/api'
 import { playBeep } from '@/lib/beep'
 import { branches } from '@/lib/catalog'
-import { cairoDate } from '@/lib/format'
+import { cairoDate, formatDateAr } from '@/lib/format'
 import { nextStatus, statusLabel, type OrderStatus } from '@/lib/orderStatus'
 import { toAsciiDigits } from '@/lib/phone'
 import { cn } from '@/lib/utils'
@@ -104,7 +104,7 @@ export function AdminPage() {
     <>
       <title>لوحة الكول سنتر | خليها مشاوي</title>
       <AdminNav />
-      <main className="mx-auto grid max-w-[1320px] gap-4 px-5 pt-4 pb-8 md:px-6 lg:px-8">
+      <main id="content" tabIndex={-1} className="outline-none mx-auto grid max-w-[1320px] gap-4 px-5 pt-4 pb-8 md:px-6 lg:px-8">
         {/* The tab already names the screen and the banner already says it is a demo. */}
         <h1 className="sr-only">الطلبات</h1>
         <div className="grid gap-3 rounded-[20px] bg-card p-4 shadow-card lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
@@ -120,7 +120,10 @@ export function AdminPage() {
               </SelectInput>
             </Field>
             <Field id="f-date" label="التاريخ">
-              <Input id="f-date" type="date" value={date} onChange={(e) => setDate(e.target.value)} />
+              <Input id="f-date" type="date" value={date} onChange={(e) => setDate(e.target.value)} aria-describedby="f-date-ar" />
+              <p id="f-date-ar" className="mt-1 text-xs font-semibold text-muted-foreground">
+                {formatDateAr(date)}
+              </p>
             </Field>
             <div className="col-span-2 sm:col-span-1">
             <Field id="f-search" label="بحث برقم الطلب أو الموبايل">

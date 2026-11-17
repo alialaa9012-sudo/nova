@@ -13,7 +13,7 @@ export function ItemCard({ item, phone, onAdd, priority = false }: { item: MenuI
   return (
     <li
       className={cn(
-        'relative flex flex-col rounded-[20px] border border-border bg-card p-1.5 pb-2.5 shadow-card focus-within:ring-3 focus-within:ring-ring/50 has-[button:hover]:bg-control lg:rounded-[22px]',
+        'relative flex flex-col rounded-[20px] border border-border bg-card p-1.5 pb-2.5 shadow-card focus-within:ring-3 focus-within:ring-brand has-[button:hover]:bg-control lg:rounded-[22px]',
         'before:pointer-events-none before:absolute before:inset-[3px] before:rounded-[17px] before:border before:border-gold/25 lg:before:rounded-[19px]',
       )}
     >
@@ -43,7 +43,7 @@ export function ItemCard({ item, phone, onAdd, priority = false }: { item: MenuI
         )}
       </div>
       {item.advanceNoticeHours ? (
-        <p className="px-1.5 pt-1 text-[11px] leading-4 font-semibold text-brand-text">بالحجز المسبق قبل {item.advanceNoticeHours} ساعة عبر الهاتف</p>
+        <p className="px-1.5 pt-1 text-xs leading-4 font-semibold text-brand-text">بالحجز المسبق قبل {item.advanceNoticeHours} ساعة عبر الهاتف</p>
       ) : null}
     </li>
   )
