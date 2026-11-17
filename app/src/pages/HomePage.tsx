@@ -50,8 +50,8 @@ function Slogan() {
   const line = 'h-px w-7 from-gold to-transparent lg:w-16'
   const diamond = 'size-[6px] shrink-0 rotate-45 bg-gold lg:size-2'
   return (
-    <p className="mx-auto mt-0.5 flex items-center justify-center gap-2 short-phone:justify-start lg:mt-2 lg:gap-3">
-      <span className={`${line} bg-linear-to-r short-phone:hidden`} aria-hidden="true" />
+    <p className="mx-auto mt-1 flex items-center justify-center gap-2 lg:mt-3 lg:gap-3">
+      <span className={`${line} bg-linear-to-r`} aria-hidden="true" />
       <span className={diamond} aria-hidden="true" />
       <span className="font-naskh text-[19px] leading-7 font-bold text-gold-deep lg:text-[30px] lg:leading-10">الشوي على أصوله</span>
       <span className={diamond} aria-hidden="true" />
@@ -80,23 +80,18 @@ export function HomePage() {
             </Link>
           </Button>
         </header>
-        <main id="content" tabIndex={-1} className="outline-none mx-auto flex w-full max-w-[1240px] min-[1700px]:max-w-[1480px] flex-1 flex-col px-5 pt-[clamp(10px,2vh,20px)] pb-28 short-phone:pt-2 md:px-6 lg:justify-center lg:px-8 lg:pb-16">
-          {/* On short phones the logo sits beside the name and slogan instead of above them, at the same size,
-              so the three branch cards fit above the bottom bar without being changed. */}
+        <main id="content" tabIndex={-1} className="relative outline-none mx-auto flex w-full max-w-[1240px] min-[1700px]:max-w-[1480px] flex-1 flex-col px-5 pt-[clamp(10px,2vh,20px)] pb-28 short-phone:pt-2 md:px-6 lg:justify-center lg:px-8 lg:pb-16">
           <div className="relative text-center">
-            <div className="short-phone:flex short-phone:items-center short-phone:justify-center short-phone:gap-3">
-              <img
-                src={brand.logoUrl}
-                alt=""
-                width={brand.logoWidth}
-                height={brand.logoHeight}
-                className="mx-auto h-[clamp(90px,12.5vh,118px)] w-auto short-phone:mx-0 lg:h-[clamp(150px,22vh,210px)]"
-              />
-              <div className="short-phone:text-start">
-                <h1 className="text-[26px] leading-9 font-extrabold lg:mt-1.5 lg:text-[clamp(44px,6.5vh,58px)] lg:leading-tight">{brand.name}</h1>
-                <Slogan />
-              </div>
-            </div>
+            <img
+              src={brand.logoUrl}
+              alt=""
+              width={brand.logoWidth}
+              height={brand.logoHeight}
+              className="mx-auto h-[clamp(90px,12.5vh,118px)] w-auto lg:h-[clamp(150px,22vh,210px)]"
+            />
+            {/* The logo already shows the name, so the page title is for screen readers and search only. */}
+            <h1 className="sr-only">{brand.name}</h1>
+            <Slogan />
             <p className="mx-auto mt-[clamp(2px,0.6vh,6px)] max-w-[30ch] text-[13px] leading-[22px] text-muted-foreground short-phone:hidden lg:mt-3 lg:max-w-none lg:text-lg">
               اختر الفرع الأقرب لك لتظهر قائمة طعامه وأسعاره ومناطق توصيله.
             </p>
@@ -105,11 +100,14 @@ export function HomePage() {
             <Link
               to={`/order/${previous.number}`}
               state={{ phone: previous.phone }}
-              className="mx-auto mt-4 flex min-h-12 w-full items-center gap-3 rounded-2xl short-phone:mt-3 short-phone:min-h-11 short-phone:py-2 border border-gold/60 bg-card px-4 py-2.5 shadow-card outline-none hover:bg-control focus-visible:ring-3 focus-visible:ring-ring/50 sm:w-fit sm:min-w-80"
+              // On short phones it becomes a small badge in the top corner, beside the logo, so it takes no row.
+              className="mx-auto mt-4 flex min-h-12 w-full items-center gap-3 rounded-2xl border border-gold/60 bg-card px-4 py-2.5 shadow-card outline-none hover:bg-control focus-visible:ring-3 focus-visible:ring-ring/50 short-phone:absolute short-phone:end-4 short-phone:top-2 short-phone:mt-0 short-phone:min-h-11 short-phone:w-auto short-phone:gap-1.5 short-phone:rounded-xl short-phone:px-2.5 short-phone:py-1.5 sm:w-fit sm:min-w-80 short-phone:sm:min-w-0"
             >
               <PackageSearch className="size-5 shrink-0 text-gold-deep" aria-hidden="true" />
-              <span className="flex-1 font-bold">حالة طلبك {previous.number}</span>
-              <ChevronLeft className="size-5 shrink-0 text-muted-foreground" aria-hidden="true" />
+              <span className="flex-1 font-bold short-phone:grid short-phone:text-xs short-phone:leading-4">
+                <span>حالة طلبك</span> <span>{previous.number}</span>
+              </span>
+              <ChevronLeft className="size-5 shrink-0 text-muted-foreground short-phone:hidden" aria-hidden="true" />
             </Link>
           ) : null}
           <HeroBanner
