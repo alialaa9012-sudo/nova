@@ -2,7 +2,8 @@
 // claude.ai Artifact: the script and the stylesheet are inlined, and fonts are already
 // data URIs inside the CSS. The viewer wraps the file in its own <html>/<head>/<body>,
 // so this writes page content only. The logo stays a separate file published next to it.
-import { readFileSync, writeFileSync } from 'node:fs'
+import { createHash } from 'node:crypto'
+import { copyFileSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
 
 const dir = join(import.meta.dirname, '..', 'dist-artifact')
@@ -13,7 +14,7 @@ const pick = (pattern, what) => {
   if (!hit) throw new Error(`build output has no ${what}; did the artifact build run?`)
   return readFileSync(join(dir, hit[1]), 'utf8')
 }
-const script = pick(/<script[^>]+src="\.\/([^"]+\.js)"/, 'script')
+let script = pick(/<script[^>]+src="\.\/([^"]+\.js)"/, 'script')
 const styles = pick(/<link[^>]+href="\.\/([^"]+\.css)"/, 'stylesheet')
 for (const [name, text] of [['script', script], ['stylesheet', styles]]) {
   if (/url\(\.?\/?assets\//.test(text) || /["']\.\/assets\//.test(text)) throw new Error(`${name} still points at separate asset files`)
@@ -21,8 +22,21 @@ for (const [name, text] of [['script', script], ['stylesheet', styles]]) {
 
 // Menu photos stay separate files (all of them inline would pass the page size limit). The script
 // asks for them next to itself, which inside the page means next to the page: publish them there.
-const photos = [...new Set([...script.matchAll(/new URL\(`(menu-[\w-]+\.(?:webp|jpe?g|png))`/g)].map((m) => m[1]))]
-writeFileSync(join(dir, 'artifact-files.json'), JSON.stringify(Object.fromEntries(photos.map((f) => [f, join(dir, 'assets', f)])), null, 1))
+// The bundler's file names change from one build to the next, so each photo is renamed after its own
+// content: an unchanged photo keeps its name, and an update only has to publish the new page.
+const built = [...new Set([...script.matchAll(/new URL\(`(menu-[\w-]+\.(?:webp|jpe?g|png))`/g)].map((m) => m[1]))]
+const photoDir = join(dir, 'photos')
+mkdirSync(photoDir, { recursive: true })
+const files = {}
+for (const name of built) {
+  const source = join(dir, 'assets', name)
+  const stable = `p-${createHash('sha256').update(readFileSync(source)).digest('hex').slice(0, 16)}${name.slice(name.lastIndexOf('.'))}`
+  script = script.replaceAll(`\`${name}\``, `\`${stable}\``)
+  copyFileSync(source, join(photoDir, stable))
+  files[stable] = join(photoDir, stable)
+}
+const photos = Object.keys(files)
+writeFileSync(join(dir, 'artifact-files.json'), JSON.stringify(files, null, 1))
 
 const FONT = "'Cairo Variable', 'Geist Variable', sans-serif"
 const page = `<title>تطبيق طلبات خليها مشاوي</title>

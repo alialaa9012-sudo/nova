@@ -112,7 +112,8 @@ export function AdminPage() {
         <h1 className="sr-only">الطلبات</h1>
         {/* One grid for labels, boxes and status buttons. Each field is a subgrid of three rows (label, box,
             caption), so the boxes stay on one line even when a label wraps or only the date has a caption.
-            The status buttons sit beside the boxes from 1280px and on their own row below that. */}
+            The status buttons sit beside the boxes from 1280px and on their own row below that; on phones that row
+            scrolls sideways so the orders start higher. */}
         <div className="grid grid-cols-2 gap-x-3 rounded-[20px] bg-card p-4 shadow-card sm:grid-cols-3 xl:grid-cols-[repeat(3,minmax(0,1fr))_auto]">
           <Field id="f-branch" label="الفرع" className={FIELD_CELL}>
             <SelectInput id="f-branch" value={branchFilter} onChange={(e) => setBranchFilter(e.target.value)}>
@@ -133,13 +134,13 @@ export function AdminPage() {
           <Field id="f-search" label="بحث برقم الطلب أو الموبايل" className={cn(FIELD_CELL, 'col-span-2 mt-3 sm:col-span-1 sm:mt-0')}>
             <Input id="f-search" type="search" dir="ltr" className="text-end" value={query} onChange={(e) => setQuery(e.target.value)} />
           </Field>
-          <div role="group" aria-label="تصفية حسب الحالة" className="col-span-full mt-1.5 flex flex-wrap gap-2 xl:col-span-1 xl:col-start-4 xl:row-start-2 xl:mt-0 xl:self-center">
+          <div role="group" aria-label="تصفية حسب الحالة" className="col-span-full mt-1.5 flex flex-wrap gap-2 max-sm:-mx-4 max-sm:flex-nowrap max-sm:overflow-x-auto max-sm:px-4 max-sm:py-1 max-sm:[scrollbar-width:none] xl:col-span-1 xl:col-start-4 xl:row-start-2 xl:mt-0 xl:self-center">
             {FILTERS.map((f) => (
               <Button
                 key={f.value}
                 variant="outline"
                 // Dark when active, so staff filters never look like the orange customer actions.
-                className={cn('h-11 bg-control px-4 text-[13px] font-semibold shadow-none', filter === f.value && 'bg-brand bg-none text-band-ink ring-1 ring-gold hover:bg-brand active:bg-brand')}
+                className={cn('h-11 shrink-0 bg-control px-4 text-[13px] font-semibold shadow-none', filter === f.value && 'bg-brand bg-none text-band-ink ring-1 ring-gold hover:bg-brand active:bg-brand')}
                 aria-pressed={filter === f.value}
                 onClick={() => setFilter(f.value)}
               >

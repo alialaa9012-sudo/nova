@@ -27,7 +27,7 @@ function BranchCard({ branch, now }: { branch: Branch; now: Date }) {
         <h2 className="min-w-0 text-[17px] leading-[24px] font-bold text-balance lg:text-2xl">فرع {branch.name}</h2>
         <OpenBadge branch={branch} now={now} className="lg:px-3.5 lg:py-1.5 lg:text-[13px]" />
       </div>
-      <p className="mt-[clamp(2px,0.7vh,6px)] line-clamp-2 text-xs leading-5 text-muted-foreground lg:mt-2 lg:text-[15px]" title={branch.address}>{shortAddress(branch)}</p>
+      <p className="mt-[clamp(2px,0.7vh,6px)] line-clamp-2 text-xs leading-5 text-muted-foreground short-phone:line-clamp-1 lg:mt-2 lg:text-[15px]" title={branch.address}>{shortAddress(branch)}</p>
       <div className="mt-auto flex items-center gap-2 pt-[clamp(8px,1.5vh,13px)] lg:gap-2.5 lg:pt-5">
         <Button asChild className="h-11 min-w-0 flex-1 text-[15px] lg:h-14 lg:text-[19px] lg:[&_svg]:size-5">
           <Link to={`/branch/${branch.id}`} aria-label={`اطلب من فرع ${branch.name}`}>
@@ -72,13 +72,13 @@ export function HomePage() {
               alt=""
               width={brand.logoWidth}
               height={brand.logoHeight}
-              className="mx-auto h-[clamp(90px,12.5vh,118px)] w-auto lg:h-[clamp(150px,22vh,210px)]"
+              className="mx-auto h-[clamp(90px,12.5vh,118px)] w-auto short-phone:h-16 tiny-phone:h-12 lg:h-[clamp(150px,22vh,210px)]"
             />
             <h1 className="text-[26px] leading-9 font-extrabold lg:mt-1.5 lg:text-[clamp(44px,6.5vh,58px)] lg:leading-tight">{brand.name}</h1>
-            <p className="mx-auto mt-0.5 flex items-center justify-center gap-3 text-[15px] leading-6 font-bold text-gold-deep before:h-px before:w-8 before:bg-linear-to-l before:from-gold before:to-transparent after:h-px after:w-8 after:bg-linear-to-r after:from-gold after:to-transparent lg:mt-2 lg:text-2xl lg:before:w-16 lg:after:w-16">
+            <p className="mx-auto mt-0.5 flex items-center justify-center gap-3 tiny-phone:hidden text-[15px] leading-6 font-bold text-gold-deep before:h-px before:w-8 before:bg-linear-to-l before:from-gold before:to-transparent after:h-px after:w-8 after:bg-linear-to-r after:from-gold after:to-transparent lg:mt-2 lg:text-2xl lg:before:w-16 lg:after:w-16">
               الشوي على أصوله
             </p>
-            <p className="mx-auto mt-[clamp(2px,0.6vh,6px)] max-w-[30ch] text-[13px] leading-[22px] text-muted-foreground lg:mt-3 lg:max-w-none lg:text-lg">
+            <p className="mx-auto mt-[clamp(2px,0.6vh,6px)] max-w-[30ch] text-[13px] leading-[22px] text-muted-foreground short-phone:hidden lg:mt-3 lg:max-w-none lg:text-lg">
               اختر الفرع الأقرب لك لتظهر قائمة طعامه وأسعاره ومناطق توصيله.
             </p>
           </div>
