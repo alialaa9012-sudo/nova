@@ -26,6 +26,9 @@ const FILTERS: { value: Filter; label: string }[] = [
   { value: 'all', label: 'الكل' },
 ]
 
+/** A filter field as three rows of the filter grid: label (pushed down to its box), box, caption. */
+const FIELD_CELL = 'row-span-3 grid-rows-subgrid [&>label]:self-end'
+
 export function AdminPage() {
   const now = useNow(15_000)
   const [orders, setOrders] = useState<Order[]>([])
@@ -107,32 +110,30 @@ export function AdminPage() {
       <main id="content" tabIndex={-1} className="outline-none mx-auto grid max-w-[1320px] gap-4 px-5 pt-4 pb-8 md:px-6 lg:px-8">
         {/* The tab already names the screen and the banner already says it is a demo. */}
         <h1 className="sr-only">الطلبات</h1>
-        <div className="grid gap-3 rounded-[20px] bg-card p-4 shadow-card lg:grid-cols-[minmax(0,1fr)_auto] lg:items-start">
-          {/* items-start: the date field has a caption under it, so without it the other fields were stretched and their boxes sat at different heights. */}
-          <div className="grid grid-cols-2 items-start gap-3 sm:grid-cols-3">
-            <Field id="f-branch" label="الفرع">
-              <SelectInput id="f-branch" value={branchFilter} onChange={(e) => setBranchFilter(e.target.value)}>
-                <option value="all">كل الفروع</option>
-                {branches.map((b) => (
-                  <option key={b.id} value={b.id}>
-                    {b.name}
-                  </option>
-                ))}
-              </SelectInput>
-            </Field>
-            <Field id="f-date" label="التاريخ">
-              <Input id="f-date" type="date" value={date} onChange={(e) => setDate(e.target.value)} aria-describedby="f-date-ar" />
-              <p id="f-date-ar" className="mt-1 text-xs font-semibold text-muted-foreground">
-                {formatDateAr(date)}
-              </p>
-            </Field>
-            <div className="col-span-2 sm:col-span-1">
-            <Field id="f-search" label="بحث برقم الطلب أو الموبايل">
-              <Input id="f-search" type="search" dir="ltr" className="text-end" value={query} onChange={(e) => setQuery(e.target.value)} />
-            </Field>
-            </div>
-          </div>
-          <div role="group" aria-label="تصفية حسب الحالة" className="flex flex-wrap gap-2 lg:pt-[30px]">
+        {/* One grid for labels, boxes and status buttons. Each field is a subgrid of three rows (label, box,
+            caption), so the boxes stay on one line even when a label wraps or only the date has a caption.
+            The status buttons sit beside the boxes from 1280px and on their own row below that. */}
+        <div className="grid grid-cols-2 gap-x-3 rounded-[20px] bg-card p-4 shadow-card sm:grid-cols-3 xl:grid-cols-[repeat(3,minmax(0,1fr))_auto]">
+          <Field id="f-branch" label="الفرع" className={FIELD_CELL}>
+            <SelectInput id="f-branch" value={branchFilter} onChange={(e) => setBranchFilter(e.target.value)}>
+              <option value="all">كل الفروع</option>
+              {branches.map((b) => (
+                <option key={b.id} value={b.id}>
+                  {b.name}
+                </option>
+              ))}
+            </SelectInput>
+          </Field>
+          <Field id="f-date" label="التاريخ" className={FIELD_CELL}>
+            <Input id="f-date" type="date" value={date} onChange={(e) => setDate(e.target.value)} aria-describedby="f-date-ar" />
+            <p id="f-date-ar" className="text-xs font-semibold text-muted-foreground">
+              {formatDateAr(date)}
+            </p>
+          </Field>
+          <Field id="f-search" label="بحث برقم الطلب أو الموبايل" className={cn(FIELD_CELL, 'col-span-2 mt-3 sm:col-span-1 sm:mt-0')}>
+            <Input id="f-search" type="search" dir="ltr" className="text-end" value={query} onChange={(e) => setQuery(e.target.value)} />
+          </Field>
+          <div role="group" aria-label="تصفية حسب الحالة" className="col-span-full mt-1.5 flex flex-wrap gap-2 xl:col-span-1 xl:col-start-4 xl:row-start-2 xl:mt-0 xl:self-center">
             {FILTERS.map((f) => (
               <Button
                 key={f.value}
