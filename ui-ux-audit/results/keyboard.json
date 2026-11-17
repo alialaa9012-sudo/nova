@@ -1,11 +1,12 @@
 [
  {
   "page": "home",
-  "tabStops": 12,
+  "tabStops": 13,
   "noRing": [],
   "tabsToMainAction": 0,
-  "skipLink": false,
+  "skipLink": true,
   "order": [
+   "انتقل إلى المحتوى",
    "واتساب",
    "تتبع طلب",
    "اطلب من فرع العاشر من رمضان",
@@ -63,12 +64,12 @@
    "أضف مسقعة تركي",
    "أضف لسان عصفور باللحمة",
    "أضف بطاطس باللحمة",
-   "أضف معمر سادة",
-   "أضف معمر حمام"
+   "أضف معمر سادة"
   ],
-  "tabsToMainAction": 20,
-  "skipLink": false,
+  "tabsToMainAction": 21,
+  "skipLink": true,
   "order": [
+   "انتقل إلى المحتوى",
    "كل الفروع",
    "ابحث عن صنف",
    "السلة (0)",
@@ -81,23 +82,22 @@
    "العزائم والعقائق",
    "الصواني",
    "الشوايات",
-   "الفتة",
-   "الطاسات"
+   "الفتة"
   ]
  },
  {
   "page": "checkout",
   "tabStops": 14,
   "noRing": [],
-  "tabsToMainAction": 3,
-  "skipLink": false,
+  "tabsToMainAction": 4,
+  "skipLink": true,
   "order": [
+   "انتقل إلى المحتوى",
    "رجوع للمنيو",
    "توصيل للعنوان",
    "الاسم",
    "رقم الموبايل",
    "المنطقة",
-   "body",
    "الشارع",
    "رقم العمارة",
    "الشقة (اختياري)",
@@ -110,11 +110,12 @@
  },
  {
   "page": "track",
-  "tabStops": 5,
+  "tabStops": 6,
   "noRing": [],
-  "tabsToMainAction": 2,
-  "skipLink": false,
+  "tabsToMainAction": 3,
+  "skipLink": true,
   "order": [
+   "انتقل إلى المحتوى",
    "الصفحة الرئيسية",
    "رقم الطلب",
    "رقم الموبايل",
@@ -124,17 +125,14 @@
  },
  {
   "page": "admin",
-  "tabStops": 60,
+  "tabStops": 15,
   "noRing": [
-   "التاريخ",
-   "التاريخ",
-   "التاريخ",
    "التاريخ"
   ],
   "tabsToMainAction": 9,
-  "skipLink": false,
+  "skipLink": true,
   "order": [
-   "body",
+   "انتقل إلى المحتوى",
    "الطلبات",
    "مناطق التوصيل",
    "الفرع",

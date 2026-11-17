@@ -1,0 +1,34 @@
+[
+ {
+  "path": "/",
+  "perf": 99
+ },
+ {
+  "path": "/admin",
+  "perf": 92
+ },
+ {
+  "path": "/admin/zones",
+  "perf": 93
+ },
+ {
+  "path": "/branch/ashry",
+  "perf": 79
+ },
+ {
+  "path": "/branch/tagamoa",
+  "perf": 80
+ },
+ {
+  "path": "/branch/zagazig",
+  "perf": 80
+ },
+ {
+  "path": "/nope",
+  "perf": 99
+ },
+ {
+  "path": "/track",
+  "perf": 92
+ }
+]

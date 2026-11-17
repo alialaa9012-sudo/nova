@@ -1,0 +1,334 @@
+
+▶ بيانات تجريبية (3 طلبات)
+[
+  {
+    number: 'A-0001',
+    status: 'new',
+    phone: '01000000001',
+    branch: 'ashry'
+  },
+  {
+    number: 'T-0001',
+    status: 'preparing',
+    phone: '01000000002',
+    branch: 'tagamoa'
+  },
+  {
+    number: 'Z-0001',
+    status: 'cancelled',
+    phone: '01000000003',
+    branch: 'zagazig'
+  }
+]
+
+▶ لقطات وفحص بصري وaxe على 5 مقاسات
+..............................................................................................................................................................................................
+190 runs, 0 failed
+
+▶ لوحة المفاتيح
+[
+ {
+  "page": "home",
+  "tabStops": 13,
+  "noRing": [],
+  "tabsToMainAction": 0,
+  "skipLink": true,
+  "order": [
+   "انتقل إلى المحتوى",
+   "واتساب",
+   "تتبع طلب",
+   "اطلب من فرع العاشر من رمضان",
+   "اتصال",
+   "الموقع",
+   "اطلب من فرع الزقازيق",
+   "اتصال",
+   "الموقع",
+   "اطلب من فرع التجمع الخامس",
+   "اتصال",
+   "الموقع",
+   "body"
+  ]
+ },
+ {
+  "page": "menu",
+  "tabStops": 60,
+  "noRing": [
+   "أضف شوربة لسان عصفور",
+   "أضف شوربة بهاريز",
+   "أضف شوربة عدس",
+   "أضف شوربة كوارع",
+   "أضف شوربة كوارع كمونية",
+   "أضف شوربة تشيكن مشروم بالكريمة",
+   "أضف وجبة التوفير",
+   "أضف كفتة و فراخ",
+   "أضف نص فرخة شيش وخضار",
+   "أضف ميكس مشوي",
+   "أضف ضلوع خليها مشاوي",
+   "أضف ميكس جريل",
+   "أضف ميكس جريل فراخ",
+   "أضف ميكس جريل لحوم",
+   "أضف موزة ضاني",
+   "أضف جرة موزة",
+   "أضف صدور دجاج مشوي وسوتيه",
+   "أضف صدور فراخ",
+   "أضف كفتة فراخ",
+   "أضف شيش طاووق",
+   "أضف كفتة بقري",
+   "أضف كفتة ضاني",
+   "أضف طرب ضاني",
+   "أضف سجق ضاني",
+   "أضف كباب مشكل ضاني",
+   "أضف كباب ضاني",
+   "أضف ريش ضاني",
+   "أضف ستيك",
+   "أضف فرخة مشوية",
+   "أضف حمام محشي مشوي",
+   "أضف نص مسحب",
+   "أضف فرخة مسحب",
+   "أضف ملوخية سادة",
+   "أضف بطاطس سادة",
+   "أضف بامية سادة",
+   "أضف مكرونة فرن",
+   "أضف مسقعة تركي",
+   "أضف لسان عصفور باللحمة",
+   "أضف بطاطس باللحمة",
+   "أضف معمر سادة"
+  ],
+  "tabsToMainAction": 21,
+  "skipLink": true,
+  "order": [
+   "انتقل إلى المحتوى",
+   "كل الفروع",
+   "ابحث عن صنف",
+   "السلة (0)",
+   "الشوربة",
+   "الأطباق الرئيسية",
+   "المشويات",
+   "الطواجن",
+   "الأطباق الجانبية",
+   "المندي",
+   "العزائم والعقائق",
+   "الصواني",
+   "الشوايات",
+   "الفتة"
+  ]
+ },
+ {
+  "page": "checkout",
+  "tabStops": 14,
+  "noRing": [],
+  "tabsToMainAction": 4,
+  "skipLink": true,
+  "order": [
+   "انتقل إلى المحتوى",
+   "رجوع للمنيو",
+   "توصيل للعنوان",
+   "الاسم",
+   "رقم الموبايل",
+   "المنطقة",
+   "الشارع",
+   "رقم العمارة",
+   "الشقة (اختياري)",
+   "علامة مميزة (اختياري)",
+   "01008888329",
+   "ملاحظات على الطلب (اختياري)",
+   "تأكيد الطلب · 285 ج.م",
+   "body"
+  ]
+ },
+ {
+  "page": "track",
+  "tabStops": 6,
+  "noRing": [],
+  "tabsToMainAction": 3,
+  "skipLink": true,
+  "order": [
+   "انتقل إلى المحتوى",
+   "الصفحة الرئيسية",
+   "رقم الطلب",
+   "رقم الموبايل",
+   "عرض حالة الطلب",
+   "body"
+  ]
+ },
+ {
+  "page": "admin",
+  "tabStops": 15,
+  "noRing": [
+   "التاريخ"
+  ],
+  "tabsToMainAction": 9,
+  "skipLink": true,
+  "order": [
+   "انتقل إلى المحتوى",
+   "الطلبات",
+   "مناطق التوصيل",
+   "الفرع",
+   "التاريخ",
+   "التاريخ",
+   "التاريخ",
+   "التاريخ",
+   "بحث برقم الطلب أو الموبايل",
+   "جديد (0)",
+   "جاري التجهيز (0)",
+   "خرج / جاهز للاستلام (0)",
+   "ملغي (0)",
+   "الكل (0)"
+  ]
+ },
+ {
+  "page": "item-window",
+  "focusTrapped": true,
+  "escapeReturnsTo": "أضف صدور فراخ",
+  "arrowKeysChangeSize": "ربع170 ج.م"
+ },
+ {
+  "page": "zone-picker",
+  "keyboardChoice": "اللوتس الشمالية · 75 ج.م"
+ },
+ {
+  "page": "checkout-submit",
+  "focusAfterError": "الاسم"
+ }
+]
+
+▶ pa11y-ci
+pa11y-ci وجد تنبيهات (متوقع)
+
+▶ Lighthouse home mobile
+
+▶ Lighthouse home desktop
+
+▶ Lighthouse menu-ashry mobile
+
+▶ Lighthouse menu-ashry desktop
+
+▶ Lighthouse menu-tagamoa mobile
+
+▶ Lighthouse menu-tagamoa desktop
+
+▶ Lighthouse track mobile
+
+▶ Lighthouse track desktop
+
+▶ Lighthouse not-found mobile
+
+▶ Lighthouse not-found desktop
+
+▶ Lighthouse admin mobile
+
+▶ Lighthouse admin desktop
+
+▶ Unlighthouse
+[Unlighthouse] √ Successfully connected to http://localhost:4173. (Status: 200).
+[Unlighthouse] i Creating Unlighthouse using config from /home/user/nova/ui-ux-audit/config/unlighthouse.config.ts
+[Unlighthouse] i The url config has been provided with 8 paths for scanning. Disabling sitemap, robots, sampling and crawler.
+[Unlighthouse] √ Unlighthouse has finished scanning http://localhost:4173: 8 routes in 50s.
+[Unlighthouse] i Running score budgets. 50
+[Unlighthouse] √ Score assertions have passed.
+[Unlighthouse] √ Generated jsonExpanded report ./results/unlighthouse/ci-result.json
+[Unlighthouse] i Generating static report.
+[Unlighthouse] √ Static report is ready for uploading: ./results/unlighthouse
+[Unlighthouse] i You can preview the static report using npx sirv-cli ./results/unlighthouse.
+[Unlighthouse] i For deployment demos, see https://unlighthouse.dev/guide/guides/generating-static-reports#interactive-html-reports
+
+▶ الاختبار الوظيفي
+
+Running 46 tests using 3 workers
+
+  ✓   3 [desktop] › tests/functional.spec.mjs:35:3 › الرئيسية › F02 call and map buttons point to each branch number and Google Maps in a new tab (750ms)
+  ✓   2 [desktop] › tests/functional.spec.mjs:42:3 › الرئيسية › F03 desktop header: WhatsApp opens wa.me and «تتبع طلب» opens tracking (848ms)
+  ✓   1 [desktop] › tests/functional.spec.mjs:29:3 › الرئيسية › F01 every «اطلب الآن» opens its own branch menu (1.5s)
+  ✓   4 [desktop] › tests/functional.spec.mjs:47:3 › الرئيسية › F04 closed branches say when they open and still let customers browse (758ms)
+  ✓   5 [desktop] › tests/functional.spec.mjs:52:3 › الرئيسية › F05 the «طلبك الحالي» bar opens the remembered order (719ms)
+  ✓   6 [desktop] › tests/functional.spec.mjs:61:3 › الرئيسية على الموبايل › F06 bottom bar: home, tracking and WhatsApp (553ms)
+  ✓   7 [desktop] › tests/functional.spec.mjs:71:3 › المنيو › F07 «كل الفروع» goes back home (709ms)
+  ✓   8 [desktop] › tests/functional.spec.mjs:74:3 › المنيو › F08 search narrows by name, tolerates spelling, clears with × (919ms)
+  ✓   9 [desktop] › tests/functional.spec.mjs:81:3 › المنيو › F09 a search with no result says so and offers to clear it (959ms)
+  ✓  10 [desktop] › tests/functional.spec.mjs:86:3 › المنيو › F10 searching «دجاج» finds chicken dishes listed as «فراخ» (synonym) (858ms)
+  ✓  11 [desktop] › tests/functional.spec.mjs:90:3 › المنيو › F11 a category chip scrolls to its section and highlights itself (1.9s)
+  ✓  12 [desktop] › tests/functional.spec.mjs:96:3 › المنيو › F12 sizes show their prices and the add button follows size and quantity (1.7s)
+  ✓  13 [desktop] › tests/functional.spec.mjs:105:3 › المنيو › F13 an item note is optional, counted and capped at 120 characters (1.9s)
+  ✓  15 [desktop] › tests/functional.spec.mjs:117:3 › المنيو › F15 booking-only items offer a call instead of add (709ms)
+  ✓  14 [desktop] › tests/functional.spec.mjs:112:3 › المنيو › F14 adding shows a confirmation and the cart bar with count and total (1.4s)
+  ✓  17 [desktop] › tests/functional.spec.mjs:129:3 › المنيو › F17 the cart survives a reload and stays separate per branch (2.3s)
+  ✓  16 [desktop] › tests/functional.spec.mjs:122:3 › المنيو › F16 cart: quantity, total, delete and the empty state (2.9s)
+  ✓  18 [desktop] › tests/functional.spec.mjs:134:3 › المنيو › F18 closed branch: cart explains and blocks checkout (2.2s)
+  ✓  21 [desktop] › tests/functional.spec.mjs:158:3 › إتمام الطلب › F21 empty cart: the page says so and leads back to the menu (844ms)
+  ✓  19 [desktop] › tests/functional.spec.mjs:140:3 › المنيو › F19 Escape closes the item window and focus returns to the item (1.2s)
+  ✓  20 [desktop] › tests/functional.spec.mjs:149:3 › الرجوع في الموبايل › F20 the phone Back button closes an open item window instead of leaving the menu (1.1s)
+  ✓  24 [desktop] › tests/functional.spec.mjs:174:3 › إتمام الطلب › F24 zone fee and the 14% Tagamoa tax appear before confirming (2.0s)
+  ✓  22 [desktop] › tests/functional.spec.mjs:162:3 › إتمام الطلب › F22 missing fields: one clear message each and focus on the first (2.3s)
+  ✓  23 [desktop] › tests/functional.spec.mjs:167:3 › إتمام الطلب › F23 phone: Arabic digits accepted, wrong prefix refused (2.5s)
+  ✓  25 [desktop] › tests/functional.spec.mjs:179:3 › إتمام الطلب › F25 pickup hides the address and shows the branch address (2.2s)
+  ✓  27 [desktop] › tests/functional.spec.mjs:190:3 › إتمام الطلب › F27 an unknown zone has a way out: the branch phone (2.3s)
+  ✓  26 [desktop] › tests/functional.spec.mjs:183:3 › إتمام الطلب › F26 what was typed survives a reload and the trip back to the menu (3.0s)
+  ✓  28 [desktop] › tests/functional.spec.mjs:195:3 › إتمام الطلب › F28 a closed branch cannot confirm, and says when to come back (1.6s)
+  ✓  29 [desktop] › tests/functional.spec.mjs:199:3 › إتمام الطلب › F29 confirming shows the order number, empties the cart and remembers the order (2.7s)
+  ✓  31 [desktop] › tests/functional.spec.mjs:209:3 › إتمام الطلب › F31 double tap on confirm places one order (2.2s)
+  ✓  32 [desktop] › tests/functional.spec.mjs:218:3 › صفحة الطلب والتتبع › F32 copy and WhatsApp share of the order number (2.2s)
+  ✓  34 [desktop] › tests/functional.spec.mjs:230:3 › صفحة الطلب والتتبع › F34 «اطلب مرة أخرى» returns to the same branch with the same items in the open cart (1.1s)
+  ✓  33 [desktop] › tests/functional.spec.mjs:224:3 › صفحة الطلب والتتبع › F33 a status change on the staff board reaches the open order page without reload (2.6s)
+  ✓  35 [desktop] › tests/functional.spec.mjs:235:3 › صفحة الطلب والتتبع › F35 an order link without the phone asks for it; a wrong phone finds nothing (610ms)
+  ✓  36 [desktop] › tests/functional.spec.mjs:241:3 › صفحة الطلب والتتبع › F36 tracking: clear errors, then the right number and phone open the order (662ms)
+  ✓  37 [desktop] › tests/functional.spec.mjs:248:3 › صفحة الطلب والتتبع › F37 an unknown address shows the not-found page with branch links (621ms)
+  ✓  38 [desktop] › tests/functional.spec.mjs:255:3 › لوحة الكول سنتر والمناطق › F38 filters by status, branch and search narrow the board (755ms)
+  ✓  30 [desktop] › tests/functional.spec.mjs:205:3 › إتمام الطلب › F30 a fourth order from one phone within 10 minutes is refused with a clear message (7.4s)
+  ✓  39 [desktop] › tests/functional.spec.mjs:263:3 › لوحة الكول سنتر والمناطق › F39 a new order moves through its statuses on the board (582ms)
+  ✓  40 [desktop] › tests/functional.spec.mjs:270:3 › لوحة الكول سنتر والمناطق › F40 cancelling needs a reason, «سبب آخر» needs words (915ms)
+  ✓  41 [desktop] › tests/functional.spec.mjs:276:3 › لوحة الكول سنتر والمناطق › F41 details show items with notes, and the POS invoice number is saved (1.4s)
+  ✓  44 [desktop] › tests/functional.spec.mjs:302:3 › لوحة الكول سنتر والمناطق › F44 a pending zone can be priced from its button (657ms)
+  ✓  42 [desktop] › tests/functional.spec.mjs:285:3 › لوحة الكول سنتر والمناطق › F42 a new order placed in another tab appears on the open board (2.5s)
+  ✓  46 [desktop] › tests/functional.spec.mjs:311:3 › لوحة الكول سنتر والمناطق › F46 the demo banner is always visible so testers know orders do not reach the kitchen (838ms)
+  ✓  43 [desktop] › tests/functional.spec.mjs:290:3 › لوحة الكول سنتر والمناطق › F43 zones: refuse empty and duplicate, accept Arabic digits, reach checkout, delete with confirmation (2.9s)
+  ✘  45 [desktop] › tests/functional.spec.mjs:307:3 › لوحة الكول سنتر والمناطق › F45 the staff board has no sign-in (demo): anyone with the link can see customer data (5.4s)
+
+
+  1) [desktop] › tests/functional.spec.mjs:307:3 › لوحة الكول سنتر والمناطق › F45 the staff board has no sign-in (demo): anyone with the link can see customer data 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('heading', { name: /تسجيل الدخول/ })
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByRole('heading', { name: /تسجيل الدخول/ }) with timeout 5000ms
+      - waiting for getByRole('heading', { name: /تسجيل الدخول/ })
+
+
+      307 |   test('F45 the staff board has no sign-in (demo): anyone with the link can see customer data', async ({ page }) => {
+      308 |     await seed(page); await page.goto('/admin')
+    > 309 |     await expect(page.getByRole('heading', { name: /تسجيل الدخول/ })).toBeVisible()
+          |                                                                       ^
+      310 |   })
+      311 |   test('F46 the demo banner is always visible so testers know orders do not reach the kitchen', async ({ page }) => {
+      312 |     for (const u of ['/', '/branch/ashry', '/track', '/admin']) { await page.goto(u); await expect(page.getByRole('complementary', { name: 'تنبيه' })).toContainText('نسخة تجريبية') }
+        at /home/user/nova/ui-ux-audit/tests/functional.spec.mjs:309:71
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    logs/functional-artifacts/functional-لوحة-الكول-سنتر-92abb--link-can-see-customer-data-desktop/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: logs/functional-artifacts/functional-لوحة-الكول-سنتر-92abb--link-can-see-customer-data-desktop/error-context.md
+
+  1 failed
+    [desktop] › tests/functional.spec.mjs:307:3 › لوحة الكول سنتر والمناطق › F45 the staff board has no sign-in (demo): anyone with the link can see customer data 
+  45 passed (30.0s)
+بعض الاختبارات فشلت (انظر results/functional.json)
+
+▶ محاكاة الشخصيات
+p1 زائر جديد لأول مرة | يفهم ما هذا الموقع ويطلب ربع صدور فراخ توصيلاً إلى | success=true clicks=13 keys=36 est=45s errors=0 confusion=4
+p2 مستخدم قليل الخبرة بالتكنولوجيا | يطلب كفتة فراخ «من غير شطة» استلاماً من فرع الزقاز | success=true clicks=12 keys=44 est=69s errors=0 confusion=0
+p3 مستخدم مستعجل | أسرع طلب ممكن: ربع شيش طاووق استلام من العاشر (أول | success=true clicks=9 keys=18 est=16s errors=0 confusion=0
+p3 مستخدم مستعجل | يعيد نفس الطلب في يوم تالٍ | success=true clicks=3 keys=0 est=10s errors=0 confusion=1
+p4 مستخدم الموبايل فقط | يتصفح المنيو ويقفل نافذة الصنف بزر الرجوع | success=true clicks=3 keys=0 est=4s errors=0 confusion=0
+p4 مستخدم الموبايل فقط | يتابع طلباً سابقاً بعد ساعة من الشريط السفلي | success=true clicks=4 keys=17 est=13s errors=0 confusion=0
+p5 مستخدم معتاد على التطبيقات الاحترافية | يقارن أسعار ثلاثة مشويات ويطلب الأرخص لعدد 2، ويعد | success=true clicks=12 keys=0 est=31s errors=0 confusion=3
+p6 مستخدم لا يفهم بعض المصطلحات | يبحث عن «دجاج مشوي» ويفهم الفرق بين الأصناف | success=true clicks=8 keys=8 est=21s errors=0 confusion=2
+
+▶ التقارير ولوحة النتائج
+reports ok: ['ACCESSIBILITY-REPORT.md', 'BUGS-AND-ISSUES.md', 'CUSTOMER-JOURNEY.md', 'EXECUTIVE-SUMMARY.md', 'FUNCTIONAL-TEST-REPORT.md', 'IMPROVEMENT-ROADMAP.md', 'PERFORMANCE-REPORT.md', 'RESPONSIVE-AUDIT.md', 'UI-DESIGN-AUDIT.md', 'UX-USABILITY-AUDIT.md'] tests 45 / 46
+
+انتهى. افتح dashboard/index.html

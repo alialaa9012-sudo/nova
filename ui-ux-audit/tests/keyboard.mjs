@@ -31,7 +31,7 @@ for (const [id, url, setup] of [
   ['admin', '/admin', null],
 ]) {
   const ctx = await context(b, vp); const p = await ctx.newPage()
-  await p.goto(url); if (setup) await setup(p)
+  await p.goto(url, { waitUntil: 'networkidle' }); if (setup) await setup(p)
   await p.evaluate(() => document.activeElement?.blur())
   const walk = await tabWalk(p)
   const firstContentIndex = walk.findIndex((w) => /اطلب الآن|أضف |الاسم|رقم الطلب|جديد/.test(w.name || ''))

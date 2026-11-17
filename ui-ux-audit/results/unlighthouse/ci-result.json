@@ -1,23 +1,23 @@
 {
   "summary": {
-    "score": 0.95,
+    "score": 0.97,
     "categories": {
       "performance": {
-        "score": 0.92,
+        "score": 0.93,
         "scores": [
-          0.99,
-          0.92,
+          0.94,
+          0.96,
           0.93,
-          0.79,
-          0.8,
-          0.8,
+          0.91,
+          0.91,
+          0.9,
           0.99,
-          0.92
+          0.93
         ],
-        "averageScore": 0.89
+        "averageScore": 0.93
       },
       "accessibility": {
-        "score": 0.98,
+        "score": 1,
         "scores": [
           1,
           1,
@@ -26,7 +26,7 @@
           1,
           1,
           1,
-          0.98
+          1
         ],
         "averageScore": 1
       },
@@ -61,49 +61,49 @@
     },
     "metrics": {
       "largest-contentful-paint": {
-        "numericValue": 3339.47895,
-        "displayValue": "3.3 s",
+        "numericValue": 3180.1975999999995,
+        "displayValue": "3.2 s",
         "numericValues": [
-          1954.979,
-          3219.6769,
-          3223.463,
-          5482.399399999999,
-          5329.3668,
-          5195.568325,
-          1960.5038,
-          3339.47895
+          3072.038,
+          1956.4955,
+          3223.31065,
+          3472.02025,
+          3468.39705,
+          3606.1931999999997,
+          1961.518,
+          3180.1975999999995
         ],
-        "averageNumericValue": 3713.18
+        "averageNumericValue": 2992.52
       },
       "cumulative-layout-shift": {
-        "numericValue": 0.001281010191416206,
+        "numericValue": 0.001264447866159376,
         "displayValue": "0.001",
         "numericValues": [
           0.001275527042708462,
-          0.08059277996823817,
+          0.10799210944755055,
+          0.04945568105055485,
           0.0001188491855508918,
           0.0001188491855508918,
           0.0001188491855508918,
-          0,
           0.0002460167121749943,
-          0.001281010191416206
+          0.001264447866159376
         ],
-        "averageNumericValue": 0.01
+        "averageNumericValue": 0.02
       },
       "first-contentful-paint": {
-        "numericValue": 908.3193000000001,
+        "numericValue": 912.7983999999999,
         "displayValue": "0.9 s",
         "numericValues": [
-          904.979,
-          905.7846,
-          905.642,
-          903.6996999999999,
-          902.1833999999999,
-          907.1819,
-          910.5038,
-          908.3193000000001
+          919.038,
+          906.4955,
+          904.2071000000001,
+          904.0135,
+          904.2647,
+          904.1288,
+          911.518,
+          912.7983999999999
         ],
-        "averageNumericValue": 906.04
+        "averageNumericValue": 908.31
       },
       "total-blocking-time": {
         "numericValue": 0,
@@ -111,54 +111,54 @@
         "numericValues": [
           0,
           0,
-          4,
+          5,
           6,
-          23.5,
-          9.5,
+          6,
+          0,
           0,
           0
         ],
-        "averageNumericValue": 5.38
+        "averageNumericValue": 2.13
       },
       "max-potential-fid": {
-        "numericValue": 26,
+        "numericValue": 33,
         "displayValue": "30 ms",
         "numericValues": [
-          31,
-          38,
-          54,
+          46,
+          44,
+          55,
           62,
-          97,
-          69,
-          38,
-          26
+          62,
+          44,
+          30,
+          33
         ],
-        "averageNumericValue": 51.88
+        "averageNumericValue": 47
       },
       "interactive": {
-        "numericValue": 3339.4789500000006,
-        "displayValue": "3.3 s",
+        "numericValue": 3180.1975999999995,
+        "displayValue": "3.2 s",
         "numericValues": [
-          1954.979,
-          3219.6769000000004,
-          3223.463,
-          5624.899399999999,
-          5471.8668,
-          5382.4478725,
-          1960.5038,
-          3339.4789500000006
+          3072.0380000000005,
+          1956.4955,
+          3223.3106500000004,
+          3514.92025,
+          3512.39705,
+          3606.1931999999997,
+          1961.518,
+          3180.1975999999995
         ],
-        "averageNumericValue": 3772.16
+        "averageNumericValue": 3003.38
       }
     }
   },
   "routes": [
     {
       "path": "/",
-      "score": 1,
+      "score": 0.99,
       "categories": {
         "performance": {
-          "score": 0.99
+          "score": 0.94
         },
         "accessibility": {
           "score": 1
@@ -172,15 +172,15 @@
       },
       "metrics": {
         "largest-contentful-paint": {
-          "numericValue": 1954.979,
-          "displayValue": "2.0 s"
+          "numericValue": 3072.038,
+          "displayValue": "3.1 s"
         },
         "cumulative-layout-shift": {
           "numericValue": 0.001275527042708462,
           "displayValue": "0.001"
         },
         "first-contentful-paint": {
-          "numericValue": 904.979,
+          "numericValue": 919.038,
           "displayValue": "0.9 s"
         },
         "total-blocking-time": {
@@ -188,21 +188,21 @@
           "displayValue": "0 ms"
         },
         "max-potential-fid": {
-          "numericValue": 31,
-          "displayValue": "30 ms"
+          "numericValue": 46,
+          "displayValue": "50 ms"
         },
         "interactive": {
-          "numericValue": 1954.979,
-          "displayValue": "2.0 s"
+          "numericValue": 3072.0380000000005,
+          "displayValue": "3.1 s"
         }
       }
     },
     {
       "path": "/admin",
-      "score": 0.9,
+      "score": 0.91,
       "categories": {
         "performance": {
-          "score": 0.92
+          "score": 0.96
         },
         "accessibility": {
           "score": 1
@@ -216,15 +216,15 @@
       },
       "metrics": {
         "largest-contentful-paint": {
-          "numericValue": 3219.6769,
-          "displayValue": "3.2 s"
+          "numericValue": 1956.4955,
+          "displayValue": "2.0 s"
         },
         "cumulative-layout-shift": {
-          "numericValue": 0.08059277996823817,
-          "displayValue": "0.081"
+          "numericValue": 0.10799210944755055,
+          "displayValue": "0.108"
         },
         "first-contentful-paint": {
-          "numericValue": 905.7846,
+          "numericValue": 906.4955,
           "displayValue": "0.9 s"
         },
         "total-blocking-time": {
@@ -232,12 +232,12 @@
           "displayValue": "0 ms"
         },
         "max-potential-fid": {
-          "numericValue": 38,
+          "numericValue": 44,
           "displayValue": "40 ms"
         },
         "interactive": {
-          "numericValue": 3219.6769000000004,
-          "displayValue": "3.2 s"
+          "numericValue": 1956.4955,
+          "displayValue": "2.0 s"
         }
       }
     },
@@ -260,37 +260,37 @@
       },
       "metrics": {
         "largest-contentful-paint": {
-          "numericValue": 3223.463,
+          "numericValue": 3223.31065,
           "displayValue": "3.2 s"
         },
         "cumulative-layout-shift": {
-          "numericValue": 0.0001188491855508918,
-          "displayValue": "0"
+          "numericValue": 0.04945568105055485,
+          "displayValue": "0.049"
         },
         "first-contentful-paint": {
-          "numericValue": 905.642,
+          "numericValue": 904.2071000000001,
           "displayValue": "0.9 s"
         },
         "total-blocking-time": {
-          "numericValue": 4,
-          "displayValue": "0 ms"
+          "numericValue": 5,
+          "displayValue": "10 ms"
         },
         "max-potential-fid": {
-          "numericValue": 54,
-          "displayValue": "50 ms"
+          "numericValue": 55,
+          "displayValue": "60 ms"
         },
         "interactive": {
-          "numericValue": 3223.463,
+          "numericValue": 3223.3106500000004,
           "displayValue": "3.2 s"
         }
       }
     },
     {
       "path": "/branch/ashry",
-      "score": 0.95,
+      "score": 0.98,
       "categories": {
         "performance": {
-          "score": 0.79
+          "score": 0.91
         },
         "accessibility": {
           "score": 1
@@ -304,15 +304,15 @@
       },
       "metrics": {
         "largest-contentful-paint": {
-          "numericValue": 5482.399399999999,
-          "displayValue": "5.5 s"
+          "numericValue": 3472.02025,
+          "displayValue": "3.5 s"
         },
         "cumulative-layout-shift": {
           "numericValue": 0.0001188491855508918,
           "displayValue": "0"
         },
         "first-contentful-paint": {
-          "numericValue": 903.6996999999999,
+          "numericValue": 904.0135,
           "displayValue": "0.9 s"
         },
         "total-blocking-time": {
@@ -324,17 +324,17 @@
           "displayValue": "60 ms"
         },
         "interactive": {
-          "numericValue": 5624.899399999999,
-          "displayValue": "5.6 s"
+          "numericValue": 3514.92025,
+          "displayValue": "3.5 s"
         }
       }
     },
     {
       "path": "/branch/tagamoa",
-      "score": 0.95,
+      "score": 0.98,
       "categories": {
         "performance": {
-          "score": 0.8
+          "score": 0.91
         },
         "accessibility": {
           "score": 1
@@ -348,37 +348,37 @@
       },
       "metrics": {
         "largest-contentful-paint": {
-          "numericValue": 5329.3668,
-          "displayValue": "5.3 s"
+          "numericValue": 3468.39705,
+          "displayValue": "3.5 s"
         },
         "cumulative-layout-shift": {
           "numericValue": 0.0001188491855508918,
           "displayValue": "0"
         },
         "first-contentful-paint": {
-          "numericValue": 902.1833999999999,
+          "numericValue": 904.2647,
           "displayValue": "0.9 s"
         },
         "total-blocking-time": {
-          "numericValue": 23.5,
-          "displayValue": "20 ms"
+          "numericValue": 6,
+          "displayValue": "10 ms"
         },
         "max-potential-fid": {
-          "numericValue": 97,
-          "displayValue": "100 ms"
+          "numericValue": 62,
+          "displayValue": "60 ms"
         },
         "interactive": {
-          "numericValue": 5471.8668,
-          "displayValue": "5.5 s"
+          "numericValue": 3512.39705,
+          "displayValue": "3.5 s"
         }
       }
     },
     {
       "path": "/branch/zagazig",
-      "score": 0.95,
+      "score": 0.98,
       "categories": {
         "performance": {
-          "score": 0.8
+          "score": 0.9
         },
         "accessibility": {
           "score": 1
@@ -392,28 +392,28 @@
       },
       "metrics": {
         "largest-contentful-paint": {
-          "numericValue": 5195.568325,
-          "displayValue": "5.2 s"
+          "numericValue": 3606.1931999999997,
+          "displayValue": "3.6 s"
         },
         "cumulative-layout-shift": {
-          "numericValue": 0,
+          "numericValue": 0.0001188491855508918,
           "displayValue": "0"
         },
         "first-contentful-paint": {
-          "numericValue": 907.1819,
+          "numericValue": 904.1288,
           "displayValue": "0.9 s"
         },
         "total-blocking-time": {
-          "numericValue": 9.5,
-          "displayValue": "10 ms"
+          "numericValue": 0,
+          "displayValue": "0 ms"
         },
         "max-potential-fid": {
-          "numericValue": 69,
-          "displayValue": "70 ms"
+          "numericValue": 44,
+          "displayValue": "40 ms"
         },
         "interactive": {
-          "numericValue": 5382.4478725,
-          "displayValue": "5.4 s"
+          "numericValue": 3606.1931999999997,
+          "displayValue": "3.6 s"
         }
       }
     },
@@ -436,7 +436,7 @@
       },
       "metrics": {
         "largest-contentful-paint": {
-          "numericValue": 1960.5038,
+          "numericValue": 1961.518,
           "displayValue": "2.0 s"
         },
         "cumulative-layout-shift": {
@@ -444,7 +444,7 @@
           "displayValue": "0"
         },
         "first-contentful-paint": {
-          "numericValue": 910.5038,
+          "numericValue": 911.518,
           "displayValue": "0.9 s"
         },
         "total-blocking-time": {
@@ -452,11 +452,11 @@
           "displayValue": "0 ms"
         },
         "max-potential-fid": {
-          "numericValue": 38,
-          "displayValue": "40 ms"
+          "numericValue": 30,
+          "displayValue": "30 ms"
         },
         "interactive": {
-          "numericValue": 1960.5038,
+          "numericValue": 1961.518,
           "displayValue": "2.0 s"
         }
       }
@@ -466,10 +466,10 @@
       "score": 0.98,
       "categories": {
         "performance": {
-          "score": 0.92
+          "score": 0.93
         },
         "accessibility": {
-          "score": 0.98
+          "score": 1
         },
         "best-practices": {
           "score": 1
@@ -480,15 +480,15 @@
       },
       "metrics": {
         "largest-contentful-paint": {
-          "numericValue": 3339.47895,
-          "displayValue": "3.3 s"
+          "numericValue": 3180.1975999999995,
+          "displayValue": "3.2 s"
         },
         "cumulative-layout-shift": {
-          "numericValue": 0.001281010191416206,
+          "numericValue": 0.001264447866159376,
           "displayValue": "0.001"
         },
         "first-contentful-paint": {
-          "numericValue": 908.3193000000001,
+          "numericValue": 912.7983999999999,
           "displayValue": "0.9 s"
         },
         "total-blocking-time": {
@@ -496,12 +496,12 @@
           "displayValue": "0 ms"
         },
         "max-potential-fid": {
-          "numericValue": 26,
+          "numericValue": 33,
           "displayValue": "30 ms"
         },
         "interactive": {
-          "numericValue": 3339.4789500000006,
-          "displayValue": "3.3 s"
+          "numericValue": 3180.1975999999995,
+          "displayValue": "3.2 s"
         }
       }
     }

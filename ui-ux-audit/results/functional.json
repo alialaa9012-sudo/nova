@@ -100,12 +100,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 1607,
+                      "duration": 1537,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-17T12:57:04.163Z",
+                      "startTime": "2026-11-17T14:18:02.698Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -134,12 +134,12 @@
                       "workerIndex": 1,
                       "parallelIndex": 1,
                       "status": "passed",
-                      "duration": 544,
+                      "duration": 750,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-17T12:57:04.217Z",
+                      "startTime": "2026-11-17T14:18:02.737Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -168,12 +168,12 @@
                       "workerIndex": 2,
                       "parallelIndex": 2,
                       "status": "passed",
-                      "duration": 695,
+                      "duration": 848,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-17T12:57:04.182Z",
+                      "startTime": "2026-11-17T14:18:02.710Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -202,12 +202,12 @@
                       "workerIndex": 1,
                       "parallelIndex": 1,
                       "status": "passed",
-                      "duration": 930,
+                      "duration": 758,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-17T12:57:04.939Z",
+                      "startTime": "2026-11-17T14:18:03.653Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -236,12 +236,12 @@
                       "workerIndex": 2,
                       "parallelIndex": 2,
                       "status": "passed",
-                      "duration": 703,
+                      "duration": 719,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-17T12:57:05.044Z",
+                      "startTime": "2026-11-17T14:18:03.721Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -275,15 +275,15 @@
                   "projectName": "desktop",
                   "results": [
                     {
-                      "workerIndex": 2,
-                      "parallelIndex": 2,
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 666,
+                      "duration": 553,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-17T12:57:05.774Z",
+                      "startTime": "2026-11-17T14:18:04.398Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -320,12 +320,12 @@
                       "workerIndex": 1,
                       "parallelIndex": 1,
                       "status": "passed",
-                      "duration": 891,
+                      "duration": 709,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-17T12:57:05.883Z",
+                      "startTime": "2026-11-17T14:18:04.453Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -351,15 +351,15 @@
                   "projectName": "desktop",
                   "results": [
                     {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
                       "status": "passed",
-                      "duration": 1014,
+                      "duration": 919,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-17T12:57:05.920Z",
+                      "startTime": "2026-11-17T14:18:04.470Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -385,15 +385,15 @@
                   "projectName": "desktop",
                   "results": [
                     {
-                      "workerIndex": 2,
-                      "parallelIndex": 2,
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 1018,
+                      "duration": 959,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-17T12:57:06.477Z",
+                      "startTime": "2026-11-17T14:18:04.970Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -408,7 +408,7 @@
             },
             {
               "title": "F10 searching «دجاج» finds chicken dishes listed as «فراخ» (synonym)",
-              "ok": false,
+              "ok": true,
               "tags": [],
               "tests": [
                 {
@@ -421,53 +421,18 @@
                     {
                       "workerIndex": 1,
                       "parallelIndex": 1,
-                      "status": "failed",
-                      "duration": 5755,
-                      "error": {
-                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('button', { name: 'أضف صدور فراخ', exact: true })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByRole('button', { name: 'أضف صدور فراخ', exact: true }) with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('button', { name: 'أضف صدور فراخ', exact: true })\u001b[22m\n",
-                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('button', { name: 'أضف صدور فراخ', exact: true })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByRole('button', { name: 'أضف صدور فراخ', exact: true }) with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('button', { name: 'أضف صدور فراخ', exact: true })\u001b[22m\n\n    at /home/user/nova/ui-ux-audit/tests/functional.spec.mjs:88:84",
-                        "location": {
-                          "file": "/home/user/nova/ui-ux-audit/tests/functional.spec.mjs",
-                          "column": 84,
-                          "line": 88
-                        },
-                        "snippet": "  86 |   test('F10 searching «دجاج» finds chicken dishes listed as «فراخ» (synonym)', async ({ page }) => {\n  87 |     await page.goto('/branch/ashry'); await page.getByRole('searchbox').fill('دجاج')\n> 88 |     await expect(page.getByRole('button', { name: 'أضف صدور فراخ', exact: true })).toBeVisible()\n     |                                                                                    ^\n  89 |   })\n  90 |   test('F11 a category chip scrolls to its section and highlights itself', async ({ page }) => {\n  91 |     await page.goto('/branch/ashry'); const bar = page.getByRole('navigation', { name: 'أقسام المنيو' })"
-                      },
-                      "errors": [
-                        {
-                          "location": {
-                            "file": "/home/user/nova/ui-ux-audit/tests/functional.spec.mjs",
-                            "column": 84,
-                            "line": 88
-                          },
-                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('button', { name: 'أضف صدور فراخ', exact: true })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByRole('button', { name: 'أضف صدور فراخ', exact: true }) with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('button', { name: 'أضف صدور فراخ', exact: true })\u001b[22m\n\n\n  86 |   test('F10 searching «دجاج» finds chicken dishes listed as «فراخ» (synonym)', async ({ page }) => {\n  87 |     await page.goto('/branch/ashry'); await page.getByRole('searchbox').fill('دجاج')\n> 88 |     await expect(page.getByRole('button', { name: 'أضف صدور فراخ', exact: true })).toBeVisible()\n     |                                                                                    ^\n  89 |   })\n  90 |   test('F11 a category chip scrolls to its section and highlights itself', async ({ page }) => {\n  91 |     await page.goto('/branch/ashry'); const bar = page.getByRole('navigation', { name: 'أقسام المنيو' })\n    at /home/user/nova/ui-ux-audit/tests/functional.spec.mjs:88:84"
-                        }
-                      ],
+                      "status": "passed",
+                      "duration": 858,
+                      "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-17T12:57:06.816Z",
+                      "startTime": "2026-11-17T14:18:05.187Z",
                       "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "/home/user/nova/ui-ux-audit/logs/functional-artifacts/functional-المنيو-F10-sear-439b8-s-listed-as-«فراخ»-synonym--desktop/test-failed-1.png"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "/home/user/nova/ui-ux-audit/logs/functional-artifacts/functional-المنيو-F10-sear-439b8-s-listed-as-«فراخ»-synonym--desktop/error-context.md"
-                        }
-                      ],
-                      "errorLocation": {
-                        "file": "/home/user/nova/ui-ux-audit/tests/functional.spec.mjs",
-                        "column": 84,
-                        "line": 88
-                      }
+                      "attachments": []
                     }
                   ],
-                  "status": "unexpected"
+                  "status": "expected"
                 }
               ],
               "id": "030c45a8da3ad1f99bb2-f1d63425dfbc8273c265",
@@ -488,15 +453,15 @@
                   "projectName": "desktop",
                   "results": [
                     {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
                       "status": "passed",
-                      "duration": 1777,
+                      "duration": 1940,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-17T12:57:06.964Z",
+                      "startTime": "2026-11-17T14:18:05.409Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -522,15 +487,15 @@
                   "projectName": "desktop",
                   "results": [
                     {
-                      "workerIndex": 2,
-                      "parallelIndex": 2,
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 1486,
+                      "duration": 1654,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-17T12:57:07.529Z",
+                      "startTime": "2026-11-17T14:18:05.963Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -556,15 +521,15 @@
                   "projectName": "desktop",
                   "results": [
                     {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
                       "status": "passed",
-                      "duration": 1463,
+                      "duration": 1891,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-17T12:57:08.763Z",
+                      "startTime": "2026-11-17T14:18:06.062Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -593,12 +558,12 @@
                       "workerIndex": 2,
                       "parallelIndex": 2,
                       "status": "passed",
-                      "duration": 1410,
+                      "duration": 1356,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-17T12:57:09.031Z",
+                      "startTime": "2026-11-17T14:18:07.367Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -627,12 +592,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 564,
+                      "duration": 709,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-17T12:57:10.239Z",
+                      "startTime": "2026-11-17T14:18:07.634Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -658,15 +623,15 @@
                   "projectName": "desktop",
                   "results": [
                     {
-                      "workerIndex": 2,
-                      "parallelIndex": 2,
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
                       "status": "passed",
-                      "duration": 2877,
+                      "duration": 2920,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-17T12:57:10.453Z",
+                      "startTime": "2026-11-17T14:18:07.973Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -695,12 +660,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 1775,
+                      "duration": 2285,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-17T12:57:10.817Z",
+                      "startTime": "2026-11-17T14:18:08.361Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -726,15 +691,15 @@
                   "projectName": "desktop",
                   "results": [
                     {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
                       "status": "passed",
-                      "duration": 2142,
+                      "duration": 2212,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-17T12:57:12.616Z",
+                      "startTime": "2026-11-17T14:18:08.738Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -760,15 +725,15 @@
                   "projectName": "desktop",
                   "results": [
                     {
-                      "workerIndex": 3,
-                      "parallelIndex": 1,
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 1310,
+                      "duration": 1170,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-17T12:57:13.337Z",
+                      "startTime": "2026-11-17T14:18:10.667Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -791,7 +756,7 @@
           "specs": [
             {
               "title": "F20 the phone Back button closes an open item window instead of leaving the menu",
-              "ok": false,
+              "ok": true,
               "tags": [],
               "tests": [
                 {
@@ -802,55 +767,20 @@
                   "projectName": "desktop",
                   "results": [
                     {
-                      "workerIndex": 2,
-                      "parallelIndex": 2,
-                      "status": "failed",
-                      "duration": 5976,
-                      "error": {
-                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected pattern: \u001b[32m/\\/branch\\/ashry$/\u001b[39m\nReceived string:  \u001b[31m\"http://localhost:4173/\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 5000ms\u001b[22m\n\u001b[2m    14 × locator resolved to <html lang=\"ar\" dir=\"rtl\">…</html>\u001b[22m\n\u001b[2m       - unexpected value \"http://localhost:4173/\"\u001b[22m\n",
-                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected pattern: \u001b[32m/\\/branch\\/ashry$/\u001b[39m\nReceived string:  \u001b[31m\"http://localhost:4173/\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 5000ms\u001b[22m\n\u001b[2m    14 × locator resolved to <html lang=\"ar\" dir=\"rtl\">…</html>\u001b[22m\n\u001b[2m       - unexpected value \"http://localhost:4173/\"\u001b[22m\n\n    at /home/user/nova/ui-ux-audit/tests/functional.spec.mjs:153:24",
-                        "location": {
-                          "file": "/home/user/nova/ui-ux-audit/tests/functional.spec.mjs",
-                          "column": 24,
-                          "line": 153
-                        },
-                        "snippet": "  151 |     await page.getByRole('button', { name: 'أضف صدور فراخ', exact: true }).click(); await expect(page.getByRole('dialog')).toBeVisible()\n  152 |     await page.goBack()\n> 153 |     await expect(page).toHaveURL(/\\/branch\\/ashry$/)\n      |                        ^\n  154 |   })\n  155 | })\n  156 |"
-                      },
-                      "errors": [
-                        {
-                          "location": {
-                            "file": "/home/user/nova/ui-ux-audit/tests/functional.spec.mjs",
-                            "column": 24,
-                            "line": 153
-                          },
-                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected pattern: \u001b[32m/\\/branch\\/ashry$/\u001b[39m\nReceived string:  \u001b[31m\"http://localhost:4173/\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 5000ms\u001b[22m\n\u001b[2m    14 × locator resolved to <html lang=\"ar\" dir=\"rtl\">…</html>\u001b[22m\n\u001b[2m       - unexpected value \"http://localhost:4173/\"\u001b[22m\n\n\n  151 |     await page.getByRole('button', { name: 'أضف صدور فراخ', exact: true }).click(); await expect(page.getByRole('dialog')).toBeVisible()\n  152 |     await page.goBack()\n> 153 |     await expect(page).toHaveURL(/\\/branch\\/ashry$/)\n      |                        ^\n  154 |   })\n  155 | })\n  156 |\n    at /home/user/nova/ui-ux-audit/tests/functional.spec.mjs:153:24"
-                        }
-                      ],
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 1057,
+                      "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-17T12:57:13.349Z",
+                      "startTime": "2026-11-17T14:18:10.912Z",
                       "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "/home/user/nova/ui-ux-audit/logs/functional-artifacts/functional-الرجوع-في-الموب-e32a7-instead-of-leaving-the-menu-desktop/test-failed-1.png"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "/home/user/nova/ui-ux-audit/logs/functional-artifacts/functional-الرجوع-في-الموب-e32a7-instead-of-leaving-the-menu-desktop/error-context.md"
-                        }
-                      ],
-                      "errorLocation": {
-                        "file": "/home/user/nova/ui-ux-audit/tests/functional.spec.mjs",
-                        "column": 24,
-                        "line": 153
-                      }
+                      "attachments": []
                     }
                   ],
-                  "status": "unexpected"
+                  "status": "expected"
                 }
               ],
               "id": "030c45a8da3ad1f99bb2-0f86b123145c47c621df",
@@ -879,15 +809,15 @@
                   "projectName": "desktop",
                   "results": [
                     {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
                       "status": "passed",
-                      "duration": 674,
+                      "duration": 844,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-17T12:57:14.772Z",
+                      "startTime": "2026-11-17T14:18:10.969Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -913,15 +843,15 @@
                   "projectName": "desktop",
                   "results": [
                     {
-                      "workerIndex": 3,
-                      "parallelIndex": 1,
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
                       "status": "passed",
-                      "duration": 1980,
+                      "duration": 2253,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-17T12:57:14.818Z",
+                      "startTime": "2026-11-17T14:18:11.824Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -950,12 +880,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 2034,
+                      "duration": 2495,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-17T12:57:15.465Z",
+                      "startTime": "2026-11-17T14:18:11.859Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -981,15 +911,15 @@
                   "projectName": "desktop",
                   "results": [
                     {
-                      "workerIndex": 3,
+                      "workerIndex": 1,
                       "parallelIndex": 1,
                       "status": "passed",
-                      "duration": 1956,
+                      "duration": 2008,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-17T12:57:16.823Z",
+                      "startTime": "2026-11-17T14:18:11.988Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1015,15 +945,15 @@
                   "projectName": "desktop",
                   "results": [
                     {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
                       "status": "passed",
-                      "duration": 1828,
+                      "duration": 2202,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-17T12:57:17.526Z",
+                      "startTime": "2026-11-17T14:18:14.023Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1049,15 +979,15 @@
                   "projectName": "desktop",
                   "results": [
                     {
-                      "workerIndex": 3,
-                      "parallelIndex": 1,
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
                       "status": "passed",
-                      "duration": 3171,
+                      "duration": 3033,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-17T12:57:18.796Z",
+                      "startTime": "2026-11-17T14:18:14.100Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1086,12 +1016,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 2279,
+                      "duration": 2260,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-17T12:57:19.366Z",
+                      "startTime": "2026-11-17T14:18:14.374Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1117,15 +1047,15 @@
                   "projectName": "desktop",
                   "results": [
                     {
-                      "workerIndex": 4,
-                      "parallelIndex": 2,
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
                       "status": "passed",
-                      "duration": 2052,
+                      "duration": 1635,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-17T12:57:20.136Z",
+                      "startTime": "2026-11-17T14:18:16.263Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1154,12 +1084,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 2975,
+                      "duration": 2722,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-17T12:57:21.669Z",
+                      "startTime": "2026-11-17T14:18:16.662Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1185,15 +1115,15 @@
                   "projectName": "desktop",
                   "results": [
                     {
-                      "workerIndex": 3,
-                      "parallelIndex": 1,
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
                       "status": "passed",
-                      "duration": 7750,
+                      "duration": 7388,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-17T12:57:21.990Z",
+                      "startTime": "2026-11-17T14:18:17.151Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1219,15 +1149,15 @@
                   "projectName": "desktop",
                   "results": [
                     {
-                      "workerIndex": 4,
-                      "parallelIndex": 2,
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
                       "status": "passed",
-                      "duration": 2415,
+                      "duration": 2231,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-17T12:57:22.344Z",
+                      "startTime": "2026-11-17T14:18:17.915Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1264,12 +1194,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 2426,
+                      "duration": 2229,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-17T12:57:24.658Z",
+                      "startTime": "2026-11-17T14:18:19.406Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1295,15 +1225,15 @@
                   "projectName": "desktop",
                   "results": [
                     {
-                      "workerIndex": 4,
-                      "parallelIndex": 2,
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
                       "status": "passed",
-                      "duration": 2755,
+                      "duration": 2611,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-17T12:57:24.787Z",
+                      "startTime": "2026-11-17T14:18:20.175Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1317,7 +1247,7 @@
               "column": 3
             },
             {
-              "title": "F34 «اطلب مرة أخرى» returns to the same branch menu",
+              "title": "F34 «اطلب مرة أخرى» returns to the same branch with the same items in the open cart",
               "ok": true,
               "tags": [],
               "tests": [
@@ -1332,12 +1262,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 920,
+                      "duration": 1076,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-17T12:57:27.108Z",
+                      "startTime": "2026-11-17T14:18:21.645Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1345,7 +1275,7 @@
                   "status": "expected"
                 }
               ],
-              "id": "030c45a8da3ad1f99bb2-5d3c40daf378f867b682",
+              "id": "030c45a8da3ad1f99bb2-29152283364d399e2d13",
               "file": "functional.spec.mjs",
               "line": 230,
               "column": 3
@@ -1363,15 +1293,15 @@
                   "projectName": "desktop",
                   "results": [
                     {
-                      "workerIndex": 4,
-                      "parallelIndex": 2,
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 774,
+                      "duration": 610,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-17T12:57:27.554Z",
+                      "startTime": "2026-11-17T14:18:22.735Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1381,7 +1311,7 @@
               ],
               "id": "030c45a8da3ad1f99bb2-2f498db6ee6c17e03657",
               "file": "functional.spec.mjs",
-              "line": 234,
+              "line": 235,
               "column": 3
             },
             {
@@ -1397,15 +1327,15 @@
                   "projectName": "desktop",
                   "results": [
                     {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
                       "status": "passed",
-                      "duration": 788,
+                      "duration": 662,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-17T12:57:28.083Z",
+                      "startTime": "2026-11-17T14:18:22.832Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1415,7 +1345,7 @@
               ],
               "id": "030c45a8da3ad1f99bb2-d5536d039fbaf709a11d",
               "file": "functional.spec.mjs",
-              "line": 240,
+              "line": 241,
               "column": 3
             },
             {
@@ -1431,15 +1361,15 @@
                   "projectName": "desktop",
                   "results": [
                     {
-                      "workerIndex": 4,
-                      "parallelIndex": 2,
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 778,
+                      "duration": 621,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-17T12:57:28.348Z",
+                      "startTime": "2026-11-17T14:18:23.356Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1449,7 +1379,7 @@
               ],
               "id": "030c45a8da3ad1f99bb2-b7a47425dcb4f65f9349",
               "file": "functional.spec.mjs",
-              "line": 247,
+              "line": 248,
               "column": 3
             }
           ]
@@ -1457,7 +1387,7 @@
         {
           "title": "لوحة الكول سنتر والمناطق",
           "file": "functional.spec.mjs",
-          "line": 253,
+          "line": 254,
           "column": 6,
           "specs": [
             {
@@ -1473,15 +1403,15 @@
                   "projectName": "desktop",
                   "results": [
                     {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
                       "status": "passed",
-                      "duration": 826,
+                      "duration": 755,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-17T12:57:28.900Z",
+                      "startTime": "2026-11-17T14:18:23.509Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1491,7 +1421,7 @@
               ],
               "id": "030c45a8da3ad1f99bb2-fdfef82249827bbb1d4d",
               "file": "functional.spec.mjs",
-              "line": 254,
+              "line": 255,
               "column": 3
             },
             {
@@ -1507,15 +1437,15 @@
                   "projectName": "desktop",
                   "results": [
                     {
-                      "workerIndex": 4,
-                      "parallelIndex": 2,
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 630,
+                      "duration": 582,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-17T12:57:29.148Z",
+                      "startTime": "2026-11-17T14:18:23.995Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1525,7 +1455,7 @@
               ],
               "id": "030c45a8da3ad1f99bb2-d520c998f91f2dd4c537",
               "file": "functional.spec.mjs",
-              "line": 262,
+              "line": 263,
               "column": 3
             },
             {
@@ -1541,15 +1471,15 @@
                   "projectName": "desktop",
                   "results": [
                     {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
                       "status": "passed",
-                      "duration": 1239,
+                      "duration": 915,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-17T12:57:29.748Z",
+                      "startTime": "2026-11-17T14:18:24.274Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1559,7 +1489,7 @@
               ],
               "id": "030c45a8da3ad1f99bb2-590a15686da72e6db52a",
               "file": "functional.spec.mjs",
-              "line": 269,
+              "line": 270,
               "column": 3
             },
             {
@@ -1575,15 +1505,15 @@
                   "projectName": "desktop",
                   "results": [
                     {
-                      "workerIndex": 3,
-                      "parallelIndex": 1,
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
                       "status": "passed",
-                      "duration": 1840,
+                      "duration": 1397,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-17T12:57:29.763Z",
+                      "startTime": "2026-11-17T14:18:24.551Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1593,7 +1523,7 @@
               ],
               "id": "030c45a8da3ad1f99bb2-eb83fa4d3034bd901f30",
               "file": "functional.spec.mjs",
-              "line": 275,
+              "line": 276,
               "column": 3
             },
             {
@@ -1609,15 +1539,15 @@
                   "projectName": "desktop",
                   "results": [
                     {
-                      "workerIndex": 4,
-                      "parallelIndex": 2,
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 2695,
+                      "duration": 2504,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-17T12:57:29.796Z",
+                      "startTime": "2026-11-17T14:18:24.596Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1627,7 +1557,7 @@
               ],
               "id": "030c45a8da3ad1f99bb2-b8b741847e9b6c6a3c51",
               "file": "functional.spec.mjs",
-              "line": 284,
+              "line": 285,
               "column": 3
             },
             {
@@ -1643,15 +1573,15 @@
                   "projectName": "desktop",
                   "results": [
                     {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
                       "status": "passed",
-                      "duration": 2919,
+                      "duration": 2851,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-17T12:57:30.999Z",
+                      "startTime": "2026-11-17T14:18:25.233Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1661,7 +1591,7 @@
               ],
               "id": "030c45a8da3ad1f99bb2-8b659252eab1a19de541",
               "file": "functional.spec.mjs",
-              "line": 289,
+              "line": 290,
               "column": 3
             },
             {
@@ -1677,15 +1607,15 @@
                   "projectName": "desktop",
                   "results": [
                     {
-                      "workerIndex": 3,
-                      "parallelIndex": 1,
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
                       "status": "passed",
-                      "duration": 780,
+                      "duration": 657,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-17T12:57:31.624Z",
+                      "startTime": "2026-11-17T14:18:25.960Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1695,7 +1625,7 @@
               ],
               "id": "030c45a8da3ad1f99bb2-0208b7209145ecbfeb0e",
               "file": "functional.spec.mjs",
-              "line": 301,
+              "line": 302,
               "column": 3
             },
             {
@@ -1711,34 +1641,34 @@
                   "projectName": "desktop",
                   "results": [
                     {
-                      "workerIndex": 3,
-                      "parallelIndex": 1,
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
                       "status": "failed",
-                      "duration": 5332,
+                      "duration": 5367,
                       "error": {
                         "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: /تسجيل الدخول/ })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByRole('heading', { name: /تسجيل الدخول/ }) with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: /تسجيل الدخول/ })\u001b[22m\n",
-                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: /تسجيل الدخول/ })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByRole('heading', { name: /تسجيل الدخول/ }) with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: /تسجيل الدخول/ })\u001b[22m\n\n    at /home/user/nova/ui-ux-audit/tests/functional.spec.mjs:308:71",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: /تسجيل الدخول/ })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByRole('heading', { name: /تسجيل الدخول/ }) with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: /تسجيل الدخول/ })\u001b[22m\n\n    at /home/user/nova/ui-ux-audit/tests/functional.spec.mjs:309:71",
                         "location": {
                           "file": "/home/user/nova/ui-ux-audit/tests/functional.spec.mjs",
                           "column": 71,
-                          "line": 308
+                          "line": 309
                         },
-                        "snippet": "  306 |   test('F45 the staff board has no sign-in (demo): anyone with the link can see customer data', async ({ page }) => {\n  307 |     await seed(page); await page.goto('/admin')\n> 308 |     await expect(page.getByRole('heading', { name: /تسجيل الدخول/ })).toBeVisible()\n      |                                                                       ^\n  309 |   })\n  310 |   test('F46 the demo banner is always visible so testers know orders do not reach the kitchen', async ({ page }) => {\n  311 |     for (const u of ['/', '/branch/ashry', '/track', '/admin']) { await page.goto(u); await expect(page.getByRole('note')).toContainText('نسخة تجريبية') }"
+                        "snippet": "  307 |   test('F45 the staff board has no sign-in (demo): anyone with the link can see customer data', async ({ page }) => {\n  308 |     await seed(page); await page.goto('/admin')\n> 309 |     await expect(page.getByRole('heading', { name: /تسجيل الدخول/ })).toBeVisible()\n      |                                                                       ^\n  310 |   })\n  311 |   test('F46 the demo banner is always visible so testers know orders do not reach the kitchen', async ({ page }) => {\n  312 |     for (const u of ['/', '/branch/ashry', '/track', '/admin']) { await page.goto(u); await expect(page.getByRole('complementary', { name: 'تنبيه' })).toContainText('نسخة تجريبية') }"
                       },
                       "errors": [
                         {
                           "location": {
                             "file": "/home/user/nova/ui-ux-audit/tests/functional.spec.mjs",
                             "column": 71,
-                            "line": 308
+                            "line": 309
                           },
-                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: /تسجيل الدخول/ })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByRole('heading', { name: /تسجيل الدخول/ }) with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: /تسجيل الدخول/ })\u001b[22m\n\n\n  306 |   test('F45 the staff board has no sign-in (demo): anyone with the link can see customer data', async ({ page }) => {\n  307 |     await seed(page); await page.goto('/admin')\n> 308 |     await expect(page.getByRole('heading', { name: /تسجيل الدخول/ })).toBeVisible()\n      |                                                                       ^\n  309 |   })\n  310 |   test('F46 the demo banner is always visible so testers know orders do not reach the kitchen', async ({ page }) => {\n  311 |     for (const u of ['/', '/branch/ashry', '/track', '/admin']) { await page.goto(u); await expect(page.getByRole('note')).toContainText('نسخة تجريبية') }\n    at /home/user/nova/ui-ux-audit/tests/functional.spec.mjs:308:71"
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: /تسجيل الدخول/ })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByRole('heading', { name: /تسجيل الدخول/ }) with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: /تسجيل الدخول/ })\u001b[22m\n\n\n  307 |   test('F45 the staff board has no sign-in (demo): anyone with the link can see customer data', async ({ page }) => {\n  308 |     await seed(page); await page.goto('/admin')\n> 309 |     await expect(page.getByRole('heading', { name: /تسجيل الدخول/ })).toBeVisible()\n      |                                                                       ^\n  310 |   })\n  311 |   test('F46 the demo banner is always visible so testers know orders do not reach the kitchen', async ({ page }) => {\n  312 |     for (const u of ['/', '/branch/ashry', '/track', '/admin']) { await page.goto(u); await expect(page.getByRole('complementary', { name: 'تنبيه' })).toContainText('نسخة تجريبية') }\n    at /home/user/nova/ui-ux-audit/tests/functional.spec.mjs:309:71"
                         }
                       ],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-17T12:57:32.423Z",
+                      "startTime": "2026-11-17T14:18:26.628Z",
                       "annotations": [],
                       "attachments": [
                         {
@@ -1755,7 +1685,7 @@
                       "errorLocation": {
                         "file": "/home/user/nova/ui-ux-audit/tests/functional.spec.mjs",
                         "column": 71,
-                        "line": 308
+                        "line": 309
                       }
                     }
                   ],
@@ -1764,7 +1694,7 @@
               ],
               "id": "030c45a8da3ad1f99bb2-55408cef962f060dcfce",
               "file": "functional.spec.mjs",
-              "line": 306,
+              "line": 307,
               "column": 3
             },
             {
@@ -1780,15 +1710,15 @@
                   "projectName": "desktop",
                   "results": [
                     {
-                      "workerIndex": 4,
-                      "parallelIndex": 2,
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 974,
+                      "duration": 838,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-17T12:57:32.509Z",
+                      "startTime": "2026-11-17T14:18:27.113Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1798,7 +1728,7 @@
               ],
               "id": "030c45a8da3ad1f99bb2-793a32104e2a6779f0e9",
               "file": "functional.spec.mjs",
-              "line": 310,
+              "line": 311,
               "column": 3
             }
           ]
@@ -1808,11 +1738,11 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-11-17T12:57:03.380Z",
-    "duration": 34449.671,
-    "expected": 43,
+    "startTime": "2026-11-17T14:18:02.086Z",
+    "duration": 29979.530000000002,
+    "expected": 45,
     "skipped": 0,
-    "unexpected": 3,
+    "unexpected": 1,
     "flaky": 0
   }
 }

@@ -11,5 +11,5 @@ for (const [id, path] of [['home', '/'], ['menu-ashry', '/branch/ashry'], ['menu
 run('Unlighthouse', 'npx unlighthouse-ci --config-file config/unlighthouse.config.ts --reporter jsonExpanded')
 try { run('الاختبار الوظيفي', 'npx playwright test --config playwright.config.mjs') } catch { console.log('بعض الاختبارات فشلت (انظر results/functional.json)') }
 run('محاكاة الشخصيات', 'node personas/personas.mjs')
-run('التقارير ولوحة النتائج', 'python3 tests/build-reports.py')
+run('التقارير ولوحة النتائج', 'python3 tests/build-reports.py && python3 tests/compare.py')
 console.log('\nانتهى. افتح dashboard/index.html')
