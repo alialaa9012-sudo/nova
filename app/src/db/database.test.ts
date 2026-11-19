@@ -124,14 +124,15 @@ describe('catalog in the database', () => {
   it('lets customers read the catalog but never orders, counters, staff or price changes', async () => {
     await as('anon', async () => {
       expect((await db.query<{ n: number }>('select count(*)::int as n from menu_items')).rows[0].n).toBe(364)
-      expect((await db.query('select * from orders')).rows).toHaveLength(0)
-      expect((await db.query('select * from order_counters')).rows).toHaveLength(0)
-      expect((await db.query('select * from staff_profiles')).rows).toHaveLength(0)
+      // Visitors have no privilege at all on orders, counters or staff: refused, not just filtered.
+      for (const table of ['orders', 'order_items', 'order_status_history', 'order_counters', 'staff_profiles']) {
+        await expect(db.query(`select * from ${table}`)).rejects.toThrow(/permission denied/)
+      }
       await expect(
         db.query(`insert into orders (order_number, order_date, daily_seq, branch_id, order_type, customer_name, phone, subtotal, total)
                   values ('X-0001', current_date, 1, 'ashry', 'pickup', 'تجربة', '01000000000', 1, 1)`),
-      ).rejects.toThrow(/row-level security/)
-      expect((await db.query('update menu_item_sizes set price = 1')).affectedRows).toBe(0)
+      ).rejects.toThrow(/permission denied/)
+      await expect(db.query('update menu_item_sizes set price = 1')).rejects.toThrow(/permission denied/)
       await expect(db.query(`select public.set_order_status(gen_random_uuid(), 'preparing')`)).rejects.toThrow(/permission denied/)
     })
   })
