@@ -2,8 +2,8 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import type { Order } from '@/lib/api'
 import { getBranch } from '@/lib/catalog'
-import { formatCairoDateTime, formatEGP } from '@/lib/format'
-import { nextStatus, statusLabel } from '@/lib/orderStatus'
+import { formatCairoDateTime, formatCairoTime, formatEGP } from '@/lib/format'
+import { actionLabel, nextStatus, statusLabel } from '@/lib/orderStatus'
 import { cn } from '@/lib/utils'
 
 export function OrderCard({
@@ -25,6 +25,8 @@ export function OrderCard({
   const waiting = order.status === 'new' || order.status === 'preparing'
   // Wait time is the board's urgency signal: calm, then warning from 10 minutes, urgent from 20.
   const age = !waiting ? 'text-muted-foreground' : minutes >= 20 ? 'bg-danger-soft text-danger-ink' : minutes >= 10 ? 'bg-warning-soft text-warning-ink' : 'bg-closed-soft text-closed-ink'
+  // Accepted orders count down to the agreed preparation time, then move on by themselves.
+  const left = order.status === 'preparing' && order.readyBy ? Math.ceil((Date.parse(order.readyBy) - now.getTime()) / 60_000) : null
   return (
     <Card className="h-full">
       <CardHeader>
@@ -39,6 +41,16 @@ export function OrderCard({
         <CardDescription>
           {statusLabel(order.status, order.orderType)} · {formatCairoDateTime(order.createdAt)}
         </CardDescription>
+        {left !== null ? (
+          <p className="flex flex-wrap items-center gap-x-2 rounded-xl bg-gold-soft px-3 py-2 text-sm font-bold text-[#5a4026] ring-1 ring-gold/40">
+            <span className="tabular-nums">
+              {left > 0 ? `باقي ${left} دقيقة` : 'انتهى وقت التجهيز'}
+            </span>
+            <span className="font-semibold">
+              · {order.orderType === 'pickup' ? 'جاهز للاستلام' : 'يخرج للتوصيل'} {order.orderType === 'pickup' && order.readyFrom ? `من ${formatCairoTime(order.readyFrom)} إلى ${formatCairoTime(order.readyBy!)}` : `الساعة ${formatCairoTime(order.readyBy!)}`}
+            </span>
+          </p>
+        ) : null}
       </CardHeader>
       <CardContent className="grid gap-2 text-sm">
         <p>
@@ -78,13 +90,13 @@ export function OrderCard({
       <CardFooter className="mt-auto flex flex-wrap items-stretch gap-2">
         {next ? (
           <Button onClick={onAdvance} className="h-auto min-h-11 basis-full py-2 whitespace-normal">
-            {`نقل إلى: ${statusLabel(next, order.orderType)}`}
+            {actionLabel(next, order.orderType)}
           </Button>
         ) : null}
         <Button variant="outline" onClick={onOpen} className="min-h-11 flex-1">
           التفاصيل
         </Button>
-        {order.status !== 'cancelled' ? (
+        {order.status !== 'cancelled' && order.status !== 'delivered' ? (
           <Button variant="ghost" className="min-h-11 flex-1 text-danger" onClick={onCancel}>
             إلغاء
           </Button>

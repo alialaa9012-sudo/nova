@@ -276,6 +276,48 @@ describe('staff and tracking', () => {
     expect(wrongPhone).toBeNull()
   })
 
+  it('starts the preparation clock on acceptance and moves the order on by itself when the time is up', async () => {
+    const times = (id: string) =>
+      db.query<{ status: string; ready_from: Date | null; ready_by: Date | null }>('select status, ready_from, ready_by from orders where id = $1', [id]).then((r) => r.rows[0])
+    const iso = (d: Date | null) => (d ? new Date(d).toISOString() : null)
+    const advance = () => as(STAFF, async () => (await db.query<{ n: number }>('select public.advance_due_orders() as n')).rows[0].n)
+
+    // Delivery (T-0001, accepted 12:05 in the test above): leaves 45 minutes later.
+    const delivery = await times(await orderId('T-0001', '2027-01-04'))
+    expect([iso(delivery.ready_from), iso(delivery.ready_by)]).toEqual(['2027-01-04T10:50:00.000Z', '2027-01-04T10:50:00.000Z'])
+
+    // Pickup: ready in 30 to 45 minutes.
+    await at('2027-01-04 13:00+02')
+    const placed = await place(await pickup('zagazig', '01044445555'))
+    const id = placed.order_id
+    await setStatus(STAFF, id, 'preparing')
+    let o = await times(id)
+    expect([o.status, iso(o.ready_from), iso(o.ready_by)]).toEqual(['preparing', '2027-01-04T11:30:00.000Z', '2027-01-04T11:45:00.000Z'])
+
+    await at('2027-01-04 13:44+02')
+    expect(await advance()).toBe(0)
+    await at('2027-01-04 13:45+02')
+    expect(await advance()).toBeGreaterThanOrEqual(1)
+    o = await times(id)
+    expect(o.status).toBe('out_for_delivery')
+    const auto = await db.query<{ changed_by: string | null; note: string }>(
+      "select changed_by, note from order_status_history where order_id = $1 and to_status = 'out_for_delivery'",
+      [id],
+    )
+    expect(auto.rows).toEqual([{ changed_by: null, note: 'تلقائياً بعد انتهاء وقت التجهيز' }])
+    await expect(as('anon', () => db.query('select public.advance_due_orders()'))).rejects.toThrow(/permission denied/)
+
+    // The customer sees the expected time, and staff close the order once it is handed over.
+    const track = await as('anon', async () =>
+      (await db.query<{ t: Tracked & { ready_from: string } }>(`select public.track_order('${placed.order_number}', '01044445555') as t`)).rows[0].t,
+    )
+    expect(new Date(track.ready_from).toISOString()).toBe('2027-01-04T11:30:00.000Z')
+    await setStatus(STAFF, id, 'delivered')
+    expect((await times(id)).status).toBe('delivered')
+    await expect(setStatus(STAFF, id, 'cancelled', 'سبب')).rejects.toThrow(/INVALID_TRANSITION/)
+    await at('2027-01-04 12:00+02')
+  })
+
   it('requires a reason to cancel and never reopens a cancelled order', async () => {
     const id = await orderId('A-0001', '2027-01-04')
     await expect(setStatus(STAFF, id, 'cancelled')).rejects.toThrow(/CANCEL_REASON_REQUIRED/)

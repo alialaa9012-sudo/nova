@@ -69,6 +69,9 @@ export interface Order {
   /** The checkout's clientRef, kept so a repeated request finds this order. */
   clientRef?: string
   createdAt: string
+  /** Set on acceptance: earliest time to promise, and when the order moves on by itself. */
+  readyFrom?: string
+  readyBy?: string
   /** Last change to the order (status, invoice). Older demo orders have none. */
   updatedAt?: string
   history: StatusEvent[]
@@ -111,6 +114,8 @@ export interface OrdersApi {
   getOrder(orderId: string): Promise<Order | null>
   setStatus(orderId: string, status: OrderStatus, note?: string): Promise<Order>
   setPosInvoice(orderId: string, value: string): Promise<Order>
+  /** Moves every order whose preparation time is up (the database also does this each minute). */
+  advanceDueOrders(): Promise<void>
   /** Zones a customer of this branch can choose, including zones added by the admin. */
   listZones(branchId: BranchId): Promise<DeliveryZone[]>
   addZone(branchId: BranchId, input: NewZoneInput): Promise<DeliveryZone>

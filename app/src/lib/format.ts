@@ -28,3 +28,10 @@ export function formatDateAr(ymd: string): string {
 export function cairoDate(date: Date): string {
   return new Intl.DateTimeFormat('en-CA', { timeZone: 'Africa/Cairo' }).format(date)
 }
+
+const time = new Intl.DateTimeFormat('ar-EG-u-nu-latn', { timeZone: 'Africa/Cairo', hour: 'numeric', minute: '2-digit' })
+
+/** Clock time in Cairo, e.g. "1:45 م". */
+export function formatCairoTime(iso: string): string {
+  return time.format(new Date(iso))
+}

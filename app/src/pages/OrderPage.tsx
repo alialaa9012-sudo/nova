@@ -9,7 +9,8 @@ import { TrackForm } from '@/components/TrackForm'
 import { Button } from '@/components/ui/button'
 import { api, type Order } from '@/lib/api'
 import { branches, brand, getBranch } from '@/lib/catalog'
-import { formatCairoDateTime } from '@/lib/format'
+import { formatCairoDateTime, formatCairoTime } from '@/lib/format'
+import { PREP_MINUTES } from '@/lib/orderStatus'
 import { cartReducer } from '@/lib/cart'
 import { lastOrder } from '@/lib/lastOrder'
 import { reorderLines } from '@/lib/reorder'
@@ -158,6 +159,7 @@ export function OrderPage() {
                 حالة الطلب
               </h2>
               <StatusTimeline order={order} horizontal />
+              <ExpectedTime order={order} />
             </section>
 
             <section aria-labelledby="details-title" className={card}>
@@ -212,4 +214,19 @@ export function OrderPage() {
       </BandSheet>
     </>
   )
+}
+
+/** When the customer can expect the order: the agreed window before acceptance, the clock time after. */
+function ExpectedTime({ order }: { order: Order }) {
+  const pickup = order.orderType === 'pickup'
+  const [from, by] = PREP_MINUTES[order.orderType]
+  let text: string | null = null
+  if (order.status === 'new') {
+    text = pickup ? `بعد قبول الطلب يكون جاهزاً للاستلام خلال ${from} إلى ${by} دقيقة.` : `بعد قبول الطلب يخرج للتوصيل خلال ${by} دقيقة.`
+  } else if (order.status === 'preparing' && order.readyBy) {
+    text = pickup && order.readyFrom
+      ? `الوقت المتوقع: جاهز للاستلام من ${formatCairoTime(order.readyFrom)} إلى ${formatCairoTime(order.readyBy)}.`
+      : `الوقت المتوقع لخروج الطلب للتوصيل: ${formatCairoTime(order.readyBy)}.`
+  }
+  return text ? <p className="rounded-xl bg-gold-soft px-3 py-2 text-[13px] font-bold text-[#5a4026] ring-1 ring-gold/40">{text}</p> : null
 }

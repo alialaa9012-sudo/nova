@@ -2,7 +2,7 @@ import { cartCount, cartReducer, cleanNote, lineKey, MAX_NOTE, cartSubtotal, MAX
 import { branches, findSize, getBranch, getMenu, getZones } from './catalog'
 import { formatEGP } from './format'
 import { formatTimeAr, formatTimeShort, getOpenStatus, summarizeHours, type WeeklyHours } from './hours'
-import { canTransition, nextStatus, statusLabel } from './orderStatus'
+import { actionLabel, canTransition, nextStatus, statusLabel } from './orderStatus'
 import { normalizeEgyptianMobile, toAsciiDigits } from './phone'
 import { computeTotals } from './pricing'
 
@@ -112,11 +112,20 @@ describe('order statuses', () => {
 
   it('moves forward one step at a time and can always cancel until cancelled', () => {
     expect(nextStatus('new')).toBe('preparing')
-    expect(nextStatus('out_for_delivery')).toBeNull()
+    expect(nextStatus('out_for_delivery')).toBe('delivered')
+    expect(nextStatus('delivered')).toBeNull()
     expect(canTransition('new', 'out_for_delivery')).toBe(false)
     expect(canTransition('preparing', 'out_for_delivery')).toBe(true)
     expect(canTransition('out_for_delivery', 'cancelled')).toBe(true)
     expect(canTransition('cancelled', 'new')).toBe(false)
+    // A delivered order is closed: no cancelling it afterwards.
+    expect(canTransition('delivered', 'cancelled')).toBe(false)
+    expect(statusLabel('delivered', 'pickup')).toBe('تم التسليم')
+    expect([actionLabel('preparing', 'pickup'), actionLabel('out_for_delivery', 'pickup'), actionLabel('delivered', 'delivery')]).toEqual([
+      'قبول الطلب',
+      'جاهز للاستلام الآن',
+      'تم التسليم',
+    ])
   })
 })
 

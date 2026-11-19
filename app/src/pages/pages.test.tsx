@@ -168,7 +168,7 @@ describe('call-center board', () => {
     expect(within(list).getByRole('heading', { name: 'Z-0001' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'جديد (1)' })).toHaveAttribute('aria-pressed', 'true')
 
-    await user.click(within(list).getByRole('button', { name: 'نقل إلى: تم استلام طلبك وجاري التجهيز' }))
+    await user.click(within(list).getByRole('button', { name: 'قبول الطلب' }))
     expect(await screen.findByRole('button', { name: 'جاري التجهيز (1)' })).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: 'جاري التجهيز (1)' }))
     await user.click(screen.getByRole('button', { name: 'إلغاء' }))

@@ -4,7 +4,7 @@ import { cleanNote } from '../cart'
 import { branches, findSize, getBranch, getZones, type BranchId, type DeliveryZone } from '../catalog'
 import { cairoDate } from '../format'
 import { getOpenStatus } from '../hours'
-import { canTransition, type OrderStatus } from '../orderStatus'
+import { canTransition, PREP_MINUTES, type OrderStatus } from '../orderStatus'
 import { normalizeEgyptianMobile } from '../phone'
 import { computeTotals, round2 } from '../pricing'
 import { cleanZoneName, DEFAULT_ZONE_TYPE, MAX_ZONE_FEE, MAX_ZONE_NAME, zoneKey, zoneLabel } from '../zones'
@@ -105,6 +105,25 @@ export function createLocalApi(options: { store: KeyValueStore; now?: () => Date
     return orders[i]
   }
 
+  // Same rule as advance_due_orders() in the database: when the preparation time is up the order
+  // moves on by itself. The demo has no clock job, so every read applies it first.
+  const advanceDue = () => {
+    const at = now()
+    let changed = false
+    const orders = read().map((o) => {
+      if (o.status !== 'preparing' || !o.readyBy || Date.parse(o.readyBy) > at.getTime()) return o
+      changed = true
+      const when = at.toISOString()
+      return {
+        ...o,
+        status: 'out_for_delivery' as const,
+        updatedAt: when,
+        history: [...o.history, { from: o.status, to: 'out_for_delivery' as const, at: when, note: 'تلقائياً بعد انتهاء وقت التجهيز' }],
+      }
+    })
+    if (changed) write(orders)
+  }
+
   return {
     mode: 'local',
 
@@ -188,6 +207,7 @@ export function createLocalApi(options: { store: KeyValueStore; now?: () => Date
     },
 
     async trackOrder(number, phone) {
+      advanceDue()
       const wanted = number.trim().toUpperCase()
       const normalized = normalizeEgyptianMobile(phone)
       const cutoff = now().getTime() - 3 * 24 * 60 * 60_000
@@ -198,6 +218,7 @@ export function createLocalApi(options: { store: KeyValueStore; now?: () => Date
     },
 
     async listOrders(options) {
+      advanceDue()
       return read()
         .filter((o) => !options?.date || o.date === options.date)
         .filter((o) => !options?.since || (o.updatedAt ?? o.createdAt) > options.since)
@@ -205,6 +226,7 @@ export function createLocalApi(options: { store: KeyValueStore; now?: () => Date
     },
 
     async getOrder(orderId) {
+      advanceDue()
       return read().find((o) => o.id === orderId) ?? null
     },
 
@@ -213,13 +235,21 @@ export function createLocalApi(options: { store: KeyValueStore; now?: () => Date
       return update(orderId, (o) => {
         if (!canTransition(o.status, status)) throw new ApiError('INVALID_TRANSITION')
         if (status === 'cancelled' && !reason) throw new ApiError('CANCEL_REASON_REQUIRED')
+        const at = now()
+        const [from, by] = PREP_MINUTES[o.orderType]
         return {
           ...o,
           status,
           cancelReason: status === 'cancelled' ? reason : o.cancelReason,
+          readyFrom: status === 'preparing' ? new Date(at.getTime() + from * 60_000).toISOString() : o.readyFrom,
+          readyBy: status === 'preparing' ? new Date(at.getTime() + by * 60_000).toISOString() : o.readyBy,
           history: [...o.history, { from: o.status, to: status, at: now().toISOString(), note: reason }],
         }
       })
+    },
+
+    async advanceDueOrders() {
+      advanceDue()
     },
 
     async setPosInvoice(orderId, value) {

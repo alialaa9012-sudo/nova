@@ -57,29 +57,66 @@ export function unlockSoundOnGesture(onUnlocked?: () => void): () => void {
   return stop
 }
 
+/** Schedules one two-note chime at `t` (seconds on the audio clock) into `out`. */
+function chime(c: AudioContext, out: AudioNode, t: number): void {
+  for (const [i, freq] of [880, 1320].entries()) {
+    const osc = c.createOscillator()
+    const gain = c.createGain()
+    const start = t + i * 0.22
+    osc.type = 'triangle'
+    osc.frequency.value = freq
+    gain.gain.setValueAtTime(0.0001, start)
+    gain.gain.exponentialRampToValueAtTime(0.4, start + 0.02)
+    gain.gain.exponentialRampToValueAtTime(0.0001, start + 0.38)
+    osc.connect(gain).connect(out)
+    osc.start(start)
+    osc.stop(start + 0.4)
+  }
+}
+
 /** A short two-note chime, loud enough to hear across a room. Silent when audio is locked. */
 export function playBeep(): void {
   const c = audio()
   if (!c) return
   try {
     if (c.state !== 'running') void c.resume()
-    const start = c.currentTime + 0.02
-    for (const [i, freq] of [880, 1320].entries()) {
-      const osc = c.createOscillator()
-      const gain = c.createGain()
-      const t = start + i * 0.22
-      osc.type = 'triangle'
-      osc.frequency.value = freq
-      gain.gain.setValueAtTime(0.0001, t)
-      gain.gain.exponentialRampToValueAtTime(0.35, t + 0.02)
-      gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.38)
-      osc.connect(gain).connect(c.destination)
-      osc.start(t)
-      osc.stop(t + 0.4)
-    }
+    chime(c, c.destination, c.currentTime + 0.02)
   } catch {
     /* no audio device */
   }
+}
+
+/** Seconds between chimes while ringing, and how far ahead they are scheduled. */
+const RING_EVERY = 4
+const RING_AHEAD = 20 * 60
+
+let ring: { outs: GainNode[]; until: number } | null = null
+
+/**
+ * Rings until stopRinging(). The chimes are scheduled on the audio clock rather than with timers:
+ * browsers slow timers in background tabs down to once a minute, but not audio already scheduled.
+ * Call it again from time to time: it only tops the schedule up when it is running low.
+ */
+export function startRinging(): void {
+  const c = audio()
+  if (!c) return
+  try {
+    if (c.state !== 'running') void c.resume()
+    if (ring && ring.until - c.currentTime > 5 * 60) return
+    const out = c.createGain()
+    out.connect(c.destination)
+    const begin = Math.max(c.currentTime + 0.02, ring?.until ?? 0)
+    for (let t = begin; t < begin + RING_AHEAD; t += RING_EVERY) chime(c, out, t)
+    ring = { outs: [...(ring?.outs ?? []), out], until: begin + RING_AHEAD }
+  } catch {
+    /* no audio device */
+  }
+}
+
+export function stopRinging(): void {
+  if (!ring) return
+  for (const out of ring.outs) out.disconnect()
+  ring = null
 }
 
 export type NotifyPermission = NotificationPermission | 'unsupported'

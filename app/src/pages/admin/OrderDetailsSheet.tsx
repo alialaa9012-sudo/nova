@@ -10,7 +10,7 @@ import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from '
 import { api, errorMessage, type Order } from '@/lib/api'
 import { getBranch } from '@/lib/catalog'
 import { formatCairoDateTime } from '@/lib/format'
-import { nextStatus, statusLabel } from '@/lib/orderStatus'
+import { actionLabel, nextStatus } from '@/lib/orderStatus'
 import { orderText } from '@/lib/orderText'
 
 export function OrderDetailsSheet({
@@ -107,8 +107,8 @@ export function OrderDetailsSheet({
             </Field>
           </section>
           <div className="flex flex-wrap gap-2">
-            {next ? <Button onClick={onAdvance}>{`نقل إلى: ${statusLabel(next, order.orderType)}`}</Button> : null}
-            {order.status !== 'cancelled' ? (
+            {next ? <Button onClick={onAdvance}>{actionLabel(next, order.orderType)}</Button> : null}
+            {order.status !== 'cancelled' && order.status !== 'delivered' ? (
               <Button variant="outline" className="text-danger" onClick={onCancel}>
                 إلغاء الطلب
               </Button>

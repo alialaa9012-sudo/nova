@@ -125,6 +125,27 @@ describe('local demo backend', () => {
     expect((await api.setPosInvoice(order.id, ' 5521 ')).posInvoiceNo).toBe('5521')
   })
 
+  it('starts the preparation clock on acceptance and moves the order on by itself when it runs out', async () => {
+    const { api, setClock } = setup()
+    const pickup = await api.placeOrder({ ...tagamoaDelivery(), orderType: 'pickup', zoneId: undefined, street: undefined, building: undefined })
+    const delivery = await api.placeOrder({ ...tagamoaDelivery(), phone: '01012345679' })
+    const accepted = await api.setStatus(pickup.id, 'preparing')
+    await api.setStatus(delivery.id, 'preparing')
+    expect([accepted.readyFrom, accepted.readyBy]).toEqual([monday(12, 30).toISOString(), monday(12, 45).toISOString()])
+    expect((await api.getOrder(delivery.id))!.readyBy).toBe(monday(12, 45).toISOString())
+
+    setClock(monday(12, 44))
+    expect((await api.getOrder(pickup.id))!.status).toBe('preparing')
+    setClock(monday(12, 45))
+    const moved = (await api.getOrder(pickup.id))!
+    expect(moved.status).toBe('out_for_delivery')
+    expect(moved.history.at(-1)).toMatchObject({ to: 'out_for_delivery', note: 'تلقائياً بعد انتهاء وقت التجهيز' })
+
+    // Staff close the order once the customer has it; a closed order cannot be cancelled.
+    expect((await api.setStatus(pickup.id, 'delivered')).status).toBe('delivered')
+    await expect(api.setStatus(pickup.id, 'cancelled', 'سبب')).rejects.toMatchObject({ code: 'INVALID_TRANSITION' })
+  })
+
   it('notifies subscribers when orders change', async () => {
     const { api } = setup()
     const seen: number[] = []

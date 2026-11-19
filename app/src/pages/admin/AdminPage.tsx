@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { useNow } from '@/hooks/useNow'
 import { api, errorMessage, type Order } from '@/lib/api'
-import { askNotify, notify, notifyPermission, playBeep, soundReady, unlockSound, unlockSoundOnGesture } from '@/lib/alerts'
+import { askNotify, notify, notifyPermission, playBeep, soundReady, startRinging, stopRinging, unlockSound, unlockSoundOnGesture } from '@/lib/alerts'
 import { branches, getBranch } from '@/lib/catalog'
 import { cairoDate, formatDateAr, formatEGP } from '@/lib/format'
 import { nextStatus, statusLabel, type OrderStatus } from '@/lib/orderStatus'
@@ -23,6 +23,7 @@ const FILTERS: { value: Filter; label: string }[] = [
   { value: 'new', label: 'جديد' },
   { value: 'preparing', label: 'جاري التجهيز' },
   { value: 'out_for_delivery', label: 'خرج / جاهز للاستلام' },
+  { value: 'delivered', label: 'تم التسليم' },
   { value: 'cancelled', label: 'ملغي' },
   { value: 'all', label: 'الكل' },
 ]
@@ -34,8 +35,6 @@ const FIELD_CELL = 'row-span-3 grid-rows-subgrid [&>label]:self-end'
 const POLL_MS = 15_000
 /** How often it re-reads the whole day, in case something was missed or removed. */
 const FULL_RELOAD_MS = 5 * 60_000
-/** How often the chime repeats while a new order is waiting and nobody has touched the board. */
-const ALARM_MS = 8_000
 
 const stamp = (o: Order) => Date.parse(o.updatedAt ?? o.createdAt) || 0
 
@@ -60,8 +59,6 @@ export function AdminPage() {
   const [filter, setFilter] = useState<Filter>('new')
   const [detailId, setDetailId] = useState<string | null>(null)
   const [cancelId, setCancelId] = useState<string | null>(null)
-  // New orders nobody has looked at yet: they keep the chime going and show in the tab's title.
-  const [unseen, setUnseen] = useState(0)
   const [sound, setSound] = useState(soundReady)
   const [permission, setPermission] = useState(notifyPermission)
   const known = useRef<Set<string> | null>(null)
@@ -78,8 +75,6 @@ export function AdminPage() {
     const announce = (fresh: Order[]) => {
       const waiting = fresh.filter((o) => o.status === 'new')
       if (waiting.length === 0) return
-      setUnseen((n) => n + waiting.length)
-      playBeep()
       toast.success(`طلب جديد: ${waiting.map((o) => o.number).join('، ')}`)
       if (document.hidden || !document.hasFocus()) {
         for (const o of waiting) {
@@ -142,34 +137,37 @@ export function AdminPage() {
     }
   }, [date])
 
-  // Any click or key press on the board counts as having seen the new orders, and unlocks sound.
-  // The reminder bar stays until its own button is used: removing it mid-click would move the page
-  // under the pointer and the click would land on something else.
-  useEffect(() => {
-    const seen = () => setUnseen(0)
-    const onVisible = () => {
-      if (!document.hidden) seen()
-    }
-    window.addEventListener('pointerdown', seen, true)
-    window.addEventListener('keydown', seen, true)
-    document.addEventListener('visibilitychange', onVisible)
-    const stopUnlock = unlockSoundOnGesture()
-    return () => {
-      window.removeEventListener('pointerdown', seen, true)
-      window.removeEventListener('keydown', seen, true)
-      document.removeEventListener('visibilitychange', onVisible)
-      stopUnlock()
-    }
-  }, [])
+  // A click or key press anywhere unlocks sound. The reminder bar stays until its own button is used:
+  // removing it mid-click would move the page under the pointer and the click would land elsewhere.
+  useEffect(() => unlockSoundOnGesture(), [])
 
-  // Another screen may accept the order first, so only orders still "new" keep ringing.
+  // The board rings for as long as any order is still waiting to be accepted, on every screen that
+  // shows it, and stops once each one is accepted or cancelled (here or on another screen).
   const waitingCount = orders.filter((o) => o.status === 'new').length
-  const ringing = Math.min(unseen, waitingCount)
+  const ringing = waitingCount > 0
   useEffect(() => {
-    if (ringing === 0) return
-    const timer = setInterval(playBeep, ALARM_MS)
-    return () => clearInterval(timer)
+    if (!ringing) return
+    startRinging()
+    const topUp = setInterval(startRinging, 60_000)
+    return () => {
+      clearInterval(topUp)
+      stopRinging()
+    }
   }, [ringing])
+
+  // When an accepted order's time is up the database moves it on within a minute; the board asks
+  // for it as soon as its own clock gets there, so the card moves without waiting.
+  const asked = useRef(new Set<string>())
+  const dueIds = orders
+    .filter((o) => o.status === 'preparing' && o.readyBy && Date.parse(o.readyBy) <= now.getTime())
+    .map((o) => o.id)
+    .join(',')
+  useEffect(() => {
+    const fresh = dueIds.split(',').filter((id) => id && !asked.current.has(id))
+    if (fresh.length === 0) return
+    for (const id of fresh) asked.current.add(id)
+    void api.advanceDueOrders().catch(() => undefined)
+  }, [dueIds])
 
   async function enableAlerts() {
     setSound(await unlockSound())
@@ -221,7 +219,7 @@ export function AdminPage() {
 
   return (
     <>
-      <title>{`${ringing > 0 ? `(${ringing}) طلب جديد · ` : ''}لوحة الكول سنتر | خليها مشاوي`}</title>
+      <title>{`${waitingCount > 0 ? `(${waitingCount}) طلب جديد · ` : ''}لوحة الكول سنتر | خليها مشاوي`}</title>
       <AdminNav />
       <main id="content" tabIndex={-1} className="outline-none mx-auto grid max-w-[1320px] gap-4 px-5 pt-4 pb-8 md:px-6 lg:px-8">
         {/* The tab already names the screen and the banner already says it is a demo. */}
@@ -229,8 +227,8 @@ export function AdminPage() {
         {!sound || permission === 'default' ? (
           <div role="status" className="flex flex-wrap items-center gap-x-3 gap-y-2 rounded-[20px] bg-warning-soft px-4 py-3 text-sm font-semibold text-warning-ink ring-1 ring-warning-ink/20">
             <BellRing aria-hidden className="size-5 shrink-0" />
-            <p className="min-w-0 flex-1">فعّل الصوت والتنبيهات عشان ما يفوتكش طلب جديد، حتى لو إنت على صفحة تانية.</p>
-            <Button className="h-11 px-5" onClick={() => void enableAlerts()}>
+            <p className="min-w-48 flex-1">فعّل الصوت والتنبيهات عشان ما يفوتكش طلب جديد، حتى لو إنت على صفحة تانية.</p>
+            <Button className="h-11 px-5 max-sm:w-full" onClick={() => void enableAlerts()}>
               تفعيل الصوت والتنبيهات
             </Button>
           </div>

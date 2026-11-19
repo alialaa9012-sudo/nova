@@ -73,6 +73,8 @@ function fromRow(r: Row): Order {
     posInvoiceNo: str(r.pos_invoice_no),
     clientRef: str(r.client_ref),
     createdAt: String(r.created_at),
+    readyFrom: str(r.ready_from),
+    readyBy: str(r.ready_by),
     updatedAt: str(r.updated_at),
     history: history.map((h) => ({
       from: (h.from_status as OrderStatus | null) ?? null,
@@ -112,6 +114,8 @@ function fromTracked(t: Row, phone: string): Order {
       total: num(t.total),
     },
     createdAt: String(t.created_at),
+    readyFrom: str(t.ready_from),
+    readyBy: str(t.ready_by),
     history: history.map((h, i) => ({
       from: i === 0 ? null : (history[i - 1].status as OrderStatus),
       to: h.status as OrderStatus,
@@ -267,6 +271,10 @@ export function createSupabaseApi(client: SupabaseClient): OrdersApi {
     async setPosInvoice(orderId, value) {
       check(await client.rpc('set_pos_invoice', { p_order_id: orderId, p_invoice: value }))
       return fetchOrder(orderId)
+    },
+
+    async advanceDueOrders() {
+      check(await client.rpc('advance_due_orders'))
     },
 
     async listZones(branchId) {
