@@ -247,8 +247,10 @@ test('the board rings until an order is accepted, times it, and closes it as del
   await expect(admin).toHaveTitle('(1) طلب جديد · لوحة الكول سنتر | خليها مشاوي')
 
   // Sound and notifications are switched on from the board; using the board does not silence it.
-  await admin.getByRole('button', { name: 'تفعيل الصوت والتنبيهات' }).click()
-  await expect(admin.getByRole('button', { name: 'تفعيل الصوت والتنبيهات' })).toHaveCount(0)
+  // (The browser may already count the tab as used, and then sound needs no switching on.)
+  const enable = admin.getByRole('button', { name: 'تفعيل الصوت والتنبيهات' })
+  if (await enable.count()) await enable.click()
+  await expect(enable).toHaveCount(0)
   await expect(admin).toHaveTitle('(1) طلب جديد · لوحة الكول سنتر | خليها مشاوي')
 
   // Accepting stops the ringing and starts the 30 to 45 minute pickup clock.
