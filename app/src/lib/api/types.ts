@@ -69,6 +69,8 @@ export interface Order {
   /** The checkout's clientRef, kept so a repeated request finds this order. */
   clientRef?: string
   createdAt: string
+  /** Last change to the order (status, invoice). Older demo orders have none. */
+  updatedAt?: string
   history: StatusEvent[]
 }
 
@@ -100,8 +102,11 @@ export interface OrdersApi {
   readonly auth?: AuthApi
   placeOrder(input: PlaceOrderInput): Promise<Order>
   trackOrder(number: string, phone: string): Promise<Order | null>
-  /** Staff: orders of one Cairo date (YYYY-MM-DD), or the latest 1000 without a date. */
-  listOrders(options?: { date?: string }): Promise<Order[]>
+  /**
+   * Staff: orders of one Cairo date (YYYY-MM-DD), or the latest 1000 without a date. With `since`
+   * (an ISO time) only the orders created or changed after it, so a board can poll cheaply.
+   */
+  listOrders(options?: { date?: string; since?: string }): Promise<Order[]>
   /** Staff: one order, or null when it no longer exists. */
   getOrder(orderId: string): Promise<Order | null>
   setStatus(orderId: string, status: OrderStatus, note?: string): Promise<Order>
@@ -113,8 +118,9 @@ export interface OrdersApi {
   removeZone(zoneId: string): Promise<void>
   /**
    * Calls onChange when orders or zones change. When the backend knows which order changed it passes
-   * its id, so a screen can fetch just that order. pollMs re-checks on a timer for screens that get no
-   * push (customers); 0 turns the timer off. The local demo ignores it.
+   * its id, so a screen can fetch just that order. A call without an id means "re-read": a timer tick,
+   * or the live connection (re)starting or failing, when pushes may have been missed. pollMs is that
+   * timer for screens that get no push (customers); 0 turns it off. The local demo ignores it.
    */
   subscribe(onChange: (change?: { orderId?: string }) => void, options?: { pollMs?: number }): () => void
 }

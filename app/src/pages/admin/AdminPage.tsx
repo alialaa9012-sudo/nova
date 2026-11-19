@@ -1,3 +1,4 @@
+import { BellRing } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
 import { Field } from '@/components/Field'
@@ -6,9 +7,9 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { useNow } from '@/hooks/useNow'
 import { api, errorMessage, type Order } from '@/lib/api'
-import { playBeep } from '@/lib/beep'
-import { branches } from '@/lib/catalog'
-import { cairoDate, formatDateAr } from '@/lib/format'
+import { askNotify, notify, notifyPermission, playBeep, soundReady, unlockSound, unlockSoundOnGesture } from '@/lib/alerts'
+import { branches, getBranch } from '@/lib/catalog'
+import { cairoDate, formatDateAr, formatEGP } from '@/lib/format'
 import { nextStatus, statusLabel, type OrderStatus } from '@/lib/orderStatus'
 import { toAsciiDigits } from '@/lib/phone'
 import { cn } from '@/lib/utils'
@@ -29,6 +30,26 @@ const FILTERS: { value: Filter; label: string }[] = [
 /** A filter field as three rows of the filter grid: label (pushed down to its box), box, caption. */
 const FIELD_CELL = 'row-span-3 grid-rows-subgrid [&>label]:self-end'
 
+/** How often the board asks for orders created or changed since its last look. */
+const POLL_MS = 15_000
+/** How often it re-reads the whole day, in case something was missed or removed. */
+const FULL_RELOAD_MS = 5 * 60_000
+/** How often the chime repeats while a new order is waiting and nobody has touched the board. */
+const ALARM_MS = 8_000
+
+const stamp = (o: Order) => Date.parse(o.updatedAt ?? o.createdAt) || 0
+
+/** Puts fresh copies of orders into the list, never replacing a copy with an older one. */
+function mergeOrders(list: Order[], incoming: Order[]): Order[] {
+  const next = list.slice()
+  for (const order of incoming) {
+    const i = next.findIndex((o) => o.id === order.id)
+    if (i < 0) next.unshift(order)
+    else if (stamp(order) >= stamp(next[i])) next[i] = order
+  }
+  return next
+}
+
 export function AdminPage() {
   const now = useNow(15_000)
   const [orders, setOrders] = useState<Order[]>([])
@@ -39,48 +60,127 @@ export function AdminPage() {
   const [filter, setFilter] = useState<Filter>('new')
   const [detailId, setDetailId] = useState<string | null>(null)
   const [cancelId, setCancelId] = useState<string | null>(null)
+  // New orders nobody has looked at yet: they keep the chime going and show in the tab's title.
+  const [unseen, setUnseen] = useState(0)
+  const [sound, setSound] = useState(soundReady)
+  const [permission, setPermission] = useState(notifyPermission)
   const known = useRef<Set<string> | null>(null)
 
-  // The board holds one day's orders. A change pushed by the database fetches only that order; a
-  // slow timer re-reads the day in case a push was missed (for example after the screen slept).
+  // The board holds one day's orders. A push from the database fetches only the order that changed.
+  // Pushes can be lost (a dropped connection, a sleeping screen), so every 15 seconds it also asks for
+  // whatever changed since its last look, and re-reads the whole day every 5 minutes.
   useEffect(() => {
     let alive = true
+    let cursor = 0 // the newest change seen, in ms
     known.current = null // a new day is not a burst of new orders
+    const day = date || undefined
+
     const announce = (fresh: Order[]) => {
-      if (fresh.length === 0) return
+      const waiting = fresh.filter((o) => o.status === 'new')
+      if (waiting.length === 0) return
+      setUnseen((n) => n + waiting.length)
       playBeep()
-      toast.success(`طلب جديد: ${fresh.map((o) => o.number).join('، ')}`)
+      toast.success(`طلب جديد: ${waiting.map((o) => o.number).join('، ')}`)
+      if (document.hidden || !document.hasFocus()) {
+        for (const o of waiting) {
+          const where = `${getBranch(o.branchId)?.name ?? ''} · ${o.orderType === 'delivery' ? 'توصيل' : 'استلام'}`
+          notify(`طلب جديد ${o.number}`, `${where} · ${formatEGP(o.totals.total)}`, o.id)
+        }
+      }
     }
-    const load = async () => {
-      const list = await api.listOrders({ date: date || undefined })
-      if (!alive) return
+    const take = (incoming: Order[], replace: boolean) => {
+      for (const o of incoming) cursor = Math.max(cursor, stamp(o))
       const seen = known.current
-      announce(seen ? list.filter((o) => !seen.has(o.id)) : [])
-      known.current = new Set(list.map((o) => o.id))
-      setOrders(list)
+      if (seen) announce(incoming.filter((o) => !seen.has(o.id)))
+      known.current = new Set([...(replace ? [] : (seen ?? [])), ...incoming.map((o) => o.id)])
+      setOrders((list) => (replace ? incoming : mergeOrders(list, incoming)))
       setLoaded(true)
     }
-    const refreshOne = async (orderId: string) => {
-      const order = await api.getOrder(orderId)
-      if (!alive) return
-      if (!order || (date && order.date !== date)) {
-        setOrders((list) => list.filter((o) => o.id !== orderId))
-        return
+    const load = async () => {
+      try {
+        const list = await api.listOrders({ date: day })
+        if (alive) take(list, true)
+      } catch {
+        /* offline: the next tick tries again */
       }
-      const seen = known.current
-      if (seen && !seen.has(order.id)) {
-        announce([order])
-        seen.add(order.id)
-      }
-      setOrders((list) => (list.some((o) => o.id === order.id) ? list.map((o) => (o.id === order.id ? order : o)) : [order, ...list]))
     }
+    const poll = async () => {
+      if (!cursor) return load()
+      try {
+        // A little overlap: a change saved during the last look can carry a slightly older time.
+        const list = await api.listOrders({ date: day, since: new Date(cursor - 15_000).toISOString() })
+        if (alive && list.length) take(list, false)
+      } catch {
+        /* offline: the next tick tries again */
+      }
+    }
+    const refreshOne = async (orderId: string) => {
+      try {
+        const order = await api.getOrder(orderId)
+        if (!alive) return
+        if (!order || (date && order.date !== date)) setOrders((list) => list.filter((o) => o.id !== orderId))
+        else take([order], false)
+      } catch {
+        void poll()
+      }
+    }
+    const onVisible = () => {
+      if (!document.hidden) void poll()
+    }
+
     void load()
-    const stop = api.subscribe((change) => void (change?.orderId ? refreshOne(change.orderId) : load()), { pollMs: 120_000 })
+    const stop = api.subscribe((change) => void (change?.orderId ? refreshOne(change.orderId) : load()), { pollMs: FULL_RELOAD_MS })
+    const timer = setInterval(() => void poll(), POLL_MS)
+    document.addEventListener('visibilitychange', onVisible)
+    window.addEventListener('online', onVisible)
     return () => {
       alive = false
       stop()
+      clearInterval(timer)
+      document.removeEventListener('visibilitychange', onVisible)
+      window.removeEventListener('online', onVisible)
     }
   }, [date])
+
+  // Any click or key press on the board counts as having seen the new orders, and unlocks sound.
+  // The reminder bar stays until its own button is used: removing it mid-click would move the page
+  // under the pointer and the click would land on something else.
+  useEffect(() => {
+    const seen = () => setUnseen(0)
+    const onVisible = () => {
+      if (!document.hidden) seen()
+    }
+    window.addEventListener('pointerdown', seen, true)
+    window.addEventListener('keydown', seen, true)
+    document.addEventListener('visibilitychange', onVisible)
+    const stopUnlock = unlockSoundOnGesture()
+    return () => {
+      window.removeEventListener('pointerdown', seen, true)
+      window.removeEventListener('keydown', seen, true)
+      document.removeEventListener('visibilitychange', onVisible)
+      stopUnlock()
+    }
+  }, [])
+
+  // Another screen may accept the order first, so only orders still "new" keep ringing.
+  const waitingCount = orders.filter((o) => o.status === 'new').length
+  const ringing = Math.min(unseen, waitingCount)
+  useEffect(() => {
+    if (ringing === 0) return
+    const timer = setInterval(playBeep, ALARM_MS)
+    return () => clearInterval(timer)
+  }, [ringing])
+
+  async function enableAlerts() {
+    setSound(await unlockSound())
+    setPermission(await askNotify())
+    playBeep()
+  }
+
+  function upsert(order: Order) {
+    known.current?.add(order.id)
+    setOrders((list) => mergeOrders(list, [order]))
+  }
 
   const q = toAsciiDigits(query).trim().toUpperCase()
   const inScope = orders.filter(
@@ -102,7 +202,7 @@ export function AdminPage() {
     const next = nextStatus(order.status)
     if (!next) return
     try {
-      await api.setStatus(order.id, next)
+      upsert(await api.setStatus(order.id, next))
       toast.success(`طلب ${order.number}: ${statusLabel(next, order.orderType)}`)
     } catch (e) {
       toast.error(errorMessage(e))
@@ -111,7 +211,7 @@ export function AdminPage() {
 
   async function cancel(order: Order, reason: string) {
     try {
-      await api.setStatus(order.id, 'cancelled', reason)
+      upsert(await api.setStatus(order.id, 'cancelled', reason))
       setCancelId(null)
       toast.success(`أُلغي الطلب ${order.number}`)
     } catch (e) {
@@ -121,11 +221,20 @@ export function AdminPage() {
 
   return (
     <>
-      <title>لوحة الكول سنتر | خليها مشاوي</title>
+      <title>{`${ringing > 0 ? `(${ringing}) طلب جديد · ` : ''}لوحة الكول سنتر | خليها مشاوي`}</title>
       <AdminNav />
       <main id="content" tabIndex={-1} className="outline-none mx-auto grid max-w-[1320px] gap-4 px-5 pt-4 pb-8 md:px-6 lg:px-8">
         {/* The tab already names the screen and the banner already says it is a demo. */}
         <h1 className="sr-only">الطلبات</h1>
+        {!sound || permission === 'default' ? (
+          <div role="status" className="flex flex-wrap items-center gap-x-3 gap-y-2 rounded-[20px] bg-warning-soft px-4 py-3 text-sm font-semibold text-warning-ink ring-1 ring-warning-ink/20">
+            <BellRing aria-hidden className="size-5 shrink-0" />
+            <p className="min-w-0 flex-1">فعّل الصوت والتنبيهات عشان ما يفوتكش طلب جديد، حتى لو إنت على صفحة تانية.</p>
+            <Button className="h-11 px-5" onClick={() => void enableAlerts()}>
+              تفعيل الصوت والتنبيهات
+            </Button>
+          </div>
+        ) : null}
         {/* One grid for labels, boxes and status buttons. Each field is a subgrid of three rows (label, box,
             caption), so the boxes stay on one line even when a label wraps or only the date has a caption.
             The status buttons sit beside the boxes from 1280px and on their own row below that; on phones that row
@@ -180,7 +289,7 @@ export function AdminPage() {
         )}
       </main>
       {detail ? (
-        <OrderDetailsSheet order={detail} onClose={() => setDetailId(null)} onAdvance={() => void advance(detail)} onCancel={() => setCancelId(detail.id)} />
+        <OrderDetailsSheet order={detail} onSaved={upsert} onClose={() => setDetailId(null)} onAdvance={() => void advance(detail)} onCancel={() => setCancelId(detail.id)} />
       ) : null}
       {cancelling ? (
         <CancelDialog key={cancelling.id} order={cancelling} onClose={() => setCancelId(null)} onConfirm={(reason) => void cancel(cancelling, reason)} />

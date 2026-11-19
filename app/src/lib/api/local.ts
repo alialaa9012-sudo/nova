@@ -100,7 +100,7 @@ export function createLocalApi(options: { store: KeyValueStore; now?: () => Date
     const orders = read()
     const i = orders.findIndex((o) => o.id === orderId)
     if (i < 0) throw new ApiError('ORDER_NOT_FOUND')
-    orders[i] = change(orders[i])
+    orders[i] = { ...change(orders[i]), updatedAt: now().toISOString() }
     write(orders)
     return orders[i]
   }
@@ -180,6 +180,7 @@ export function createLocalApi(options: { store: KeyValueStore; now?: () => Date
         totals: computeTotals(lines, input.orderType, deliveryFee, branch.charges),
         clientRef: input.clientRef,
         createdAt,
+        updatedAt: createdAt,
         history: [{ from: null, to: 'new', at: createdAt }],
       }
       write([...orders, order])
@@ -199,6 +200,7 @@ export function createLocalApi(options: { store: KeyValueStore; now?: () => Date
     async listOrders(options) {
       return read()
         .filter((o) => !options?.date || o.date === options.date)
+        .filter((o) => !options?.since || (o.updatedAt ?? o.createdAt) > options.since)
         .sort((a, b) => b.createdAt.localeCompare(a.createdAt))
     },
 

@@ -16,13 +16,14 @@ function fake(replies: { tables?: Record<string, Reply | Reply[]>; rpc?: Record<
   const builder = (table: string) => {
     const b: Record<string, unknown> = {}
     for (const m of ['select', 'order', 'limit', 'maybeSingle', 'single']) b[m] = () => b
-    b.eq = (column: string, value: unknown) => (calls.push({ kind: 'eq', name: table, args: [column, value] }), b)
+    for (const m of ['eq', 'gt']) b[m] = (column: string, value: unknown) => (calls.push({ kind: m, name: table, args: [column, value] }), b)
     for (const m of ['insert', 'update', 'delete']) b[m] = (args: unknown) => (calls.push({ kind: m, name: table, args }), b)
     b.then = (resolve: (r: Reply) => unknown) => resolve(next(table))
     return b
   }
   let signedOut = false
   const listeners: { table: string; cb: (payload: unknown) => void }[] = []
+  const statusListeners: ((status: string) => void)[] = []
   const client = {
     from: (table: string) => builder(table),
     rpc: (name: string, args: unknown) => {
@@ -37,13 +38,15 @@ function fake(replies: { tables?: Record<string, Reply | Reply[]>; rpc?: Record<
       onAuthStateChange: () => ({ data: { subscription: { unsubscribe() {} } } }),
     },
     channel: () => ({
-      on(_kind: string, filter: { table: string }, cb: (payload: unknown) => void) { listeners.push({ table: filter.table, cb }); return this },
-      subscribe() { return this },
+      on(_kind: string, filter: { table?: string }, cb: (payload: unknown) => void) { listeners.push({ table: filter.table ?? _kind, cb }); return this },
+      subscribe(cb?: (status: string) => void) { if (cb) statusListeners.push(cb); return this },
     }),
     removeChannel: () => Promise.resolve('ok'),
   }
   const push = (table: string, payload: unknown) => listeners.filter((l) => l.table === table).forEach((l) => l.cb(payload))
-  return { client: client as unknown as SupabaseClient, calls, wasSignedOut: () => signedOut, push }
+  const status = (s: string) => statusListeners.forEach((cb) => cb(s))
+  const tables = () => listeners.map((l) => l.table)
+  return { client: client as unknown as SupabaseClient, calls, wasSignedOut: () => signedOut, push, status, tables }
 }
 
 const item = getMenu('ashry').flatMap((c) => c.items).find((i) => i.name === 'صدور فراخ')!
@@ -127,7 +130,29 @@ describe('Supabase backend', () => {
     const api = createSupabaseApi(client)
     await api.listOrders({ date: '2027-01-04' })
     expect(calls).toContainEqual({ kind: 'eq', name: 'orders', args: ['order_date', '2027-01-04'] })
+    expect(calls.some((c) => c.kind === 'gt')).toBe(false)
     expect(await api.getOrder('missing')).toBeNull()
+  })
+
+  it('asks only for orders changed after a given time', async () => {
+    const { client, calls } = fake({ tables: { orders: { data: [{ id: 'u1', order_number: 'A-0001', order_date: '2027-01-04', created_at: '2027-01-04T10:00:00Z', updated_at: '2027-01-04T10:05:00Z' }], error: null } } })
+    const [order] = await createSupabaseApi(client).listOrders({ date: '2027-01-04', since: '2027-01-04T10:01:00Z' })
+    expect(calls).toContainEqual({ kind: 'gt', name: 'orders', args: ['updated_at', '2027-01-04T10:01:00Z'] })
+    expect(order.updatedAt).toBe('2027-01-04T10:05:00Z')
+  })
+
+  it('listens to orders only, and re-reads when the live connection comes back or fails', () => {
+    const { client, status, tables } = fake({})
+    const seen: unknown[] = []
+    const stop = createSupabaseApi(client).subscribe((change) => seen.push(change), { pollMs: 0 })
+    // delivery_zones is not published for Realtime; asking for it got the whole channel refused.
+    expect(tables().filter((t) => t !== 'system')).toEqual(['orders'])
+    status('SUBSCRIBED')
+    expect(seen).toEqual([])
+    status('CHANNEL_ERROR')
+    status('SUBSCRIBED')
+    expect(seen).toEqual([undefined, undefined])
+    stop()
   })
 
   it('names the changed order in a push and does not poll when asked not to', async () => {

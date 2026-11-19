@@ -15,11 +15,13 @@ import { orderText } from '@/lib/orderText'
 
 export function OrderDetailsSheet({
   order,
+  onSaved,
   onClose,
   onAdvance,
   onCancel,
 }: {
   order: Order
+  onSaved: (order: Order) => void
   onClose: () => void
   onAdvance: () => void
   onCancel: () => void
@@ -30,7 +32,7 @@ export function OrderDetailsSheet({
 
   async function saveInvoice() {
     try {
-      await api.setPosInvoice(order.id, invoice)
+      onSaved(await api.setPosInvoice(order.id, invoice))
       toast.success('حُفظ رقم الفاتورة')
     } catch (e) {
       toast.error(errorMessage(e))

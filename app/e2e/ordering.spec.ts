@@ -207,3 +207,41 @@ test('searching «دجاج» finds the chicken dishes', async ({ page }) => {
   await page.getByRole('searchbox').fill('دجاج')
   await expect(page.getByRole('button', { name: 'أضف صدور فراخ', exact: true })).toBeVisible()
 })
+
+test('the board announces a new order from another tab and moves a cancelled one at once', async ({ page, context }) => {
+  await context.grantPermissions(['notifications'])
+  const admin = await context.newPage()
+  await admin.clock.setFixedTime(MONDAY_NOON_CAIRO)
+  await admin.goto('/admin')
+  await expect(admin.getByText('لا توجد طلبات بهذه التصفية.')).toBeVisible()
+  await expect(admin).toHaveTitle('لوحة الكول سنتر | خليها مشاوي')
+
+  // A customer orders in another tab while nobody touches the board.
+  await page.goto('/branch/ashry')
+  await addToCart(page, 'صدور فراخ', /^نص/, 'أضف للسلة · 340 ج.م')
+  await page.getByRole('button', { name: /عرض السلة/ }).click()
+  await page.getByRole('dialog', { name: 'السلة' }).getByRole('link', { name: 'إتمام الطلب' }).click()
+  await page.getByRole('radio', { name: 'استلام من الفرع' }).click()
+  await page.getByLabel('الاسم').fill('منى')
+  await page.getByLabel('رقم الموبايل').fill('01112345678')
+  await page.getByRole('button', { name: 'تأكيد الطلب · 340 ج.م' }).click()
+  await expect(page).toHaveURL(/\/order\/A-0001$/)
+
+  // The board shows it, and its tab title counts it until someone uses the board.
+  const list = admin.getByRole('list', { name: 'قائمة الطلبات' })
+  await expect(list.getByRole('heading', { name: 'A-0001' })).toBeVisible()
+  await expect(admin).toHaveTitle('(1) طلب جديد · لوحة الكول سنتر | خليها مشاوي')
+
+  // Sound and notifications are switched on from the board; the reminder then goes away.
+  await admin.getByRole('button', { name: 'تفعيل الصوت والتنبيهات' }).click()
+  await expect(admin.getByRole('button', { name: 'تفعيل الصوت والتنبيهات' })).toHaveCount(0)
+  await expect(admin).toHaveTitle('لوحة الكول سنتر | خليها مشاوي')
+
+  // Cancelling moves the order to «ملغي» straight away.
+  await list.getByRole('button', { name: 'إلغاء' }).click()
+  const dialog = admin.getByRole('dialog', { name: /إلغاء الطلب/ })
+  await dialog.getByRole('radio').first().click()
+  await dialog.getByRole('button', { name: 'تأكيد الإلغاء' }).click()
+  await expect(admin.getByRole('button', { name: 'جديد (0)' })).toBeVisible()
+  await expect(admin.getByRole('button', { name: 'ملغي (1)' })).toBeVisible()
+})

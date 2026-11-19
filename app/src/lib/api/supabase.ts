@@ -73,6 +73,7 @@ function fromRow(r: Row): Order {
     posInvoiceNo: str(r.pos_invoice_no),
     clientRef: str(r.client_ref),
     createdAt: String(r.created_at),
+    updatedAt: str(r.updated_at),
     history: history.map((h) => ({
       from: (h.from_status as OrderStatus | null) ?? null,
       to: h.to_status as OrderStatus,
@@ -248,6 +249,7 @@ export function createSupabaseApi(client: SupabaseClient): OrdersApi {
       // One day at a time: the board never downloads the whole history.
       let q = client.from('orders').select(ORDER_COLUMNS)
       if (options?.date) q = q.eq('order_date', options.date)
+      if (options?.since) q = q.gt('updated_at', options.since)
       const rows = check(await q.order('created_at', { ascending: false }).limit(1000)) as unknown as Row[]
       return rows.map(fromRow)
     },
@@ -301,14 +303,25 @@ export function createSupabaseApi(client: SupabaseClient): OrdersApi {
     subscribe(onChange, options) {
       // Staff get a push naming the order that changed, so the board fetches that order alone.
       // Customers cannot read orders and get no push, so their screens re-read on a timer instead.
+      // Only `orders` is published for Realtime. A channel that also asks for an unpublished table is
+      // refused as a whole (that silenced the board), so zones rely on the timer.
+      let joinedBefore = false
       const channel = client
         .channel(`km-${Math.random().toString(36).slice(2)}`)
         .on('postgres_changes', { event: '*', schema: 'public', table: 'orders' }, (payload) => {
           const row = (payload.new && Object.keys(payload.new).length ? payload.new : payload.old) as Row | undefined
           onChange(row?.id ? { orderId: String(row.id) } : undefined)
         })
-        .on('postgres_changes', { event: '*', schema: 'public', table: 'delivery_zones' }, () => onChange())
-        .subscribe()
+        .on('system', {}, (message: { status?: string; message?: string }) => {
+          if (message?.status === 'error') console.warn('Realtime:', message.message)
+        })
+        .subscribe((status) => {
+          // After a drop the client rejoins by itself; changes made meanwhile were never pushed.
+          if (status === 'SUBSCRIBED') {
+            if (joinedBefore) onChange()
+            joinedBefore = true
+          } else if (status === 'CHANNEL_ERROR' || status === 'TIMED_OUT') onChange()
+        })
       const ms = options?.pollMs ?? POLL_MS
       const timer = ms > 0 ? setInterval(() => onChange(), ms) : undefined
       return () => {
