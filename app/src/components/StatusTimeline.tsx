@@ -4,7 +4,11 @@ import { formatCairoDateTime } from '@/lib/format'
 import { STATUS_FLOW, statusLabel } from '@/lib/orderStatus'
 import { cn } from '@/lib/utils'
 
-/** horizontal: the four steps side by side (order page); otherwise one under the other (staff details). */
+/**
+ * horizontal: the customer's view on the order page: three steps side by side, no times, and no
+ * «تم التسليم» step (the customer knows they have the order). Otherwise the staff view: every step
+ * one under the other with its time.
+ */
 export function StatusTimeline({ order, horizontal = false }: { order: Order; horizontal?: boolean }) {
   if (order.status === 'cancelled') {
     return (
@@ -24,7 +28,7 @@ export function StatusTimeline({ order, horizontal = false }: { order: Order; ho
                 {statusLabel(h.to, order.orderType)}
                 {h.to === 'cancelled' && order.cancelReason ? `: ${order.cancelReason}` : ''}
               </p>
-              <p className="text-xs text-muted-foreground">{formatCairoDateTime(h.at)}</p>
+              {horizontal ? null : <p className="text-xs text-muted-foreground">{formatCairoDateTime(h.at)}</p>}
             </div>
           </li>
         ))}
@@ -34,12 +38,13 @@ export function StatusTimeline({ order, horizontal = false }: { order: Order; ho
 
   const current = STATUS_FLOW.indexOf(order.status)
   if (horizontal) {
+    const steps = STATUS_FLOW.filter((s) => s !== 'delivered')
+    const reached = Math.min(current, steps.length - 1)
     return (
-      <ol className="relative grid grid-cols-4 gap-1 before:absolute before:inset-x-[12.5%] before:top-4 before:h-0.5 before:bg-border" aria-label="حالة الطلب">
-        {STATUS_FLOW.map((status, i) => {
-          const done = i <= current
-          const now = i === current
-          const at = order.history.find((h) => h.to === status)?.at
+      <ol className="relative grid grid-cols-3 gap-1 before:absolute before:inset-x-[16%] before:top-4 before:h-0.5 before:bg-border" aria-label="حالة الطلب">
+        {steps.map((status, i) => {
+          const done = i <= reached
+          const now = i === reached
           return (
             <li key={status} className="relative grid justify-items-center gap-1.5 text-center" aria-current={now ? 'step' : undefined}>
               <span
@@ -55,7 +60,6 @@ export function StatusTimeline({ order, horizontal = false }: { order: Order; ho
                 {done ? <Check className="size-4 stroke-[2.6]" aria-hidden="true" /> : i + 1}
               </span>
               <p className={cn('text-xs leading-[18px] font-extrabold', !done && 'text-muted-foreground')}>{statusLabel(status, order.orderType)}</p>
-              {at ? <p className="-mt-1 text-xs leading-4 text-muted-foreground">{formatCairoDateTime(at)}</p> : null}
             </li>
           )
         })}

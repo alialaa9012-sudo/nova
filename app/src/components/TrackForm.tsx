@@ -6,6 +6,7 @@ import { normalizeEgyptianMobile, toAsciiDigits } from '@/lib/phone'
 import { fieldGroup, rowInput } from './form-styles'
 import { IconField } from './IconField'
 import { cn } from '@/lib/utils'
+import { cleanOrderNumber } from '@/lib/orderNumber'
 
 /** Asks for the order number (unless known) and the phone used to place the order. */
 export function TrackForm({ fixedNumber, onDone }: { fixedNumber?: string; onDone: (number: string, phone: string) => void }) {
@@ -15,10 +16,10 @@ export function TrackForm({ fixedNumber, onDone }: { fixedNumber?: string; onDon
 
   function submit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
-    const n = toAsciiDigits(number).trim().toUpperCase()
+    const n = cleanOrderNumber(toAsciiDigits(number))
     const p = normalizeEgyptianMobile(phone)
     const found = {
-      number: /^[A-Z]-\d{4}$/.test(n) ? undefined : 'اكتب رقم الطلب كما وصلك، مثل A-0012.',
+      number: /^(\d{1,4}|[A-Z]-\d{4})$/.test(n) ? undefined : 'اكتب رقم الطلب كما وصلك، مثل #12.',
       phone: p ? undefined : 'اكتب رقم الموبايل الذي طلبت به.',
     }
     setErrors(found)
@@ -35,7 +36,7 @@ export function TrackForm({ fixedNumber, onDone }: { fixedNumber?: string; onDon
             <input
               {...fieldProps('order-number', errors.number)}
               dir="ltr"
-              placeholder="A-0012"
+              placeholder="#12"
               value={number}
               onChange={(e) => {
                 setNumber(e.target.value)

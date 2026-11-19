@@ -5,6 +5,7 @@ import { getBranch } from '@/lib/catalog'
 import { formatCairoDateTime, formatCairoTime, formatEGP } from '@/lib/format'
 import { actionLabel, nextStatus, statusLabel } from '@/lib/orderStatus'
 import { cn } from '@/lib/utils'
+import { orderLabel } from '@/lib/orderNumber'
 
 export function OrderCard({
   order,
@@ -32,7 +33,7 @@ export function OrderCard({
       <CardHeader>
         <CardTitle className="flex flex-wrap items-center gap-2 text-lg">
           <h2 dir="ltr" className="text-xl font-extrabold">
-            {order.number}
+            {orderLabel(order.number)}
           </h2>
           <span className="rounded-full bg-closed-soft px-2 py-0.5 text-xs font-semibold text-closed-ink">فرع {branch?.name}</span>
           <span className="rounded-full border border-line px-2 py-0.5 text-xs font-semibold">{order.orderType === 'delivery' ? 'توصيل' : 'استلام'}</span>

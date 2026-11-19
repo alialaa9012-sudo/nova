@@ -1,12 +1,13 @@
 import type { Order } from './api/types'
 import { getBranch } from './catalog'
 import { formatEGP } from './format'
+import { orderLabel } from '@/lib/orderNumber'
 
 /** Plain-text order summary for copying into the cashier system. */
 export function orderText(order: Order): string {
   const branch = getBranch(order.branchId)
   const out = [
-    `طلب ${order.number} | فرع ${branch?.name ?? order.branchId}`,
+    `طلب ${orderLabel(order.number)} | فرع ${branch?.name ?? order.branchId}`,
     `النوع: ${order.orderType === 'delivery' ? 'توصيل' : 'استلام من الفرع'}`,
     `العميل: ${order.customerName} | ${order.phone}`,
   ]

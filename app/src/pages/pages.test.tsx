@@ -67,7 +67,7 @@ describe('ordering', () => {
     await user.click(screen.getByRole('button', { name: 'تأكيد الطلب · 680 ج.م' }))
 
     expect(await screen.findByRole('heading', { name: 'تم إرسال طلبك' })).toBeInTheDocument()
-    expect(screen.getAllByText('A-0001').length).toBeGreaterThan(0)
+    expect(screen.getAllByText('#01').length).toBeGreaterThan(0)
     const timeline = screen.getByRole('list', { name: 'حالة الطلب' })
     expect(within(timeline).getByText('طلب جديد').closest('li')).toHaveAttribute('aria-current', 'step')
     expect(within(timeline).getByText('جاهز للاستلام')).toBeInTheDocument()
@@ -165,7 +165,7 @@ describe('call-center board', () => {
     renderAt('/admin')
 
     const list = await screen.findByRole('list', { name: 'قائمة الطلبات' })
-    expect(within(list).getByRole('heading', { name: 'Z-0001' })).toBeInTheDocument()
+    expect(within(list).getByRole('heading', { name: '#01' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'جديد (1)' })).toHaveAttribute('aria-pressed', 'true')
 
     await user.click(within(list).getByRole('button', { name: 'قبول الطلب' }))
@@ -173,7 +173,7 @@ describe('call-center board', () => {
     await user.click(screen.getByRole('button', { name: 'جاري التجهيز (1)' }))
     await user.click(screen.getByRole('button', { name: 'إلغاء' }))
 
-    const dialog = await screen.findByRole('dialog', { name: 'إلغاء الطلب Z-0001' })
+    const dialog = await screen.findByRole('dialog', { name: 'إلغاء الطلب #01' })
     const confirm = within(dialog).getByRole('button', { name: 'تأكيد الإلغاء' })
     expect(confirm).toBeDisabled()
     await user.click(within(dialog).getByRole('radio', { name: 'العميل لا يرد' }))
@@ -338,7 +338,7 @@ describe('checkout draft and order number', () => {
     expect(localStorage.getItem('km.checkoutDraft.v1.ashry')).toBeNull()
     // the order number stands on its own with copy and share
     expect(screen.getByRole('button', { name: 'نسخ رقم الطلب' })).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: 'مشاركة رقم الطلب على واتساب' })).toHaveAttribute('href', expect.stringContaining('A-0001'))
+    expect(screen.getByRole('link', { name: 'مشاركة رقم الطلب على واتساب' })).toHaveAttribute('href', expect.stringContaining(encodeURIComponent('#01')))
   })
 
   it('shows the remembered order above the branches on the home page', () => {
@@ -358,20 +358,20 @@ describe('call-center queue', () => {
       return api.placeOrder({ branchId, orderType: 'pickup', customerName: 'عميل', phone, lines: [{ sizeId: item.sizes[0].id, qty: 1 }] })
     }
     vi.setSystemTime(new Date('2027-01-04T10:00:00Z'))
-    await pickup('ashry', '01012345678') // A-0001, 30 minutes old at 10:30
+    await pickup('ashry', '01012345678') // #01, 30 minutes old at 10:30
     vi.setSystemTime(new Date('2027-01-04T10:25:00Z'))
-    await pickup('zagazig', '01112345678') // Z-0001, 5 minutes old
+    await pickup('ashry', '01112345678') // #02, 5 minutes old
     vi.setSystemTime(new Date('2027-01-04T10:30:00Z'))
     renderAt('/admin')
 
     const list = await screen.findByRole('list', { name: 'قائمة الطلبات' })
-    expect(within(list).getAllByRole('heading', { level: 2 }).map((h) => h.textContent)).toEqual(['A-0001', 'Z-0001'])
+    expect(within(list).getAllByRole('heading', { level: 2 }).map((h) => h.textContent)).toEqual(['#01', '#02'])
     expect(within(list).getByText('منذ 30 دقيقة')).toHaveClass('bg-danger-soft')
     expect(within(list).getByText('منذ 5 دقيقة')).toHaveClass('bg-closed-soft')
     // the items are on the card itself
     expect(within(list).getAllByRole('list')).toHaveLength(2)
 
     await user.click(screen.getByRole('button', { name: 'الكل (2)' }))
-    expect(within(screen.getByRole('list', { name: 'قائمة الطلبات' })).getAllByRole('heading', { level: 2 }).map((h) => h.textContent)).toEqual(['Z-0001', 'A-0001'])
+    expect(within(screen.getByRole('list', { name: 'قائمة الطلبات' })).getAllByRole('heading', { level: 2 }).map((h) => h.textContent)).toEqual(['#02', '#01'])
   })
 })

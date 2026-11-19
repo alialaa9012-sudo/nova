@@ -90,8 +90,9 @@ async function zoneId(branch: string, name: string): Promise<number> {
   const r = await db.query<{ id: number }>('select id from delivery_zones where branch_id = $1 and name_ar = $2', [branch, name])
   return Number(r.rows[0].id)
 }
-async function orderId(number: string, date: string): Promise<string> {
-  const r = await db.query<{ id: string }>('select id from orders where order_number = $1 and order_date = $2', [number, date])
+/** Numbers restart at 01 every day in each branch, so a number needs its branch and date. */
+async function orderId(branch: string, number: string, date: string): Promise<string> {
+  const r = await db.query<{ id: string }>('select id from orders where branch_id = $1 and order_number = $2 and order_date = $3', [branch, number, date])
   return r.rows[0].id
 }
 const pickup = async (branch: string, phone: string) => ({
@@ -158,7 +159,7 @@ describe('placing orders', () => {
       ],
     }
     expect(await place(delivery)).toMatchObject({
-      order_number: 'T-0001',
+      order_number: '01',
       order_date: '2027-01-04',
       subtotal: 630,
       delivery_fee: 75,
@@ -166,19 +167,19 @@ describe('placing orders', () => {
       tax_amount: 88.2,
       total: 793.2,
     })
-    expect(await place(await pickup('ashry', '01112345678'))).toMatchObject({ order_number: 'A-0001', tax_amount: 0, total: 170 })
-    expect((await place({ ...delivery, phone: '01212345678' })).order_number).toBe('T-0002')
+    expect(await place(await pickup('ashry', '01112345678'))).toMatchObject({ order_number: '01', tax_amount: 0, total: 170 })
+    expect((await place({ ...delivery, phone: '01212345678' })).order_number).toBe('02')
 
     const lines = await db.query<{ name_snapshot: string; unit_price: string; qty: number; note: string | null }>(
       `select name_snapshot, unit_price::text, qty, note from order_items oi join orders o on o.id = oi.order_id
-       where o.order_number = 'T-0001' order by oi.id`,
+       where o.branch_id = 'tagamoa' and o.order_number = '01' order by oi.id`,
     )
     expect(lines.rows.map((l) => [l.name_snapshot, Number(l.unit_price), l.qty, l.note])).toEqual([
       ['صدور فراخ', 250, 1, 'من غير شطة'],
       ['كفتة فراخ', 190, 2, 'x'.repeat(120)],
     ])
-    // the customer sees the note again when tracking the order
-    const tracked = await db.query<{ t: { items: { note: string | null }[] } }>(`select track_order('T-0001', '01012345678') as t`)
+    // the customer sees the note again when tracking the order (typed with or without «#»)
+    const tracked = await db.query<{ t: { items: { note: string | null }[] } }>(`select track_order('#01', '01012345678') as t`)
     expect(tracked.rows[0].t.items[0].note).toBe('من غير شطة')
   })
 
@@ -207,12 +208,12 @@ describe('placing orders', () => {
     await db.exec("update branches set accepting_orders = false, pause_reason = 'ضغط' where id = 'zagazig'")
     await expect(place(base)).rejects.toThrow(/BRANCH_PAUSED/)
     await db.exec("update branches set accepting_orders = true, pause_reason = null where id = 'zagazig'")
-    expect((await place(base)).order_number).toBe('Z-0001')
+    expect((await place(base)).order_number).toBe('01')
   })
 
   it('accepts orders until 01:00 after Thursday and restarts numbering on the new date', async () => {
     await at('2027-01-08 00:30+02') // Friday 00:30, still inside Thursday's hours
-    expect(await place(await pickup('ashry', '01512345678'))).toMatchObject({ order_number: 'A-0001', order_date: '2027-01-08' })
+    expect(await place(await pickup('ashry', '01512345678'))).toMatchObject({ order_number: '01', order_date: '2027-01-08' })
     await at('2027-01-08 01:00+02')
     await expect(place(await pickup('ashry', '01512345679'))).rejects.toThrow(/BRANCH_CLOSED/)
     await at('2027-01-04 12:00+02')
@@ -223,7 +224,7 @@ describe('placing orders', () => {
     for (let i = 0; i < 3; i++) await place(await pickup('ashry', '01011112222'))
     await expect(place(await pickup('ashry', '01011112222'))).rejects.toThrow(/TOO_MANY_ORDERS/)
     await at('2027-01-04 13:11+02')
-    expect((await place(await pickup('ashry', '01011112222'))).order_number).toMatch(/^A-\d{4}$/)
+    expect((await place(await pickup('ashry', '01011112222'))).order_number).toMatch(/^\d{2,}$/)
   })
 
   it('returns the same order when a checkout is sent twice with its client_ref', async () => {
@@ -246,7 +247,7 @@ describe('placing orders', () => {
 
 describe('staff and tracking', () => {
   it('moves an order through the four statuses with a timestamp for each change', async () => {
-    const id = await orderId('T-0001', '2027-01-04')
+    const id = await orderId('tagamoa', '01', '2027-01-04')
     await expect(setStatus('anon', id, 'preparing')).rejects.toThrow(/permission denied/)
 
     await at('2027-01-04 12:05+02')
@@ -256,7 +257,7 @@ describe('staff and tracking', () => {
     await setStatus(STAFF, id, 'out_for_delivery')
 
     const track = await as('anon', async () =>
-      (await db.query<{ t: Tracked }>("select public.track_order(' t-0001 ', '01012345678') as t")).rows[0].t,
+      (await db.query<{ t: Tracked }>("select public.track_order(' 01 ', '01012345678') as t")).rows[0].t,
     )
     expect(track.status).toBe('out_for_delivery')
     expect(track.total).toBe(793.2)
@@ -271,7 +272,7 @@ describe('staff and tracking', () => {
     expect(who.rows.map((r) => r.changed_by)).toEqual([null, STAFF, STAFF])
 
     const wrongPhone = await as('anon', async () =>
-      (await db.query<{ t: Tracked | null }>("select public.track_order('T-0001', '01099999999') as t")).rows[0].t,
+      (await db.query<{ t: Tracked | null }>("select public.track_order('01', '01099999999') as t")).rows[0].t,
     )
     expect(wrongPhone).toBeNull()
   })
@@ -282,8 +283,8 @@ describe('staff and tracking', () => {
     const iso = (d: Date | null) => (d ? new Date(d).toISOString() : null)
     const advance = () => as(STAFF, async () => (await db.query<{ n: number }>('select public.advance_due_orders() as n')).rows[0].n)
 
-    // Delivery (T-0001, accepted 12:05 in the test above): leaves 45 minutes later.
-    const delivery = await times(await orderId('T-0001', '2027-01-04'))
+    // Delivery (Tagamoa #01, accepted 12:05 in the test above): leaves 45 minutes later.
+    const delivery = await times(await orderId('tagamoa', '01', '2027-01-04'))
     expect([iso(delivery.ready_from), iso(delivery.ready_by)]).toEqual(['2027-01-04T10:50:00.000Z', '2027-01-04T10:50:00.000Z'])
 
     // Pickup: ready in 30 to 45 minutes.
@@ -319,7 +320,7 @@ describe('staff and tracking', () => {
   })
 
   it('requires a reason to cancel and never reopens a cancelled order', async () => {
-    const id = await orderId('A-0001', '2027-01-04')
+    const id = await orderId('ashry', '01', '2027-01-04')
     await expect(setStatus(STAFF, id, 'cancelled')).rejects.toThrow(/CANCEL_REASON_REQUIRED/)
     await setStatus(STAFF, id, 'cancelled', 'العميل ألغى الطلب')
     await expect(setStatus(STAFF, id, 'preparing')).rejects.toThrow(/INVALID_TRANSITION/)
@@ -333,7 +334,7 @@ describe('staff and tracking', () => {
       expect(rows.length).toBeGreaterThan(0)
       expect(new Set(rows.map((r) => r.branch_id))).toEqual(new Set(['ashry']))
     })
-    await expect(setStatus(ASHRY_AGENT, await orderId('T-0002', '2027-01-04'), 'preparing')).rejects.toThrow(/NOT_ALLOWED/)
+    await expect(setStatus(ASHRY_AGENT, await orderId('tagamoa', '02', '2027-01-04'), 'preparing')).rejects.toThrow(/NOT_ALLOWED/)
 
     const size = await sizeId('ashry', 'صدور فراخ', 'ربع')
     await as(STAFF, async () => {

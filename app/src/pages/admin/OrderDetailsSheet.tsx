@@ -12,6 +12,7 @@ import { getBranch } from '@/lib/catalog'
 import { formatCairoDateTime } from '@/lib/format'
 import { actionLabel, nextStatus } from '@/lib/orderStatus'
 import { orderText } from '@/lib/orderText'
+import { orderLabel } from '@/lib/orderNumber'
 
 export function OrderDetailsSheet({
   order,
@@ -53,7 +54,7 @@ export function OrderDetailsSheet({
       <SheetContent side="left" className="w-full overflow-y-auto sm:max-w-lg">
         <SheetHeader>
           <SheetTitle className="text-xl">
-            طلب <span dir="ltr">{order.number}</span>
+            طلب <span dir="ltr">{orderLabel(order.number)}</span>
           </SheetTitle>
           <SheetDescription>
             فرع {branch?.name} · {order.orderType === 'delivery' ? 'توصيل' : 'استلام من الفرع'} · {formatCairoDateTime(order.createdAt)}

@@ -7,6 +7,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Textarea } from '@/components/ui/textarea'
 import type { Order } from '@/lib/api'
 import { CANCEL_REASONS } from '@/lib/orderStatus'
+import { orderLabel } from '@/lib/orderNumber'
 
 const OTHER = 'سبب آخر'
 
@@ -21,7 +22,7 @@ export function CancelDialog({ order, onClose, onConfirm }: { order: Order; onCl
       <DialogContent>
         <DialogHeader>
           <DialogTitle>
-            إلغاء الطلب <span dir="ltr">{order.number}</span>
+            إلغاء الطلب <span dir="ltr">{orderLabel(order.number)}</span>
           </DialogTitle>
           <DialogDescription>اختر سبب الإلغاء. يُسجَّل السبب ووقت الإلغاء في سجل الطلب.</DialogDescription>
         </DialogHeader>

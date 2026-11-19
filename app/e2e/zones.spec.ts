@@ -50,7 +50,8 @@ test('the admin adds a delivery zone to one branch and a customer orders to it',
   await page.getByLabel('رقم العمارة').fill('5')
   await page.getByRole('button', { name: 'تأكيد الطلب · 435 ج.م' }).click()
   await expect(page.getByRole('heading', { name: 'تم إرسال طلبك' })).toBeVisible()
-  await expect(page.getByText('العنوان: مدينتي، شارع 1، عمارة 5')).toBeVisible()
+  // The customer's page no longer repeats the address (owner, 20 Nov 2026); the fee is in the total.
+  await expect(page.getByText('435 ج.م').first()).toBeVisible()
 
   // Deleting needs a second click, and the placed order keeps its zone and fee.
   await page.goto('/admin/zones')

@@ -5,7 +5,8 @@ import { branches, findSize, getBranch, getZones, type BranchId, type DeliveryZo
 import { cairoDate } from '../format'
 import { getOpenStatus } from '../hours'
 import { canTransition, PREP_MINUTES, type OrderStatus } from '../orderStatus'
-import { normalizeEgyptianMobile } from '../phone'
+import { cleanOrderNumber } from '../orderNumber'
+import { normalizeEgyptianMobile, toAsciiDigits } from '../phone'
 import { computeTotals, round2 } from '../pricing'
 import { cleanZoneName, DEFAULT_ZONE_TYPE, MAX_ZONE_FEE, MAX_ZONE_NAME, zoneKey, zoneLabel } from '../zones'
 import { ApiError, type NewZoneInput, type Order, type OrdersApi, type PlaceOrderInput } from './types'
@@ -182,7 +183,7 @@ export function createLocalApi(options: { store: KeyValueStore; now?: () => Date
       const createdAt = at.toISOString()
       const order: Order = {
         id: newId(),
-        number: `${branch.code}-${String(seq).padStart(4, '0')}`,
+        number: String(seq).padStart(2, '0'),
         date,
         branchId: branch.id,
         orderType: input.orderType,
@@ -208,7 +209,7 @@ export function createLocalApi(options: { store: KeyValueStore; now?: () => Date
 
     async trackOrder(number, phone) {
       advanceDue()
-      const wanted = number.trim().toUpperCase()
+      const wanted = cleanOrderNumber(toAsciiDigits(number))
       const normalized = normalizeEgyptianMobile(phone)
       const cutoff = now().getTime() - 3 * 24 * 60 * 60_000
       const matches = read()

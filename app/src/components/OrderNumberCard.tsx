@@ -1,9 +1,11 @@
 import { Check, Copy, Share2 } from 'lucide-react'
 import { useState } from 'react'
 import { brand } from '@/lib/catalog'
+import { orderLabel } from '@/lib/orderNumber'
 
 /** The order number in the dark band, with copy and WhatsApp share. */
-export function OrderNumberCard({ number }: { number: string }) {
+export function OrderNumberCard({ number: raw }: { number: string }) {
+  const number = orderLabel(raw)
   const [copied, setCopied] = useState(false)
   const share = `https://wa.me/?text=${encodeURIComponent(`رقم طلبي من ${brand.name}: ${number}`)}`
 

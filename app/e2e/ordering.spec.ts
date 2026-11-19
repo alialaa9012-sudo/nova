@@ -37,7 +37,7 @@ test('a delivery order at Tagamoa: zone fee, 14% tax, order number, then the cal
   await page.getByRole('button', { name: 'تأكيد الطلب · 360 ج.م' }).click()
 
   await expect(page.getByRole('heading', { name: 'تم إرسال طلبك' })).toBeVisible()
-  await expect(page).toHaveURL(/\/order\/T-0001$/)
+  await expect(page).toHaveURL(/\/order\/01$/)
   const timeline = page.getByRole('list', { name: 'حالة الطلب' })
   await expect(timeline.locator('[aria-current="step"]')).toContainText('طلب جديد')
   await expect(timeline).toContainText('خرج للتوصيل')
@@ -47,7 +47,7 @@ test('a delivery order at Tagamoa: zone fee, 14% tax, order number, then the cal
   await admin.clock.setFixedTime(MONDAY_NOON_CAIRO)
   await admin.goto('/admin')
   const list = admin.getByRole('list', { name: 'قائمة الطلبات' })
-  await expect(list.getByRole('heading', { name: 'T-0001' })).toBeVisible()
+  await expect(list.getByRole('heading', { name: '#01' })).toBeVisible()
   await expect(list).toContainText('سارة')
   await list.getByRole('button', { name: 'قبول الطلب' }).click()
   await expect(admin.getByRole('button', { name: 'جاري التجهيز (1)' })).toBeVisible()
@@ -67,19 +67,19 @@ test('a pickup order can be tracked later by number and phone', async ({ page })
   await page.getByLabel('الاسم').fill('منى')
   await page.getByLabel('رقم الموبايل').fill('٠١١١٢٣٤٥٦٧٨') // Arabic digits are accepted
   await page.getByRole('button', { name: 'تأكيد الطلب · 340 ج.م' }).click()
-  await expect(page).toHaveURL(/\/order\/A-0001$/)
+  await expect(page).toHaveURL(/\/order\/01$/)
   await expect(page.getByRole('list', { name: 'حالة الطلب' })).toContainText('جاهز للاستلام')
 
   await page.goto('/track')
-  await page.getByLabel('رقم الطلب').fill('a-0001')
+  await page.getByLabel('رقم الطلب').fill('#01')
   await page.getByLabel('رقم الموبايل').fill('01112345678')
   await page.getByRole('button', { name: 'عرض حالة الطلب' }).click()
-  await expect(page).toHaveURL(/\/order\/A-0001$/)
+  await expect(page).toHaveURL(/\/order\/01$/)
   await expect(page.getByRole('list', { name: 'حالة الطلب' })).toBeVisible()
 
   // A wrong phone does not reveal the order.
   await page.goto('/track')
-  await page.getByLabel('رقم الطلب').fill('A-0001')
+  await page.getByLabel('رقم الطلب').fill('01')
   await page.getByLabel('رقم الموبايل').fill('01000000000')
   await page.getByRole('button', { name: 'عرض حالة الطلب' }).click()
   await expect(page.getByRole('heading', { name: 'لم نجد هذا الطلب' })).toBeVisible()
@@ -142,7 +142,7 @@ test('three taps on confirm in the same instant still place one order', async ({
     const button = el as unknown as { click(): void }
     for (let i = 0; i < 3; i++) button.click()
   })
-  await expect(page).toHaveURL(/\/order\/A-0001$/)
+  await expect(page).toHaveURL(/\/order\/01$/)
   const stored = await page.evaluate(() => JSON.parse(localStorage.getItem('km.demo.orders.v1') ?? '[]').length)
   expect(stored).toBe(1)
 })
@@ -228,10 +228,10 @@ test('the board rings until an order is accepted, times it, and closes it as del
   }
   // A customer orders in another tab: the board shows it and its tab title counts it.
   await order('01112345678')
-  await expect(page).toHaveURL(/\/order\/A-0001$/)
+  await expect(page).toHaveURL(/\/order\/01$/)
   await expect(page.getByText('بعد قبول الطلب يكون جاهزاً للاستلام خلال 30 إلى 45 دقيقة.')).toBeVisible()
   const list = admin.getByRole('list', { name: 'قائمة الطلبات' })
-  await expect(list.getByRole('heading', { name: 'A-0001' })).toBeVisible()
+  await expect(list.getByRole('heading', { name: '#01' })).toBeVisible()
   await expect(admin).toHaveTitle('(1) طلب جديد · لوحة الكول سنتر | خليها مشاوي')
 
   // Sound and notifications are switched on from the board; using the board does not silence it.
@@ -252,9 +252,13 @@ test('the board rings until an order is accepted, times it, and closes it as del
   await admin.getByRole('button', { name: 'خرج / جاهز للاستلام (1)' }).click()
   await list.getByRole('button', { name: 'تم التسليم' }).click()
   await admin.getByRole('button', { name: 'تم التسليم (1)' }).click()
-  await expect(list.getByRole('heading', { name: 'A-0001' })).toBeVisible()
+  await expect(list.getByRole('heading', { name: '#01' })).toBeVisible()
   await expect(list.getByRole('button', { name: 'إلغاء' })).toHaveCount(0)
-  await expect(page.getByRole('list', { name: 'حالة الطلب' }).locator('[aria-current="step"]')).toContainText('تم التسليم')
+  // The customer sees three steps only, with no «تم التسليم» and no times.
+  const steps = page.getByRole('list', { name: 'حالة الطلب' })
+  await expect(steps.locator('[aria-current="step"]')).toContainText('جاهز للاستلام')
+  await expect(steps).not.toContainText('تم التسليم')
+  await expect(steps).not.toContainText(/\d{1,2}:\d{2}/)
 
   // A second order is cancelled from the board and moves to «ملغي» straight away.
   await order('01112345679')
@@ -279,7 +283,7 @@ test('an accepted order moves on by itself when its preparation time is up', asy
   await page.getByLabel('الشارع').fill('شارع التسعين')
   await page.getByLabel('رقم العمارة').fill('12')
   await page.getByRole('button', { name: /^تأكيد الطلب/ }).click()
-  await expect(page).toHaveURL(/\/order\/T-0001$/)
+  await expect(page).toHaveURL(/\/order\/01$/)
 
   await admin.goto('/admin')
   const list = admin.getByRole('list', { name: 'قائمة الطلبات' })

@@ -41,7 +41,7 @@ test.describe('accessibility @a11y', () => {
 
     await page.goto('/track')
     await page.getByRole('button', { name: 'عرض حالة الطلب' }).click()
-    await expect(page.getByText('اكتب رقم الطلب كما وصلك، مثل A-0012.')).toBeVisible()
+    await expect(page.getByText('اكتب رقم الطلب كما وصلك، مثل #12.')).toBeVisible()
     await expectNoViolations(page, testInfo, 'track-with-errors')
 
     await page.goto('/nowhere')
@@ -105,7 +105,7 @@ test.describe('accessibility @a11y', () => {
 
     await page.goto('/admin')
     const list = page.getByRole('list', { name: 'قائمة الطلبات' })
-    await expect(list.getByRole('heading', { name: 'Z-0001' })).toBeVisible()
+    await expect(list.getByRole('heading', { name: '#01' })).toBeVisible()
     await expectNoViolations(page, testInfo, 'admin-list')
 
     await list.getByRole('button', { name: 'التفاصيل' }).click()
@@ -115,7 +115,7 @@ test.describe('accessibility @a11y', () => {
     await expect(page.getByRole('dialog')).toBeHidden()
 
     await list.getByRole('button', { name: 'إلغاء' }).click()
-    await expect(page.getByRole('dialog', { name: 'إلغاء الطلب Z-0001' })).toBeVisible()
+    await expect(page.getByRole('dialog', { name: 'إلغاء الطلب #01' })).toBeVisible()
     await expectNoViolations(page, testInfo, 'cancel-dialog')
   })
   test('delivery zones screen with errors, an added zone and the delete confirmation', async ({ page }, testInfo) => {

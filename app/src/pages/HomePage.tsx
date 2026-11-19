@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button'
 import { useNow } from '@/hooks/useNow'
 import { brand, branches, heroBanners, type Branch } from '@/lib/catalog'
 import { lastOrder } from '@/lib/lastOrder'
+import { orderLabel } from '@/lib/orderNumber'
 
 const iconLink =
   'grid size-[clamp(44px,6.4vh,52px)] shrink-0 place-items-center rounded-2xl bg-control text-foreground ring-1 ring-border outline-none hover:bg-gold-soft focus-visible:ring-3 focus-visible:ring-ring/50 lg:size-14 [&_svg]:size-[18px] lg:[&_svg]:size-6'
@@ -104,7 +105,7 @@ export function HomePage() {
               className="relative mx-auto mt-2 flex w-fit items-center gap-1.5 rounded-full border border-gold/60 bg-card px-3 py-1 text-[12.5px] leading-[18px] shadow-sm outline-none after:absolute after:-inset-y-2 after:inset-x-0 after:content-[''] hover:bg-control focus-visible:ring-3 focus-visible:ring-ring/50 lg:mt-4 lg:gap-2 lg:px-5 lg:py-2 lg:text-base"
             >
               <PackageSearch className="size-4 shrink-0 text-gold-deep lg:size-5" aria-hidden="true" />
-              <span className="font-bold">طلبك {previous.number}</span>
+              <span className="font-bold">طلبك {orderLabel(previous.number)}</span>
               <span className="text-gold-deep">· تابع حالته</span>
               <ChevronLeft className="size-4 shrink-0 text-muted-foreground" aria-hidden="true" />
             </Link>

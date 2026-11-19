@@ -38,9 +38,9 @@ describe('local demo backend', () => {
     const first = await api.placeOrder(tagamoaDelivery())
     setClock(new Date(Date.UTC(2027, 0, 5, 10)))
     await api.placeOrder({ ...tagamoaDelivery(), phone: '01012345679' })
-    expect((await api.listOrders({ date: '2027-01-04' })).map((o) => o.number)).toEqual(['T-0001'])
+    expect((await api.listOrders({ date: '2027-01-04' })).map((o) => o.number)).toEqual(['01'])
     expect(await api.listOrders()).toHaveLength(2)
-    expect((await api.getOrder(first.id))?.number).toBe('T-0001')
+    expect((await api.getOrder(first.id))?.number).toBe('01')
     expect(await api.getOrder('nope')).toBeNull()
   })
 
@@ -48,7 +48,7 @@ describe('local demo backend', () => {
     const { api } = setup()
     const order = await api.placeOrder(tagamoaDelivery())
     expect(order).toMatchObject({
-      number: 'T-0001',
+      number: '01',
       date: '2027-01-04',
       status: 'new',
       customerName: 'أحمد',
@@ -57,7 +57,7 @@ describe('local demo backend', () => {
       totals: { subtotal: 630, deliveryFee: 75, service: 0, tax: 88.2, total: 793.2 },
     })
     expect(order.history).toEqual([{ from: null, to: 'new', at: '2027-01-04T10:00:00.000Z' }])
-    expect((await api.placeOrder({ ...tagamoaDelivery(), phone: '01112345678' })).number).toBe('T-0002')
+    expect((await api.placeOrder({ ...tagamoaDelivery(), phone: '01112345678' })).number).toBe('02')
   })
 
   it('keeps the customer\'s note on each item, cleaned like the database does', async () => {
@@ -75,7 +75,7 @@ describe('local demo backend', () => {
     expect(b.id).toBe(a.id)
     expect(c.id).toBe(a.id)
     setClock(monday(3)) // the branch has closed since: a retry still gets its order back
-    expect((await api.placeOrder(input)).number).toBe('T-0001')
+    expect((await api.placeOrder(input)).number).toBe('01')
     expect(await api.listOrders()).toHaveLength(1)
     await expect(api.placeOrder({ ...input, phone: '01112345678' })).rejects.toMatchObject({ code: 'INVALID_CLIENT_REF' })
   })
@@ -108,8 +108,8 @@ describe('local demo backend', () => {
   it('tracks by number and phone, moves through statuses and requires a cancel reason', async () => {
     const { api, setClock } = setup()
     const order = await api.placeOrder(tagamoaDelivery())
-    expect(await api.trackOrder('t-0001 ', '01012345678')).toMatchObject({ id: order.id })
-    expect(await api.trackOrder('T-0001', '01099999999')).toBeNull()
+    expect(await api.trackOrder('#01 ', '01012345678')).toMatchObject({ id: order.id })
+    expect(await api.trackOrder('01', '01099999999')).toBeNull()
 
     await expect(api.setStatus(order.id, 'out_for_delivery')).rejects.toMatchObject({ code: 'INVALID_TRANSITION' })
     setClock(monday(12, 5))

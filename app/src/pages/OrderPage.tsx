@@ -9,13 +9,14 @@ import { TrackForm } from '@/components/TrackForm'
 import { Button } from '@/components/ui/button'
 import { api, type Order } from '@/lib/api'
 import { branches, brand, getBranch } from '@/lib/catalog'
-import { formatCairoDateTime, formatCairoTime } from '@/lib/format'
+import { formatCairoTime } from '@/lib/format'
 import { PREP_MINUTES } from '@/lib/orderStatus'
 import { cartReducer } from '@/lib/cart'
 import { lastOrder } from '@/lib/lastOrder'
 import { reorderLines } from '@/lib/reorder'
 import { loadCart, saveCart } from '@/state/cart-context'
 import { cn } from '@/lib/utils'
+import { orderLabel } from '@/lib/orderNumber'
 
 export function OrderPage() {
   const { number = '' } = useParams()
@@ -53,10 +54,10 @@ export function OrderPage() {
   if (!phone) {
     return (
       <>
-        <title>{`طلب ${number} | خليها مشاوي`}</title>
+        <title>{`طلب ${orderLabel(number)} | خليها مشاوي`}</title>
         {band(
           <>
-            طلب رقم <span dir="ltr">{number}</span>
+            طلب رقم <span dir="ltr">{orderLabel(number)}</span>
           </>,
           'اكتب رقم الموبايل الذي طلبت به لعرض حالة الطلب.',
         )}
@@ -72,7 +73,7 @@ export function OrderPage() {
       <>
         {band(
           <>
-            طلب رقم <span dir="ltr">{number}</span>
+            طلب رقم <span dir="ltr">{orderLabel(number)}</span>
           </>,
         )}
         <BandSheet className="pt-8 pb-12 text-center" >
@@ -128,7 +129,7 @@ export function OrderPage() {
   const card = 'grid gap-2.5 rounded-[22px] border border-border bg-card p-3.5 lg:p-4'
   return (
     <>
-      <title>{`طلب ${order.number} | خليها مشاوي`}</title>
+      <title>{`طلب ${orderLabel(order.number)} | خليها مشاوي`}</title>
       <BandHeader backTo="/" backLabel="الصفحة الرئيسية" branchName={branch?.name} wide>
         <div className="mt-5 lg:flex lg:items-end lg:justify-between lg:gap-8">
           {navState?.justPlaced ? (
@@ -143,7 +144,7 @@ export function OrderPage() {
             </div>
           ) : (
             <h1 className="text-[22px] leading-8 font-extrabold lg:text-[28px] lg:leading-10">
-              طلب رقم <span dir="ltr">{order.number}</span>
+              طلب رقم <span dir="ltr">{orderLabel(order.number)}</span>
             </h1>
           )}
           <div className="lg:min-w-[300px]">
@@ -166,18 +167,10 @@ export function OrderPage() {
               <h2 id="details-title" className="text-[15px] font-extrabold">
                 تفاصيل الطلب
               </h2>
+              {/* Kept short on purpose (owner, 20 Nov 2026): branch and type only, no address or times. */}
               <p className="text-[12.5px] text-muted-foreground">
-                فرع {branch?.name} · {order.orderType === 'delivery' ? 'توصيل' : 'استلام من الفرع'} · {formatCairoDateTime(order.createdAt)}
+                فرع {branch?.name} · {order.orderType === 'delivery' ? 'توصيل' : 'استلام من الفرع'}
               </p>
-              {order.orderType === 'delivery' ? (
-                <p className="text-sm">
-                  العنوان: {[order.zoneLabel, order.street, order.building && `عمارة ${order.building}`, order.apartment && `شقة ${order.apartment}`]
-                    .filter(Boolean)
-                    .join('، ')}
-                </p>
-              ) : (
-                <p className="text-sm">الاستلام من: {branch?.address}</p>
-              )}
               <OrderSummary
                 lines={order.lines.map((l, i) => ({ key: String(i), ...l }))}
                 totals={order.totals}

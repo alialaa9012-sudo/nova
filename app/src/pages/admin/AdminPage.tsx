@@ -17,6 +17,7 @@ import { AdminNav } from './AdminNav'
 import { CancelDialog } from './CancelDialog'
 import { OrderCard } from './OrderCard'
 import { OrderDetailsSheet } from './OrderDetailsSheet'
+import { cleanOrderNumber, orderLabel } from '@/lib/orderNumber'
 
 type Filter = OrderStatus | 'all'
 const FILTERS: { value: Filter; label: string }[] = [
@@ -75,11 +76,11 @@ export function AdminPage() {
     const announce = (fresh: Order[]) => {
       const waiting = fresh.filter((o) => o.status === 'new')
       if (waiting.length === 0) return
-      toast.success(`طلب جديد: ${waiting.map((o) => o.number).join('، ')}`)
+      toast.success(`طلب جديد: ${waiting.map((o) => orderLabel(o.number)).join('، ')}`)
       if (document.hidden || !document.hasFocus()) {
         for (const o of waiting) {
           const where = `${getBranch(o.branchId)?.name ?? ''} · ${o.orderType === 'delivery' ? 'توصيل' : 'استلام'}`
-          notify(`طلب جديد ${o.number}`, `${where} · ${formatEGP(o.totals.total)}`, o.id)
+          notify(`طلب جديد ${orderLabel(o.number)}`, `${where} · ${formatEGP(o.totals.total)}`, o.id)
         }
       }
     }
@@ -180,7 +181,7 @@ export function AdminPage() {
     setOrders((list) => mergeOrders(list, [order]))
   }
 
-  const q = toAsciiDigits(query).trim().toUpperCase()
+  const q = cleanOrderNumber(toAsciiDigits(query))
   const inScope = orders.filter(
     (o) =>
       (branchFilter === 'all' || o.branchId === branchFilter) &&
@@ -201,7 +202,7 @@ export function AdminPage() {
     if (!next) return
     try {
       upsert(await api.setStatus(order.id, next))
-      toast.success(`طلب ${order.number}: ${statusLabel(next, order.orderType)}`)
+      toast.success(`طلب ${orderLabel(order.number)}: ${statusLabel(next, order.orderType)}`)
     } catch (e) {
       toast.error(errorMessage(e))
     }
@@ -211,7 +212,7 @@ export function AdminPage() {
     try {
       upsert(await api.setStatus(order.id, 'cancelled', reason))
       setCancelId(null)
-      toast.success(`أُلغي الطلب ${order.number}`)
+      toast.success(`أُلغي الطلب ${orderLabel(order.number)}`)
     } catch (e) {
       toast.error(errorMessage(e))
     }
