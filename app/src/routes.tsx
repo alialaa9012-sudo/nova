@@ -43,6 +43,7 @@ export const routes: RouteObject[] = [
       // Staff screens load on demand, so customers never download them.
       { path: 'admin', lazy: () => staff(import('./pages/admin/AdminPage').then((m) => m.AdminPage)) },
       { path: 'admin/zones', lazy: () => staff(import('./pages/admin/ZonesPage').then((m) => m.ZonesPage)) },
+      { path: 'admin/visits', lazy: () => staff(import('./pages/admin/VisitsPage').then((m) => m.VisitsPage)) },
       { path: '*', element: <NotFoundPage /> },
     ],
   },

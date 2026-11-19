@@ -275,6 +275,15 @@ export function createSupabaseApi(client: SupabaseClient): OrdersApi {
       return fetchOrder(orderId)
     },
 
+    async logVisit(visitId, step, branchId) {
+      check(await client.rpc('log_visit', { p_visit: visitId, p_step: step, p_branch: branchId ?? null }))
+    },
+
+    async visitFunnel({ date, branchId }) {
+      const f = (check(await client.rpc('visit_funnel', { p_date: date, p_branch: branchId ?? null })) ?? {}) as Row
+      return { visitors: num(f.visitors), home: num(f.home), menu: num(f.menu), cart: num(f.cart), checkout: num(f.checkout), ordered: num(f.ordered) }
+    },
+
     async advanceDueOrders() {
       check(await client.rpc('advance_due_orders'))
     },

@@ -9,7 +9,7 @@ import { cleanOrderNumber } from '../orderNumber'
 import { normalizeEgyptianMobile, toAsciiDigits } from '../phone'
 import { computeTotals, round2 } from '../pricing'
 import { cleanZoneName, DEFAULT_ZONE_TYPE, MAX_ZONE_FEE, MAX_ZONE_NAME, zoneKey, zoneLabel } from '../zones'
-import { ApiError, type NewZoneInput, type Order, type OrdersApi, type PlaceOrderInput } from './types'
+import { ApiError, VISIT_STEPS, type NewZoneInput, type Order, type OrdersApi, type PlaceOrderInput, type VisitFunnel, type VisitStep } from './types'
 
 export interface KeyValueStore {
   getItem(key: string): string | null
@@ -18,6 +18,8 @@ export interface KeyValueStore {
 
 export const ORDERS_KEY = 'km.demo.orders.v1'
 export const ZONES_KEY = 'km.demo.zones.v1'
+export const VISITS_KEY = 'km.demo.visits.v1'
+type StoredVisit = { visitId: string; step: VisitStep; branchId?: BranchId; date: string }
 
 /** A zone added from the admin screen, as kept in the store. */
 interface StoredZone {
@@ -81,6 +83,14 @@ export function createLocalApi(options: { store: KeyValueStore; now?: () => Date
     store.setItem(ZONES_KEY, JSON.stringify(zones))
     events.dispatchEvent(new Event(CHANGE_EVENT))
   }
+  const readVisits = (): StoredVisit[] => {
+    try {
+      return JSON.parse(store.getItem(VISITS_KEY) ?? '[]') as StoredVisit[]
+    } catch {
+      return []
+    }
+  }
+  const writeVisits = (visits: StoredVisit[]) => store.setItem(VISITS_KEY, JSON.stringify(visits))
   const toZone = (z: StoredZone): DeliveryZone => ({
     id: z.id,
     type: z.type,
@@ -256,6 +266,25 @@ export function createLocalApi(options: { store: KeyValueStore; now?: () => Date
           history: [...o.history, { from: o.status, to: status, at: now().toISOString(), note: reason }],
         }
       })
+    },
+
+    // Same rules as log_visit() and visit_funnel() in the database.
+    async logVisit(visitId, step, branchId) {
+      const date = cairoDate(now())
+      const all = readVisits()
+      const mine = all.filter((v) => v.date === date && v.visitId === visitId)
+      if (mine.length >= 20 || mine.some((v) => v.step === step && v.branchId === branchId)) return
+      writeVisits([...all, { visitId, step, branchId, date }])
+    },
+
+    async visitFunnel({ date, branchId }) {
+      const day = readVisits().filter((v) => v.date === date)
+      const inBranch = new Set(day.filter((v) => !branchId || v.branchId === branchId).map((v) => v.visitId))
+      const top = new Map<string, number>()
+      for (const v of day) if (inBranch.has(v.visitId)) top.set(v.visitId, Math.max(top.get(v.visitId) ?? 0, VISIT_STEPS.indexOf(v.step)))
+      const funnel: VisitFunnel = { visitors: top.size, home: 0, menu: 0, cart: 0, checkout: 0, ordered: 0 }
+      for (const t of top.values()) funnel[VISIT_STEPS[t]] += 1
+      return funnel
     },
 
     async advanceDueOrders() {

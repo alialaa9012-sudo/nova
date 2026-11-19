@@ -372,3 +372,32 @@ describe('call-center queue', () => {
     expect(within(screen.getByRole('list', { name: 'قائمة الطلبات' })).getAllByRole('heading', { level: 2 }).map((h) => h.textContent)).toEqual(['#02', '#01'])
   })
 })
+
+describe('visitors who did not order', () => {
+  it('records each step of a visit once and shows staff where visitors stopped', async () => {
+    const { recordStep } = await import('@/lib/visits')
+    // This browser: opened the site, Ashry's menu and added to the cart (twice: counted once).
+    recordStep('home')
+    recordStep('menu', 'ashry')
+    recordStep('cart', 'ashry')
+    recordStep('cart', 'ashry')
+    // Two other visitors: one left from the home page, one ordered at Tagamoa.
+    const today = new Intl.DateTimeFormat('en-CA', { timeZone: 'Africa/Cairo' }).format(new Date())
+    await api.logVisit('other-1', 'home')
+    for (const step of ['menu', 'cart', 'checkout', 'ordered'] as const) await api.logVisit('other-2', step, 'tagamoa')
+    await vi.waitFor(async () => expect((await api.visitFunnel({ date: today })).visitors).toBe(3))
+
+    renderAt('/admin/visits')
+    const summary = await screen.findByRole('list', { name: 'ملخص الزوار' })
+    expect(summary).toHaveTextContent('زوار3')
+    expect(summary).toHaveTextContent('طلبوا1')
+    expect(summary).toHaveTextContent('لم يطلبوا2')
+    const stops = screen.getByRole('region', { name: 'أين توقف من لم يطلب؟' })
+    expect(within(stops).getAllByRole('listitem').map((li) => li.textContent)).toEqual([
+      expect.stringMatching(/^الصفحة الرئيسية.*1 \(50%\)$/),
+      expect.stringMatching(/^المنيو.*0 \(0%\)$/),
+      expect.stringMatching(/^السلة.*1 \(50%\)$/),
+      expect.stringMatching(/^إتمام الطلب.*0 \(0%\)$/),
+    ])
+  })
+})

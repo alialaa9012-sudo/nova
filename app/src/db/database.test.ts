@@ -395,3 +395,34 @@ describe('staff and tracking', () => {
     await expect(place({ ...order, phone: '01500000003' })).rejects.toThrow(/INVALID_ZONE/)
   })
 })
+
+describe('visitors who did not order', () => {
+  it('records anonymous steps once each and tells staff where each visitor stopped', async () => {
+    await at('2027-01-04 12:00+02')
+    const log = (visit: string, step: string, branch: string | null = null) =>
+      as('anon', () => db.query('select public.log_visit($1, $2, $3)', [visit, step, branch]))
+    const a = 'aaaaaaaa-0000-4000-8000-000000000001'
+    const b = 'aaaaaaaa-0000-4000-8000-000000000002'
+    const c = 'aaaaaaaa-0000-4000-8000-000000000003'
+    await log(a, 'home')
+    await log(a, 'home') // repeats count once
+    await log(b, 'home')
+    await log(b, 'menu', 'ashry')
+    await log(b, 'cart', 'ashry')
+    await log(c, 'menu', 'tagamoa')
+    await log(c, 'cart', 'tagamoa')
+    await log(c, 'checkout', 'tagamoa')
+    await log(c, 'ordered', 'tagamoa')
+    await log(c, 'hacked')
+
+    const funnel = (branch: string | null) =>
+      as(STAFF, async () => (await db.query<{ f: Record<string, number> }>('select public.visit_funnel($1, $2) as f', ['2027-01-04', branch])).rows[0].f)
+    expect(await funnel(null)).toEqual({ visitors: 3, home: 1, menu: 0, cart: 1, checkout: 0, ordered: 1 })
+    expect(await funnel('ashry')).toEqual({ visitors: 1, home: 0, menu: 0, cart: 1, checkout: 0, ordered: 0 })
+
+    // Visitors cannot read the steps, and a signed-in non-staff account gets nothing.
+    await expect(as('anon', () => db.query('select * from visit_events'))).rejects.toThrow(/permission denied/)
+    await expect(as('anon', () => db.query("select public.visit_funnel('2027-01-04')"))).rejects.toThrow(/permission denied/)
+  })
+})
+

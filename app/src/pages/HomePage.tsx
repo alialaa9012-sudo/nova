@@ -1,4 +1,5 @@
 import { ChevronLeft, MapPin, MessageCircle, PackageSearch, Phone, ShoppingBag } from 'lucide-react'
+import { useEffect } from 'react'
 import { Link } from 'react-router'
 import { BottomNav } from '@/components/BottomNav'
 import { HeroBanner } from '@/components/HeroBanner'
@@ -8,6 +9,7 @@ import { useNow } from '@/hooks/useNow'
 import { brand, branches, heroBanners, type Branch } from '@/lib/catalog'
 import { lastOrder } from '@/lib/lastOrder'
 import { orderLabel } from '@/lib/orderNumber'
+import { recordStep } from '@/lib/visits'
 
 const iconLink =
   'grid size-[clamp(44px,6.4vh,52px)] shrink-0 place-items-center rounded-2xl bg-control text-foreground ring-1 ring-border outline-none hover:bg-gold-soft focus-visible:ring-3 focus-visible:ring-ring/50 lg:size-14 [&_svg]:size-[18px] lg:[&_svg]:size-6'
@@ -64,6 +66,7 @@ function Slogan() {
 export function HomePage() {
   const now = useNow()
   const previous = lastOrder()
+  useEffect(() => recordStep('home'), [])
   return (
     <>
       <title>خليها مشاوي | اطلب أونلاين</title>

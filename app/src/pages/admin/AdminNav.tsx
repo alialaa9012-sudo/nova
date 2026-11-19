@@ -6,6 +6,7 @@ import { cn } from '@/lib/utils'
 const LINKS = [
   { to: '/admin', label: 'الطلبات', end: true },
   { to: '/admin/zones', label: 'مناطق التوصيل', end: false },
+  { to: '/admin/visits', label: 'الزوار', end: false },
 ]
 
 /** The staff band: gold logo, the board's name and the switch between its screens. */

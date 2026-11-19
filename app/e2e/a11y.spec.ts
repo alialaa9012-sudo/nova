@@ -118,6 +118,22 @@ test.describe('accessibility @a11y', () => {
     await expect(page.getByRole('dialog', { name: 'إلغاء الطلب #01' })).toBeVisible()
     await expectNoViolations(page, testInfo, 'cancel-dialog')
   })
+  test('visitors screen', async ({ page }, testInfo) => {
+    // Test browsers are not counted as visitors, so seed one day of the demo's visit log.
+    const today = new Intl.DateTimeFormat('en-CA', { timeZone: 'Africa/Cairo' }).format(MONDAY_NOON_CAIRO)
+    await page.goto('/admin/visits')
+    await page.evaluate(
+      `localStorage.setItem('km.demo.visits.v1', JSON.stringify([
+        { visitId: 'a', step: 'home', date: '${today}' },
+        { visitId: 'b', step: 'menu', branchId: 'ashry', date: '${today}' },
+        { visitId: 'c', step: 'ordered', branchId: 'ashry', date: '${today}' },
+      ]))`,
+    )
+    await page.reload()
+    await expect(page.getByRole('list', { name: 'ملخص الزوار' })).toContainText('3')
+    await expectNoViolations(page, testInfo, 'admin-visits')
+  })
+
   test('delivery zones screen with errors, an added zone and the delete confirmation', async ({ page }, testInfo) => {
     await page.goto('/admin/zones')
     await expect(page.getByRole('heading', { name: 'مناطق تحتاج سعراً (8)' })).toBeVisible()

@@ -19,6 +19,7 @@ import { formatTimeAr, getOpenStatus } from '@/lib/hours'
 import { matchesSearch, searchKey } from '@/lib/text'
 import { useBranch } from '@/state/branch-context'
 import { useCart } from '@/state/cart-context'
+import { recordStep } from '@/lib/visits'
 
 /** The gold diamonds and hairlines around a section title. */
 function SectionTitle({ id, children }: { id: string; children: string }) {
@@ -78,6 +79,7 @@ export function MenuPage() {
   const navigate = useNavigate()
   const reordered = (location.state as { reordered?: { added: number; missing: string[] } } | null)?.reordered
   const [cartOpen, setCartOpen] = useState(() => Boolean(reordered))
+  useEffect(() => recordStep('menu', branch.id), [branch.id])
   useEffect(() => {
     if (!reordered) return
     navigate(location.pathname, { replace: true, state: null }) // a reload must not reopen it
@@ -257,6 +259,7 @@ export function MenuPage() {
               qty,
               line: { sizeId: size.id, itemId: selected.id, name: selected.name, sizeLabel: size.label, unitPrice: size.price, note },
             })
+            recordStep('cart', branch.id)
             toast.success(`أُضيف ${selected.name}${size.label ? ` (${size.label})` : ''} إلى السلة`)
             setSelected(null)
           }}

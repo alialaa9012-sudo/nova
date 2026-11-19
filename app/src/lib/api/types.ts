@@ -77,6 +77,13 @@ export interface Order {
   history: StatusEvent[]
 }
 
+/** How far a visitor got: opened the site, a menu, added to the cart, opened checkout, ordered. */
+export type VisitStep = 'home' | 'menu' | 'cart' | 'checkout' | 'ordered'
+export const VISIT_STEPS: VisitStep[] = ['home', 'menu', 'cart', 'checkout', 'ordered']
+
+/** One day's visitors, and how many stopped at each step (the furthest each one reached). */
+export type VisitFunnel = { visitors: number } & Record<VisitStep, number>
+
 /** Same error codes as the database functions (e.g. BRANCH_CLOSED). */
 export class ApiError extends Error {
   code: string
@@ -118,6 +125,10 @@ export interface OrdersApi {
   getOrder(orderId: string): Promise<Order | null>
   setStatus(orderId: string, status: OrderStatus, note?: string): Promise<Order>
   setPosInvoice(orderId: string, value: string): Promise<Order>
+  /** Records a step of an anonymous visit (a random id per browser and day); repeats are ignored. */
+  logVisit(visitId: string, step: VisitStep, branchId?: BranchId): Promise<void>
+  /** Staff: one day's visitors and where they stopped; with a branch, those who opened its menu. */
+  visitFunnel(options: { date: string; branchId?: BranchId }): Promise<VisitFunnel>
   /** Moves every order whose preparation time is up (the database also does this each minute). */
   advanceDueOrders(): Promise<void>
   /** Zones a customer of this branch can choose, including zones added by the admin. */

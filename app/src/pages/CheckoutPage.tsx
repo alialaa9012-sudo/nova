@@ -22,6 +22,7 @@ import { computeTotals, type OrderType } from '@/lib/pricing'
 import { useBranch } from '@/state/branch-context'
 import { useCart } from '@/state/cart-context'
 import { cn } from '@/lib/utils'
+import { recordStep } from '@/lib/visits'
 
 const ORDER_TYPES = [
   { value: 'delivery', label: 'توصيل للعنوان', icon: Bike },
@@ -39,6 +40,7 @@ export function CheckoutPage() {
   const now = useNow()
   const { lines, dispatch } = useCart()
   const [zones, setZones] = useState<DeliveryZone[]>([])
+  useEffect(() => recordStep('checkout', branch.id), [branch.id])
   useEffect(() => {
     let alive = true
     const load = async () => {
@@ -104,6 +106,7 @@ export function CheckoutPage() {
         clientRef,
         lines: lines.map((l) => ({ sizeId: l.sizeId, qty: l.qty, note: l.note })),
       })
+      recordStep('ordered', branch.id)
       dispatch({ type: 'clear' })
       clearDraft(branch.id)
       rememberOrder(order.number, order.phone)
