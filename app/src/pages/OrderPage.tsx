@@ -33,12 +33,11 @@ export function OrderPage() {
       if (alive) setOrder(found)
     }
     void load()
-    const stop = api.subscribe(() => void load())
-    const timer = setInterval(() => void load(), 30_000)
+    // The customer gets no push, so the status is re-read every 15 seconds while the page is open.
+    const stop = api.subscribe(() => void load(), { pollMs: 15_000 })
     return () => {
       alive = false
       stop()
-      clearInterval(timer)
     }
   }, [number, phone])
 

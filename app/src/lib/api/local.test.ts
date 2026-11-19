@@ -33,6 +33,17 @@ const tagamoaDelivery = (): PlaceOrderInput => ({
 })
 
 describe('local demo backend', () => {
+  it('lists one day of orders and finds an order by id', async () => {
+    const { api, setClock } = setup()
+    const first = await api.placeOrder(tagamoaDelivery())
+    setClock(new Date(Date.UTC(2027, 0, 5, 10)))
+    await api.placeOrder({ ...tagamoaDelivery(), phone: '01012345679' })
+    expect((await api.listOrders({ date: '2027-01-04' })).map((o) => o.number)).toEqual(['T-0001'])
+    expect(await api.listOrders()).toHaveLength(2)
+    expect((await api.getOrder(first.id))?.number).toBe('T-0001')
+    expect(await api.getOrder('nope')).toBeNull()
+  })
+
   it('places an order with the same totals and numbering as the database', async () => {
     const { api } = setup()
     const order = await api.placeOrder(tagamoaDelivery())

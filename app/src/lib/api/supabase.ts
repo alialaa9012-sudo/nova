@@ -244,9 +244,17 @@ export function createSupabaseApi(client: SupabaseClient): OrdersApi {
       return tracked ? fromTracked(tracked, normalized) : null
     },
 
-    async listOrders() {
-      const rows = check(await client.from('orders').select(ORDER_COLUMNS).order('created_at', { ascending: false }).limit(1000)) as unknown as Row[]
+    async listOrders(options) {
+      // One day at a time: the board never downloads the whole history.
+      let q = client.from('orders').select(ORDER_COLUMNS)
+      if (options?.date) q = q.eq('order_date', options.date)
+      const rows = check(await q.order('created_at', { ascending: false }).limit(1000)) as unknown as Row[]
       return rows.map(fromRow)
+    },
+
+    async getOrder(orderId) {
+      const row = check(await client.from('orders').select(ORDER_COLUMNS).eq('id', orderId).maybeSingle())
+      return row ? fromRow(row as unknown as Row) : null
     },
 
     async setStatus(orderId, status, note) {
@@ -290,17 +298,21 @@ export function createSupabaseApi(client: SupabaseClient): OrdersApi {
       check(await client.from('delivery_zones').delete().eq('id', zoneId))
     },
 
-    subscribe(onChange) {
-      // Staff get a push when an order or zone changes. Customers cannot read orders, so every
-      // screen also re-reads on a timer, which is how a tracked order shows its new status.
+    subscribe(onChange, options) {
+      // Staff get a push naming the order that changed, so the board fetches that order alone.
+      // Customers cannot read orders and get no push, so their screens re-read on a timer instead.
       const channel = client
         .channel(`km-${Math.random().toString(36).slice(2)}`)
-        .on('postgres_changes', { event: '*', schema: 'public', table: 'orders' }, onChange)
-        .on('postgres_changes', { event: '*', schema: 'public', table: 'delivery_zones' }, onChange)
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'orders' }, (payload) => {
+          const row = (payload.new && Object.keys(payload.new).length ? payload.new : payload.old) as Row | undefined
+          onChange(row?.id ? { orderId: String(row.id) } : undefined)
+        })
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'delivery_zones' }, () => onChange())
         .subscribe()
-      const timer = setInterval(onChange, POLL_MS)
+      const ms = options?.pollMs ?? POLL_MS
+      const timer = ms > 0 ? setInterval(() => onChange(), ms) : undefined
       return () => {
-        clearInterval(timer)
+        if (timer) clearInterval(timer)
         void client.removeChannel(channel)
       }
     },

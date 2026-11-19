@@ -41,30 +41,46 @@ export function AdminPage() {
   const [cancelId, setCancelId] = useState<string | null>(null)
   const known = useRef<Set<string> | null>(null)
 
+  // The board holds one day's orders. A change pushed by the database fetches only that order; a
+  // slow timer re-reads the day in case a push was missed (for example after the screen slept).
   useEffect(() => {
     let alive = true
+    known.current = null // a new day is not a burst of new orders
+    const announce = (fresh: Order[]) => {
+      if (fresh.length === 0) return
+      playBeep()
+      toast.success(`طلب جديد: ${fresh.map((o) => o.number).join('، ')}`)
+    }
     const load = async () => {
-      const list = await api.listOrders()
+      const list = await api.listOrders({ date: date || undefined })
       if (!alive) return
       const seen = known.current
-      const fresh = seen ? list.filter((o) => !seen.has(o.id)) : []
-      if (fresh.length > 0) {
-        playBeep()
-        toast.success(`طلب جديد: ${fresh.map((o) => o.number).join('، ')}`)
-      }
+      announce(seen ? list.filter((o) => !seen.has(o.id)) : [])
       known.current = new Set(list.map((o) => o.id))
       setOrders(list)
       setLoaded(true)
     }
+    const refreshOne = async (orderId: string) => {
+      const order = await api.getOrder(orderId)
+      if (!alive) return
+      if (!order || (date && order.date !== date)) {
+        setOrders((list) => list.filter((o) => o.id !== orderId))
+        return
+      }
+      const seen = known.current
+      if (seen && !seen.has(order.id)) {
+        announce([order])
+        seen.add(order.id)
+      }
+      setOrders((list) => (list.some((o) => o.id === order.id) ? list.map((o) => (o.id === order.id ? order : o)) : [order, ...list]))
+    }
     void load()
-    const stop = api.subscribe(() => void load())
-    const timer = setInterval(() => void load(), 20_000)
+    const stop = api.subscribe((change) => void (change?.orderId ? refreshOne(change.orderId) : load()), { pollMs: 120_000 })
     return () => {
       alive = false
       stop()
-      clearInterval(timer)
     }
-  }, [])
+  }, [date])
 
   const q = toAsciiDigits(query).trim().toUpperCase()
   const inScope = orders.filter(

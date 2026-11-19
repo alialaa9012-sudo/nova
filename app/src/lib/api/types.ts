@@ -100,7 +100,10 @@ export interface OrdersApi {
   readonly auth?: AuthApi
   placeOrder(input: PlaceOrderInput): Promise<Order>
   trackOrder(number: string, phone: string): Promise<Order | null>
-  listOrders(): Promise<Order[]>
+  /** Staff: orders of one Cairo date (YYYY-MM-DD), or the latest 1000 without a date. */
+  listOrders(options?: { date?: string }): Promise<Order[]>
+  /** Staff: one order, or null when it no longer exists. */
+  getOrder(orderId: string): Promise<Order | null>
   setStatus(orderId: string, status: OrderStatus, note?: string): Promise<Order>
   setPosInvoice(orderId: string, value: string): Promise<Order>
   /** Zones a customer of this branch can choose, including zones added by the admin. */
@@ -108,6 +111,10 @@ export interface OrdersApi {
   addZone(branchId: BranchId, input: NewZoneInput): Promise<DeliveryZone>
   /** Removes a zone that was added through addZone. Placed orders keep their own copy. */
   removeZone(zoneId: string): Promise<void>
-  /** Called when orders or zones change. */
-  subscribe(onChange: () => void): () => void
+  /**
+   * Calls onChange when orders or zones change. When the backend knows which order changed it passes
+   * its id, so a screen can fetch just that order. pollMs re-checks on a timer for screens that get no
+   * push (customers); 0 turns the timer off. The local demo ignores it.
+   */
+  subscribe(onChange: (change?: { orderId?: string }) => void, options?: { pollMs?: number }): () => void
 }

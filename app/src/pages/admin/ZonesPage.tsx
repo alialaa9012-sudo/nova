@@ -56,7 +56,7 @@ export function ZonesPage() {
       if (alive) setZones(list)
     }
     void load()
-    const stop = api.subscribe(() => void load())
+    const stop = api.subscribe(() => void load(), { pollMs: 120_000 })
     return () => {
       alive = false
       stop()

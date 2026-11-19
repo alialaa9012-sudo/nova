@@ -15,12 +15,14 @@ function fake(replies: { tables?: Record<string, Reply | Reply[]>; rpc?: Record<
   }
   const builder = (table: string) => {
     const b: Record<string, unknown> = {}
-    for (const m of ['select', 'eq', 'order', 'limit', 'maybeSingle', 'single']) b[m] = () => b
+    for (const m of ['select', 'order', 'limit', 'maybeSingle', 'single']) b[m] = () => b
+    b.eq = (column: string, value: unknown) => (calls.push({ kind: 'eq', name: table, args: [column, value] }), b)
     for (const m of ['insert', 'update', 'delete']) b[m] = (args: unknown) => (calls.push({ kind: m, name: table, args }), b)
     b.then = (resolve: (r: Reply) => unknown) => resolve(next(table))
     return b
   }
   let signedOut = false
+  const listeners: { table: string; cb: (payload: unknown) => void }[] = []
   const client = {
     from: (table: string) => builder(table),
     rpc: (name: string, args: unknown) => {
@@ -34,10 +36,14 @@ function fake(replies: { tables?: Record<string, Reply | Reply[]>; rpc?: Record<
       signOut: () => ((signedOut = true), Promise.resolve({ error: null })),
       onAuthStateChange: () => ({ data: { subscription: { unsubscribe() {} } } }),
     },
-    channel: () => ({ on() { return this }, subscribe() { return this } }),
+    channel: () => ({
+      on(_kind: string, filter: { table: string }, cb: (payload: unknown) => void) { listeners.push({ table: filter.table, cb }); return this },
+      subscribe() { return this },
+    }),
     removeChannel: () => Promise.resolve('ok'),
   }
-  return { client: client as unknown as SupabaseClient, calls, wasSignedOut: () => signedOut }
+  const push = (table: string, payload: unknown) => listeners.filter((l) => l.table === table).forEach((l) => l.cb(payload))
+  return { client: client as unknown as SupabaseClient, calls, wasSignedOut: () => signedOut, push }
 }
 
 const item = getMenu('ashry').flatMap((c) => c.items).find((i) => i.name === 'صدور فراخ')!
@@ -114,6 +120,34 @@ describe('Supabase backend', () => {
     const order = await createSupabaseApi(client).setStatus('uuid-1', 'preparing')
     expect(calls.find((c) => c.name === 'set_order_status')!.args).toEqual({ p_order_id: 'uuid-1', p_status: 'preparing', p_note: null })
     expect(order.status).toBe('preparing')
+  })
+
+  it('loads one day of orders for the board, and a single order by id', async () => {
+    const { client, calls } = fake({ tables: { orders: [{ data: [], error: null }, { data: null, error: null }] } })
+    const api = createSupabaseApi(client)
+    await api.listOrders({ date: '2027-01-04' })
+    expect(calls).toContainEqual({ kind: 'eq', name: 'orders', args: ['order_date', '2027-01-04'] })
+    expect(await api.getOrder('missing')).toBeNull()
+  })
+
+  it('names the changed order in a push and does not poll when asked not to', async () => {
+    vi.useFakeTimers()
+    try {
+      const { client, push } = fake({})
+      const seen: unknown[] = []
+      const stop = createSupabaseApi(client).subscribe((change) => seen.push(change), { pollMs: 0 })
+      push('orders', { new: { id: 'uuid-9' }, old: {} })
+      vi.advanceTimersByTime(60_000)
+      expect(seen).toEqual([{ orderId: 'uuid-9' }])
+      stop()
+      const polled: unknown[] = []
+      const stop2 = createSupabaseApi(client).subscribe((change) => polled.push(change), { pollMs: 15_000 })
+      vi.advanceTimersByTime(30_000)
+      expect(polled).toHaveLength(2)
+      stop2()
+    } finally {
+      vi.useRealTimers()
+    }
   })
 
   describe('zones', () => {

@@ -196,8 +196,14 @@ export function createLocalApi(options: { store: KeyValueStore; now?: () => Date
       return matches[0] ?? null
     },
 
-    async listOrders() {
-      return read().sort((a, b) => b.createdAt.localeCompare(a.createdAt))
+    async listOrders(options) {
+      return read()
+        .filter((o) => !options?.date || o.date === options.date)
+        .sort((a, b) => b.createdAt.localeCompare(a.createdAt))
+    },
+
+    async getOrder(orderId) {
+      return read().find((o) => o.id === orderId) ?? null
     },
 
     async setStatus(orderId: string, status: OrderStatus, note?: string) {
@@ -260,10 +266,11 @@ export function createLocalApi(options: { store: KeyValueStore; now?: () => Date
       const onStorage = (e: StorageEvent) => {
         if (e.key === ORDERS_KEY || e.key === ZONES_KEY) onChange()
       }
-      events.addEventListener(CHANGE_EVENT, onChange)
+      const onEvent = () => onChange()
+      events.addEventListener(CHANGE_EVENT, onEvent)
       if (typeof window !== 'undefined') window.addEventListener('storage', onStorage)
       return () => {
-        events.removeEventListener(CHANGE_EVENT, onChange)
+        events.removeEventListener(CHANGE_EVENT, onEvent)
         if (typeof window !== 'undefined') window.removeEventListener('storage', onStorage)
       }
     },

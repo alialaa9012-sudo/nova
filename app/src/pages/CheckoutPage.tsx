@@ -46,7 +46,8 @@ export function CheckoutPage() {
       if (alive) setZones(list)
     }
     void load()
-    const stop = api.subscribe(() => void load())
+    // Zones rarely change; a minute is soon enough for one the call center just added.
+    const stop = api.subscribe(() => void load(), { pollMs: 60_000 })
     return () => {
       alive = false
       stop()
