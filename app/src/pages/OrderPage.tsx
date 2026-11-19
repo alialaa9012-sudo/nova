@@ -130,24 +130,24 @@ export function OrderPage() {
   return (
     <>
       <title>{`طلب ${orderLabel(order.number)} | خليها مشاوي`}</title>
-      <BandHeader backTo="/" backLabel="الصفحة الرئيسية" branchName={branch?.name} wide>
-        <div className="mt-5 lg:flex lg:items-end lg:justify-between lg:gap-8">
-          {navState?.justPlaced ? (
-            <div role="status" className="flex items-center gap-2.5">
-              <span className="grid size-8 shrink-0 place-items-center rounded-full bg-linear-to-br from-[#d8b57a] to-gold text-brand ring-[3px] ring-gold-hi/20" aria-hidden="true">
-                <Check className="size-[18px] stroke-3" />
+      <BandHeader backTo="/" backLabel="الصفحة الرئيسية" branchName={branch?.name} wide bigLogo>
+        {/* The number is shown once, in its own card; the heading thanks the customer instead. */}
+        <div className="mt-5 lg:flex lg:items-center lg:justify-between lg:gap-8">
+          <div role={navState?.justPlaced ? 'status' : undefined} className="flex items-start gap-3">
+            {navState?.justPlaced ? (
+              <span className="mt-1 grid size-9 shrink-0 place-items-center rounded-full bg-linear-to-br from-[#d8b57a] to-gold text-brand ring-[3px] ring-gold-hi/20" aria-hidden="true">
+                <Check className="size-5 stroke-3" />
               </span>
-              <div className="leading-tight">
-                <h1 className="text-[19px] leading-7 font-extrabold lg:text-[28px] lg:leading-10">تم إرسال طلبك</h1>
-                <p className="text-xs text-band-muted lg:text-[13px]">احتفظ برقم الطلب لمتابعته.</p>
-              </div>
+            ) : null}
+            <div className="grid gap-1">
+              <h1 className="text-[21px] leading-8 font-extrabold lg:text-[28px] lg:leading-10">
+                {navState?.justPlaced ? 'تم إرسال طلبك، شكراً لك' : 'شكراً لاختيارك خليها مشاوي'}
+                <span className="sr-only"> · طلب رقم {orderLabel(order.number)}</span>
+              </h1>
+              <p className="text-[13px] leading-5 text-band-muted lg:text-sm">نجهّز طلبك بكل عناية، ونتمنى لك وجبة هنيّة.</p>
             </div>
-          ) : (
-            <h1 className="text-[22px] leading-8 font-extrabold lg:text-[28px] lg:leading-10">
-              طلب رقم <span dir="ltr">{orderLabel(order.number)}</span>
-            </h1>
-          )}
-          <div className="lg:min-w-[300px]">
+          </div>
+          <div className="mt-4 lg:mt-0 lg:min-w-[340px]">
             <OrderNumberCard number={order.number} />
           </div>
         </div>

@@ -22,12 +22,13 @@ export function OrderNumberCard({ number: raw }: { number: string }) {
   }
 
   const action =
-    "relative grid size-[38px] place-items-center rounded-xl bg-white/8 text-band-ink ring-1 ring-gold-hi/40 outline-none after:absolute after:-inset-[3px] after:content-[''] hover:bg-white/14 focus-visible:ring-3 focus-visible:ring-gold-hi/70"
+    "relative grid size-11 place-items-center rounded-xl bg-white/8 text-band-ink ring-1 ring-gold-hi/40 outline-none after:absolute after:-inset-[3px] after:content-[''] hover:bg-white/14 focus-visible:ring-3 focus-visible:ring-gold-hi/70"
   return (
-    <div className="mt-3.5 flex items-center gap-2.5 border-t border-gold-hi/30 pt-3.5">
+    // A glass card: the one place the number is shown, large enough to read out on the phone.
+    <div className="flex items-center gap-2.5 rounded-[20px] bg-white/7 px-4 py-3.5 ring-1 ring-gold-hi/35 backdrop-blur-sm lg:px-5 lg:py-4">
       <p className="grid flex-1 leading-tight">
         <span className="text-xs text-band-muted">رقم طلبك</span>
-        <span id="order-number-value" dir="ltr" className="text-end text-[22px] leading-8 font-extrabold tracking-wide text-gold-hi tabular-nums">
+        <span id="order-number-value" dir="ltr" className="text-end text-[30px] leading-10 font-extrabold tracking-wide text-gold-hi tabular-nums lg:text-[34px]">
           {number}
         </span>
       </p>

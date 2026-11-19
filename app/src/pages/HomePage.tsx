@@ -129,7 +129,6 @@ export function HomePage() {
               </li>
             ))}
           </ul>
-          <p className="mt-8 hidden text-center text-xs leading-[18px] text-muted-foreground lg:block">الدفع كاش عند الاستلام.</p>
         </main>
       </div>
       <BottomNav />

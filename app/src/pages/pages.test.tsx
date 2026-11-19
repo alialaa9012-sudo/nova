@@ -66,7 +66,7 @@ describe('ordering', () => {
     await user.type(screen.getByLabelText('رقم الموبايل'), '01112345678')
     await user.click(screen.getByRole('button', { name: 'تأكيد الطلب · 680 ج.م' }))
 
-    expect(await screen.findByRole('heading', { name: 'تم إرسال طلبك' })).toBeInTheDocument()
+    expect(await screen.findByRole('heading', { name: /^تم إرسال طلبك/ })).toBeInTheDocument()
     expect(screen.getAllByText('#01').length).toBeGreaterThan(0)
     const timeline = screen.getByRole('list', { name: 'حالة الطلب' })
     expect(within(timeline).getByText('طلب جديد').closest('li')).toHaveAttribute('aria-current', 'step')
@@ -97,7 +97,7 @@ describe('ordering', () => {
     await user.type(screen.getByLabelText('الاسم'), 'منى')
     await user.type(screen.getByLabelText('رقم الموبايل'), '01112345678')
     await user.click(screen.getByRole('button', { name: /^تأكيد الطلب/ }))
-    expect(await screen.findByRole('heading', { name: 'تم إرسال طلبك' })).toBeInTheDocument()
+    expect(await screen.findByRole('heading', { name: /^تم إرسال طلبك/ })).toBeInTheDocument()
     const [order] = await api.listOrders()
     expect(order.lines.map((l) => l.note)).toEqual(['من غير شطة', undefined])
   })
@@ -334,7 +334,7 @@ describe('checkout draft and order number', () => {
     expect(screen.getByRole('radio', { name: 'استلام من الفرع' })).toBeChecked()
 
     await user.click(screen.getByRole('button', { name: /^تأكيد الطلب/ }))
-    expect(await screen.findByRole('heading', { name: 'تم إرسال طلبك' })).toBeInTheDocument()
+    expect(await screen.findByRole('heading', { name: /^تم إرسال طلبك/ })).toBeInTheDocument()
     expect(localStorage.getItem('km.checkoutDraft.v1.ashry')).toBeNull()
     // the order number stands on its own with copy and share
     expect(screen.getByRole('button', { name: 'نسخ رقم الطلب' })).toBeInTheDocument()

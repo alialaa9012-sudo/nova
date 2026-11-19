@@ -14,6 +14,7 @@ export function BandHeader({
   branchName,
   children,
   wide = false,
+  bigLogo = false,
 }: {
   backTo: string
   backLabel: string
@@ -21,6 +22,8 @@ export function BandHeader({
   children: ReactNode
   /** Checkout and the order page use two columns from 1024px. */
   wide?: boolean
+  /** A larger logo, for the order page. */
+  bigLogo?: boolean
 }) {
   return (
     <header className="bg-hero-to bg-[radial-gradient(90%_100%_at_50%_0%,var(--hero-from),var(--hero-to)_80%)] text-band-ink lg:bg-[radial-gradient(70%_140%_at_50%_0%,var(--hero-from),var(--hero-to)_80%)]">
@@ -33,7 +36,7 @@ export function BandHeader({
             <ArrowRight className="size-5" aria-hidden="true" />
             <span className="sr-only">{backLabel}</span>
           </Link>
-          <img src={brand.logoGoldSmallUrl} alt="خليها مشاوي" width={brand.logoGoldWidth} height={brand.logoGoldHeight} className="h-[52px] w-auto shrink-0 lg:h-[58px]" />
+          <img src={brand.logoGoldSmallUrl} alt="خليها مشاوي" width={brand.logoGoldWidth} height={brand.logoGoldHeight} className={cn('w-auto shrink-0', bigLogo ? 'h-16 lg:h-[72px]' : 'h-[52px] lg:h-[58px]')} />
           {branchName ? (
             <p className="grid min-w-0 border-s border-gold-hi/40 ps-2.5 leading-tight lg:ps-3">
               <span className="text-xs font-bold text-band-muted">فرع</span>
