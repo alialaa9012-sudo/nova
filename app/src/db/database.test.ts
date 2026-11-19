@@ -142,7 +142,7 @@ describe('catalog in the database', () => {
 describe('placing orders', () => {
   beforeAll(() => at('2027-01-04 12:00+02')) // Monday noon in Cairo
 
-  it('prices orders from the database, taxes only Tagamoa and numbers them per branch per day', async () => {
+  it('prices orders from the database, taxes only Tagamoa and numbers them in one daily sequence', async () => {
     const delivery = {
       branch_id: 'tagamoa',
       order_type: 'delivery',
@@ -167,8 +167,8 @@ describe('placing orders', () => {
       tax_amount: 88.2,
       total: 793.2,
     })
-    expect(await place(await pickup('ashry', '01112345678'))).toMatchObject({ order_number: '01', tax_amount: 0, total: 170 })
-    expect((await place({ ...delivery, phone: '01212345678' })).order_number).toBe('02')
+    expect(await place(await pickup('ashry', '01112345678'))).toMatchObject({ order_number: '02', tax_amount: 0, total: 170 })
+    expect((await place({ ...delivery, phone: '01212345678' })).order_number).toBe('03') // all branches share #01, #02, #03 …
 
     const lines = await db.query<{ name_snapshot: string; unit_price: string; qty: number; note: string | null }>(
       `select name_snapshot, unit_price::text, qty, note from order_items oi join orders o on o.id = oi.order_id
@@ -208,7 +208,7 @@ describe('placing orders', () => {
     await db.exec("update branches set accepting_orders = false, pause_reason = 'ضغط' where id = 'zagazig'")
     await expect(place(base)).rejects.toThrow(/BRANCH_PAUSED/)
     await db.exec("update branches set accepting_orders = true, pause_reason = null where id = 'zagazig'")
-    expect((await place(base)).order_number).toBe('01')
+    expect((await place(base)).order_number).toBe('04')
   })
 
   it('accepts orders until 01:00 after Thursday and restarts numbering on the new date', async () => {
@@ -320,7 +320,7 @@ describe('staff and tracking', () => {
   })
 
   it('requires a reason to cancel and never reopens a cancelled order', async () => {
-    const id = await orderId('ashry', '01', '2027-01-04')
+    const id = await orderId('ashry', '02', '2027-01-04')
     await expect(setStatus(STAFF, id, 'cancelled')).rejects.toThrow(/CANCEL_REASON_REQUIRED/)
     await setStatus(STAFF, id, 'cancelled', 'العميل ألغى الطلب')
     await expect(setStatus(STAFF, id, 'preparing')).rejects.toThrow(/INVALID_TRANSITION/)
@@ -334,7 +334,7 @@ describe('staff and tracking', () => {
       expect(rows.length).toBeGreaterThan(0)
       expect(new Set(rows.map((r) => r.branch_id))).toEqual(new Set(['ashry']))
     })
-    await expect(setStatus(ASHRY_AGENT, await orderId('tagamoa', '02', '2027-01-04'), 'preparing')).rejects.toThrow(/NOT_ALLOWED/)
+    await expect(setStatus(ASHRY_AGENT, await orderId('tagamoa', '03', '2027-01-04'), 'preparing')).rejects.toThrow(/NOT_ALLOWED/)
 
     const size = await sizeId('ashry', 'صدور فراخ', 'ربع')
     await as(STAFF, async () => {

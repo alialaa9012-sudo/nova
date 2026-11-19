@@ -179,7 +179,7 @@ export function createLocalApi(options: { store: KeyValueStore; now?: () => Date
       })
 
       const date = cairoDate(at)
-      const seq = 1 + orders.filter((o) => o.branchId === branch.id && o.date === date).length
+      const seq = 1 + orders.filter((o) => o.date === date).length // one sequence for all branches
       const createdAt = at.toISOString()
       const order: Order = {
         id: newId(),

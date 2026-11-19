@@ -209,6 +209,7 @@ test('searching «دجاج» finds the chicken dishes', async ({ page }) => {
 })
 
 test('the board rings until an order is accepted, times it, and closes it as delivered', async ({ page, context }) => {
+  test.setTimeout(60_000) // two full orders and the whole board flow: slow when every test runs at once
   await context.grantPermissions(['notifications'])
   const admin = await context.newPage()
   await admin.clock.setFixedTime(MONDAY_NOON_CAIRO)
