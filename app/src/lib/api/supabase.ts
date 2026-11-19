@@ -6,7 +6,8 @@ import type { SupabaseClient } from '@supabase/supabase-js'
 import { cleanNote } from '../cart'
 import { findSize, getBranch, type BranchId, type DeliveryZone } from '../catalog'
 import type { OrderStatus } from '../orderStatus'
-import { normalizeEgyptianMobile } from '../phone'
+import { cleanOrderNumber } from '../orderNumber'
+import { normalizeEgyptianMobile, toAsciiDigits } from '../phone'
 import { cleanZoneName, DEFAULT_ZONE_TYPE, MAX_ZONE_FEE, MAX_ZONE_NAME, zoneKey, zoneLabel } from '../zones'
 import { ApiError, type AuthApi, type NewZoneInput, type Order, type OrdersApi, type PlaceOrderInput } from './types'
 
@@ -243,10 +244,11 @@ export function createSupabaseApi(client: SupabaseClient): OrdersApi {
     },
 
     async trackOrder(number, phone) {
-      const normalized = normalizeEgyptianMobile(phone)
-      if (!normalized) return null
-      const tracked = check(await client.rpc('track_order', { p_order_number: number, p_phone: normalized })) as Row | null
-      return tracked ? fromTracked(tracked, normalized) : null
+      const normalized = phone ? normalizeEgyptianMobile(phone) : null
+      const wanted = number ? cleanOrderNumber(toAsciiDigits(number)) : null
+      if ((phone && !normalized) || (!normalized && !wanted)) return null
+      const tracked = check(await client.rpc('track_order', { p_order_number: wanted, p_phone: normalized })) as Row | null
+      return tracked ? fromTracked(tracked, normalized ?? '') : null
     },
 
     async listOrders(options) {

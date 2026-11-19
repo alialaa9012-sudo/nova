@@ -104,7 +104,11 @@ export interface OrdersApi {
   /** Staff sign-in. Missing on the local demo, where the board is open. */
   readonly auth?: AuthApi
   placeOrder(input: PlaceOrderInput): Promise<Order>
-  trackOrder(number: string, phone: string): Promise<Order | null>
+  /**
+   * A customer's order by number, by phone, or both. Phone: the latest order of the last 3 days.
+   * Number alone: today's order with that number.
+   */
+  trackOrder(number: string | null, phone: string | null): Promise<Order | null>
   /**
    * Staff: orders of one Cairo date (YYYY-MM-DD), or the latest 1000 without a date. With `since`
    * (an ISO time) only the orders created or changed after it, so a board can poll cheaply.

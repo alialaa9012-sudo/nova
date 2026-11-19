@@ -41,7 +41,7 @@ test.describe('accessibility @a11y', () => {
 
     await page.goto('/track')
     await page.getByRole('button', { name: 'عرض حالة الطلب' }).click()
-    await expect(page.getByText('اكتب رقم الطلب كما وصلك، مثل #12.')).toBeVisible()
+    await expect(page.getByText('اكتب رقم الطلب كما وصلك، مثل #12، أو رقم الموبايل الذي طلبت به.')).toBeVisible()
     await expectNoViolations(page, testInfo, 'track-with-errors')
 
     await page.goto('/nowhere')

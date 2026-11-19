@@ -56,7 +56,7 @@ test('a delivery order at Tagamoa: zone fee, 14% tax, order number, then the cal
   await expect(timeline.locator('[aria-current="step"]')).toContainText('تم استلام طلبك وجاري التجهيز')
 })
 
-test('a pickup order can be tracked later by number and phone', async ({ page }) => {
+test('a pickup order can be tracked later by its number or by the phone alone', async ({ page, context }) => {
   await page.goto('/branch/ashry')
   await addToCart(page, 'صدور فراخ', /^نص/, 'أضف للسلة · 340 ج.م')
   await page.getByRole('button', { name: /عرض السلة/ }).click()
@@ -70,19 +70,30 @@ test('a pickup order can be tracked later by number and phone', async ({ page })
   await expect(page).toHaveURL(/\/order\/01$/)
   await expect(page.getByRole('list', { name: 'حالة الطلب' })).toContainText('جاهز للاستلام')
 
-  await page.goto('/track')
-  await page.getByLabel('رقم الطلب').fill('#01')
-  await page.getByLabel('رقم الموبايل').fill('01112345678')
-  await page.getByRole('button', { name: 'عرض حالة الطلب' }).click()
-  await expect(page).toHaveURL(/\/order\/01$/)
-  await expect(page.getByRole('list', { name: 'حالة الطلب' })).toBeVisible()
+  // One field: the phone alone finds the order (a customer who lost the number)…
+  const fresh = await context.newPage()
+  await fresh.clock.setFixedTime(MONDAY_NOON_CAIRO)
+  const track = async (value: string) => {
+    await fresh.goto('/track')
+    // As on another phone: the demo keeps its orders in this browser, but forget the remembered one.
+    await fresh.evaluate("localStorage.removeItem('km.lastOrder.v1')")
+    await fresh.getByLabel('رقم الطلب أو رقم الموبايل').fill(value)
+    await fresh.getByRole('button', { name: 'عرض حالة الطلب' }).click()
+  }
+  await track('01112345678')
+  await expect(fresh).toHaveURL(/\/order\/01$/)
+  await expect(fresh.getByRole('list', { name: 'حالة الطلب' })).toBeVisible()
 
-  // A wrong phone does not reveal the order.
-  await page.goto('/track')
-  await page.getByLabel('رقم الطلب').fill('01')
-  await page.getByLabel('رقم الموبايل').fill('01000000000')
-  await page.getByRole('button', { name: 'عرض حالة الطلب' }).click()
-  await expect(page.getByRole('heading', { name: 'لم نجد هذا الطلب' })).toBeVisible()
+  // …and so does today's number, with or without «#».
+  await track('#01')
+  await expect(fresh).toHaveURL(/\/order\/01$/)
+  await expect(fresh.getByRole('list', { name: 'حالة الطلب' })).toBeVisible()
+
+  // An unknown phone or number says so on the same page.
+  await track('01000000000')
+  await expect(fresh.getByText('لم نجد طلباً بهذا الرقم خلال آخر 3 أيام.')).toBeVisible()
+  await track('77')
+  await expect(fresh.getByText('لم نجد طلباً بهذا الرقم اليوم. لطلب أقدم ابحث برقم الموبايل.')).toBeVisible()
 })
 
 test('a closed branch lets the customer prepare a cart but not confirm it', async ({ page }) => {

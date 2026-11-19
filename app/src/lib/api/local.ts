@@ -209,11 +209,20 @@ export function createLocalApi(options: { store: KeyValueStore; now?: () => Date
 
     async trackOrder(number, phone) {
       advanceDue()
-      const wanted = cleanOrderNumber(toAsciiDigits(number))
-      const normalized = normalizeEgyptianMobile(phone)
+      // Same rules as track_order() in the database.
+      const wanted = number ? cleanOrderNumber(toAsciiDigits(number)) : null
+      const normalized = phone ? normalizeEgyptianMobile(phone) : null
+      if ((phone && !normalized) || (!normalized && !wanted)) return null
       const cutoff = now().getTime() - 3 * 24 * 60 * 60_000
+      const today = cairoDate(now())
       const matches = read()
-        .filter((o) => o.number === wanted && o.phone === normalized && Date.parse(o.createdAt) > cutoff)
+        .filter(
+          (o) =>
+            Date.parse(o.createdAt) > cutoff &&
+            (!normalized || o.phone === normalized) &&
+            (!wanted || o.number === wanted) &&
+            (normalized || o.date === today),
+        )
         .sort((a, b) => b.createdAt.localeCompare(a.createdAt))
       return matches[0] ?? null
     },

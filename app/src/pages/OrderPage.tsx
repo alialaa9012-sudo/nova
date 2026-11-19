@@ -5,7 +5,6 @@ import { BandHeader, BandSheet } from '@/components/BandHeader'
 import { OrderNumberCard } from '@/components/OrderNumberCard'
 import { OrderSummary } from '@/components/OrderSummary'
 import { StatusTimeline } from '@/components/StatusTimeline'
-import { TrackForm } from '@/components/TrackForm'
 import { Button } from '@/components/ui/button'
 import { api, type Order } from '@/lib/api'
 import { branches, brand, getBranch } from '@/lib/catalog'
@@ -24,14 +23,15 @@ export function OrderPage() {
   const location = useLocation()
   const navState = location.state as { phone?: string; justPlaced?: boolean } | null
   const remembered = lastOrder()
-  const [phone, setPhone] = useState(navState?.phone ?? (remembered?.number === number ? remembered.phone : undefined))
+  // With the phone (just placed, found by phone, or remembered on this device) the lookup is exact;
+  // with the number alone it finds today's order with that number.
+  const phone = navState?.phone ?? (remembered?.number === number ? remembered.phone : undefined)
   const [order, setOrder] = useState<Order | null | undefined>(undefined)
 
   useEffect(() => {
-    if (!phone) return
     let alive = true
     const load = async () => {
-      const found = await api.trackOrder(number, phone)
+      const found = await api.trackOrder(number, phone ?? null)
       if (alive) setOrder(found)
     }
     void load()
@@ -50,23 +50,6 @@ export function OrderPage() {
       {line ? <p className="mt-1 text-sm leading-[22px] text-band-muted">{line}</p> : null}
     </BandHeader>
   )
-
-  if (!phone) {
-    return (
-      <>
-        <title>{`طلب ${orderLabel(number)} | خليها مشاوي`}</title>
-        {band(
-          <>
-            طلب رقم <span dir="ltr">{orderLabel(number)}</span>
-          </>,
-          'اكتب رقم الموبايل الذي طلبت به لعرض حالة الطلب.',
-        )}
-        <BandSheet className="pt-4 pb-12">
-          <TrackForm fixedNumber={number} onDone={(_n, p) => setPhone(p)} />
-        </BandSheet>
-      </>
-    )
-  }
 
   if (order === undefined) {
     return (

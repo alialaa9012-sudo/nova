@@ -136,10 +136,7 @@ describe('ordering', () => {
   })
 
   it('offers WhatsApp and the branch named by the order letter when an order is not found', async () => {
-    const user = userEvent.setup()
     renderAt('/order/Z-0042')
-    await user.type(screen.getByLabelText('رقم الموبايل'), '01098765432')
-    await user.click(screen.getByRole('button', { name: 'عرض حالة الطلب' }))
     expect(await screen.findByRole('heading', { name: 'لم نجد هذا الطلب' })).toBeInTheDocument()
     expect(screen.getByRole('link', { name: 'اتصل بالفرع' })).toHaveAttribute('href', 'tel:0552311777')
     expect(screen.getByRole('link', { name: 'واتساب' })).toHaveAttribute('href', 'https://wa.me/201061005627')

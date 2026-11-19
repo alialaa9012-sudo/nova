@@ -271,6 +271,24 @@ describe('staff and tracking', () => {
     const who = await db.query<{ changed_by: string | null }>('select changed_by from order_status_history where order_id = $1 order by id', [id])
     expect(who.rows.map((r) => r.changed_by)).toEqual([null, STAFF, STAFF])
 
+    // One field on the site: the phone alone finds the latest order, the number alone today's order.
+    const byPhone = await as('anon', async () =>
+      (await db.query<{ t: Tracked | null }>("select public.track_order(null, '01012345678') as t")).rows[0].t,
+    )
+    expect(byPhone?.total).toBe(793.2)
+    const byNumber = await as('anon', async () =>
+      (await db.query<{ t: Tracked | null }>("select public.track_order('#01', null) as t")).rows[0].t,
+    )
+    expect(byNumber?.total).toBe(793.2)
+    await at('2027-01-05 12:20+02')
+    const yesterday = await as('anon', async () =>
+      (await db.query<{ t: Tracked | null }>("select public.track_order('01', null) as t")).rows[0].t,
+    )
+    expect(yesterday).toBeNull() // numbers restart daily: an old number needs the phone
+    await at('2027-01-04 12:20+02')
+    const nothing = await as('anon', async () => (await db.query<{ t: Tracked | null }>('select public.track_order(null, null) as t')).rows[0].t)
+    expect(nothing).toBeNull()
+
     const wrongPhone = await as('anon', async () =>
       (await db.query<{ t: Tracked | null }>("select public.track_order('01', '01099999999') as t")).rows[0].t,
     )

@@ -1,69 +1,61 @@
 import { useState, type FormEvent } from 'react'
-import { Hash, Phone, Search } from 'lucide-react'
+import { Search } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { fieldProps } from '@/lib/a11y'
+import { cleanOrderNumber } from '@/lib/orderNumber'
 import { normalizeEgyptianMobile, toAsciiDigits } from '@/lib/phone'
+import { cn } from '@/lib/utils'
 import { fieldGroup, rowInput } from './form-styles'
 import { IconField } from './IconField'
-import { cn } from '@/lib/utils'
-import { cleanOrderNumber } from '@/lib/orderNumber'
 
-/** Asks for the order number (unless known) and the phone used to place the order. */
-export function TrackForm({ fixedNumber, onDone }: { fixedNumber?: string; onDone: (number: string, phone: string) => void }) {
-  const [number, setNumber] = useState(fixedNumber ?? '')
-  const [phone, setPhone] = useState('')
-  const [errors, setErrors] = useState<{ number?: string; phone?: string }>({})
+export type TrackQuery = { number: string; phone?: undefined } | { phone: string; number?: undefined }
 
-  function submit(e: FormEvent<HTMLFormElement>) {
+/**
+ * One field: the order number (#12, 12 or an older A-0012) or the phone the order was placed with,
+ * so a customer who lost the number can still find the order. onDone answers with an error to show,
+ * or null once it has moved on.
+ */
+export function TrackForm({ onDone }: { onDone: (query: TrackQuery) => Promise<string | null> }) {
+  const [value, setValue] = useState('')
+  const [error, setError] = useState<string>()
+  const [busy, setBusy] = useState(false)
+
+  async function submit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
-    const n = cleanOrderNumber(toAsciiDigits(number))
-    const p = normalizeEgyptianMobile(phone)
-    const found = {
-      number: /^(\d{1,4}|[A-Z]-\d{4})$/.test(n) ? undefined : 'اكتب رقم الطلب كما وصلك، مثل #12.',
-      phone: p ? undefined : 'اكتب رقم الموبايل الذي طلبت به.',
+    const phone = normalizeEgyptianMobile(value)
+    const number = cleanOrderNumber(toAsciiDigits(value))
+    let problem: string | null
+    if (phone) problem = null
+    else if (!/^(\d{1,4}|[A-Z]-\d{4})$/.test(number)) problem = 'اكتب رقم الطلب كما وصلك، مثل #12، أو رقم الموبايل الذي طلبت به.'
+    else problem = null
+    if (!problem) {
+      setBusy(true)
+      problem = await onDone(phone ? { phone } : { number })
+      setBusy(false)
     }
-    setErrors(found)
-    if (found.number) document.getElementById('order-number')?.focus()
-    else if (found.phone) document.getElementById('track-phone')?.focus()
-    else if (p) onDone(n, p)
+    setError(problem ?? undefined)
+    if (problem) document.getElementById('track-query')?.focus()
   }
 
   return (
-    <form noValidate onSubmit={submit} className="grid gap-3.5">
+    <form noValidate onSubmit={(e) => void submit(e)} className="grid gap-3.5">
       <div className={fieldGroup}>
-        {fixedNumber ? null : (
-          <IconField id="order-number" label="رقم الطلب" icon={Hash} error={errors.number}>
-            <input
-              {...fieldProps('order-number', errors.number)}
-              dir="ltr"
-              placeholder="#12"
-              value={number}
-              onChange={(e) => {
-                setNumber(e.target.value)
-                setErrors((x) => ({ ...x, number: undefined }))
-              }}
-              className={cn(rowInput, 'text-end tracking-wide')}
-            />
-          </IconField>
-        )}
-        <IconField id="track-phone" label="رقم الموبايل" icon={Phone} error={errors.phone}>
+        <IconField id="track-query" label="رقم الطلب أو رقم الموبايل" icon={Search} error={error}>
           <input
-            {...fieldProps('track-phone', errors.phone)}
-            type="tel"
+            {...fieldProps('track-query', error)}
             inputMode="tel"
-            autoComplete="tel"
             dir="ltr"
-            placeholder="01XXXXXXXXX"
-            value={phone}
+            placeholder="#12  أو  01XXXXXXXXX"
+            value={value}
             onChange={(e) => {
-              setPhone(e.target.value)
-              setErrors((x) => ({ ...x, phone: undefined }))
+              setValue(e.target.value)
+              setError(undefined)
             }}
-            className={cn(rowInput, 'text-end tabular-nums')}
+            className={cn(rowInput, 'text-end tracking-wide tabular-nums')}
           />
         </IconField>
       </div>
-      <Button type="submit" size="lg" className="h-14 w-full text-base">
+      <Button type="submit" size="lg" className="h-14 w-full text-base" disabled={busy}>
         <Search aria-hidden="true" /> عرض حالة الطلب
       </Button>
     </form>
