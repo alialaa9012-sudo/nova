@@ -1,8 +1,1 @@
-# The app's own pages are all served by index.html (the app draws the right screen). Any other
-# address gets 404.html (the same app, which shows «الصفحة غير موجودة») with a real 404 status,
-# so search engines and scanners are not told that every made-up address exists.
-/branch/*    /index.html  200
-/order/*     /index.html  200
-/track       /index.html  200
-/admin       /index.html  200
-/admin/*     /index.html  200
+/* /index.html 200

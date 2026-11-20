@@ -1,4 +1,3 @@
-import { copyFileSync } from 'node:fs'
 import { fileURLToPath, URL } from 'node:url'
 import tailwindcss from '@tailwindcss/vite'
 import react from '@vitejs/plugin-react'
@@ -33,24 +32,6 @@ function preloadFonts(): Plugin {
   }
 }
 
-/**
- * Writes 404.html next to index.html: Cloudflare Pages answers an unknown address with it and a
- * 404 status (see public/_redirects). It is the same app, which then shows its own not-found page.
- */
-function notFoundPage(): Plugin {
-  let outDir = 'dist'
-  return {
-    name: 'km-404-page',
-    apply: 'build',
-    configResolved(config) {
-      outDir = config.build.outDir
-    },
-    writeBundle() {
-      copyFileSync(`${outDir}/index.html`, `${outDir}/404.html`)
-    },
-  }
-}
-
 /** Menu photos are named after items in Arabic; their built copies get plain names that any host serves. */
 function assetName(asset: { originalFileNames?: readonly string[] }): string {
   return asset.originalFileNames?.some((f) => f.includes('menu-images/')) ? 'assets/menu-[hash][extname]' : 'assets/[name]-[hash][extname]'
@@ -58,7 +39,7 @@ function assetName(asset: { originalFileNames?: readonly string[] }): string {
 
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => ({
-  plugins: [react(), tailwindcss(), ...(mode === 'artifact' ? [] : [preloadFonts(), notFoundPage()])],
+  plugins: [react(), tailwindcss(), ...(mode === 'artifact' ? [] : [preloadFonts()])],
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
