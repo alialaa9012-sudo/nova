@@ -1,0 +1,54 @@
+[
+ {
+  "name": "server-refuses-order",
+  "ok": true,
+  "url": "https://khaliha-mashawy.pages.dev/branch/ashry/checkout",
+  "message": "الفرع مغلق الآن. يمكنك الطلب في مواعيد العمل.",
+  "stillOnCheckout": true,
+  "pageErrors": []
+ },
+ {
+  "name": "offline-on-confirm",
+  "ok": true,
+  "message": "",
+  "stillOnCheckout": true,
+  "nameKept": "اختبار اعتمادية",
+  "pageErrors": []
+ },
+ {
+  "name": "database-unreachable",
+  "ok": true,
+  "menuItems": 122,
+  "zoneOptions": 0,
+  "zoneText": "لا توجد منطقة بهذا الاسم.",
+  "trackMessage": "",
+  "pageErrors": []
+ },
+ {
+  "name": "اختبار اعتمادية",
+  "ok": true,
+  "phone": "01000000124",
+  "total": "تأكيد الطلب · 170 ج.م",
+  "pageErrors": []
+ },
+ {
+  "name": "unknown-and-deep-links",
+  "ok": true,
+  "unknownBranch": [
+   200,
+   "الصفحة غير موجودة"
+  ],
+  "unknownPath": 200,
+  "deepCheckout": [
+   200,
+   "السلة فارغة"
+  ],
+  "pageErrors": []
+ },
+ {
+  "name": "slow-3g",
+  "ok": true,
+  "secondsToUsableMenu": 9.4,
+  "pageErrors": []
+ }
+]
