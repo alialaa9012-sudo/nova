@@ -4,7 +4,7 @@ import { chromium } from '/home/user/nova/ui-ux-audit/node_modules/playwright/in
 import AxeBuilder from '/home/user/nova/ui-ux-audit/node_modules/@axe-core/playwright/dist/index.mjs'
 import fs from 'node:fs'
 const BASE = 'https://khaliha-mashawy.pages.dev'
-const OUT = '/home/user/nova/qa-audit/screenshots/round2/live/'
+const OUT = '/home/user/nova/qa-audit/screenshots/round2/final/'
 const SIZES = [['m360', 360, 740], ['m390', 390, 844], ['t768', 768, 1024], ['d1366', 1366, 768], ['d1920', 1920, 1080]]
 const STATES = [
   ['home', '/', null],
@@ -56,7 +56,7 @@ for (const [vp, w, h] of SIZES) {
   }
 }
 await b.close()
-fs.writeFileSync('/home/user/nova/qa-audit/results/round2/live-a11y-shots.json', JSON.stringify(results, null, 1))
+fs.writeFileSync('/home/user/nova/qa-audit/results/round2/live-a11y-shots-final.json', JSON.stringify(results, null, 1))
 for (const r of results) if (!r.ok || r.overflow > 0 || r.axe.length || r.errors.length) console.log(r.vp, r.name, r.ok ? '' : 'ACTION FAILED', r.overflow > 0 ? 'OVERFLOW ' + r.overflow : '', JSON.stringify(r.axe), r.errors.join(' || '))
 console.log('runs', results.length, '| titles:', [...new Set(results.map((r) => r.name + '=' + r.title))].join(' ; '))
 console.log('status of /nope and /branch/xyz:', [...new Set(results.map((r) => r.name + ' ' + r.status))].join(', '))
