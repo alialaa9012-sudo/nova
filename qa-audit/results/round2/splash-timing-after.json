@@ -1,0 +1,71 @@
+{
+ "wifi": [
+  {
+   "firstPaint": 456,
+   "logoLoaded": 319,
+   "appScript": 512,
+   "splashHidden": 594,
+   "logoOnScreen": 138
+  },
+  {
+   "firstPaint": 564,
+   "logoLoaded": 481,
+   "appScript": 552,
+   "splashHidden": 614,
+   "logoOnScreen": 50
+  },
+  {
+   "firstPaint": 648,
+   "logoLoaded": 614,
+   "appScript": 611,
+   "splashHidden": 681,
+   "logoOnScreen": 33
+  }
+ ],
+ "4g": [
+  {
+   "firstPaint": 1368,
+   "logoLoaded": 973,
+   "appScript": 2375,
+   "splashHidden": 2644,
+   "logoOnScreen": 1276
+  },
+  {
+   "firstPaint": 1380,
+   "logoLoaded": 984,
+   "appScript": 2407,
+   "splashHidden": 2665,
+   "logoOnScreen": 1285
+  },
+  {
+   "firstPaint": 1400,
+   "logoLoaded": 969,
+   "appScript": 2393,
+   "splashHidden": 2661,
+   "logoOnScreen": 1261
+  }
+ ],
+ "slow-3g": [
+  {
+   "firstPaint": 3228,
+   "logoLoaded": 2280,
+   "appScript": 8110,
+   "splashHidden": 8402,
+   "logoOnScreen": 5174
+  },
+  {
+   "firstPaint": 3524,
+   "logoLoaded": 2283,
+   "appScript": 8113,
+   "splashHidden": 8482,
+   "logoOnScreen": 4958
+  },
+  {
+   "firstPaint": 3456,
+   "logoLoaded": 2401,
+   "appScript": 8113,
+   "splashHidden": 8410,
+   "logoOnScreen": 4954
+  }
+ ]
+}
