@@ -74,6 +74,8 @@ describe('Supabase backend', () => {
     })
     expect(order).toMatchObject({ id: 'uuid-1', number: 'A-0001', status: 'new', customerName: 'أحمد', totals: { total: 250 } })
     expect(order.lines[0]).toMatchObject({ name: 'صدور فراخ', unitPrice: 250, qty: 1 })
+    // Only the ordering branch's sizes are fetched to match the lines.
+    expect(calls).toContainEqual({ kind: 'eq', name: 'menu_item_sizes', args: ['menu_items.branch_id', 'ashry'] })
   })
 
   it('turns a database error code into an ApiError', async () => {

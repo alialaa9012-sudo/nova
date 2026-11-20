@@ -401,3 +401,33 @@ describe('visitors who did not order', () => {
     ])
   })
 })
+
+describe('when the restaurant cannot be reached', () => {
+  it('says the zones could not be loaded, instead of «no zone with this name», and retries', async () => {
+    const { ApiError } = await import('@/lib/api')
+    const user = userEvent.setup()
+    const item = getMenu('tagamoa').find((c) => c.name === 'المشويات')!.items.find((i) => i.name === 'صدور فراخ')!
+    localStorage.setItem('km.cart.v1.tagamoa', JSON.stringify([{ sizeId: item.sizes[0].id, itemId: item.id, name: item.name, sizeLabel: 'ربع', unitPrice: 1, qty: 1 }]))
+    const failing = vi.spyOn(api, 'listZones').mockRejectedValueOnce(new ApiError('NETWORK'))
+    renderAt('/branch/tagamoa/checkout')
+    await user.click(screen.getByRole('combobox', { name: 'المنطقة' }))
+    expect(await screen.findByText('تعذّر تحميل مناطق التوصيل. تأكد من الإنترنت.')).toBeInTheDocument()
+    expect(screen.queryByText('لا توجد منطقة بهذا الاسم.')).not.toBeInTheDocument()
+
+    await user.click(screen.getByRole('button', { name: 'حاول مرة أخرى' }))
+    expect(await screen.findByRole('option', { name: /اللوتس الشمالية/ })).toBeInTheDocument()
+    failing.mockRestore()
+  })
+
+  it('says a tracking search failed to connect, instead of «not found»', async () => {
+    const { ApiError } = await import('@/lib/api')
+    const user = userEvent.setup()
+    const failing = vi.spyOn(api, 'trackOrder').mockRejectedValueOnce(new ApiError('NETWORK'))
+    renderAt('/track')
+    await user.type(screen.getByLabelText('رقم الطلب أو رقم الموبايل'), '01012345678')
+    await user.click(screen.getByRole('button', { name: 'عرض حالة الطلب' }))
+    expect(await screen.findByText('تعذّر الاتصال. تأكد من الإنترنت وحاول مرة أخرى.')).toBeInTheDocument()
+    expect(screen.queryByText(/لم نجد طلباً/)).not.toBeInTheDocument()
+    failing.mockRestore()
+  })
+})

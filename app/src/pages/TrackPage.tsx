@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router'
 import { BandHeader, BandSheet } from '@/components/BandHeader'
 import { BottomNav } from '@/components/BottomNav'
 import { TrackForm } from '@/components/TrackForm'
-import { api } from '@/lib/api'
+import { api, errorMessage } from '@/lib/api'
 
 export function TrackPage() {
   const navigate = useNavigate()
@@ -16,7 +16,12 @@ export function TrackPage() {
       <BandSheet className="pt-4 pb-28 lg:pb-12">
         <TrackForm
           onDone={async (query) => {
-            const order = await api.trackOrder(query.number ?? null, query.phone ?? null).catch(() => null)
+            let order
+            try {
+              order = await api.trackOrder(query.number ?? null, query.phone ?? null)
+            } catch (e) {
+              return errorMessage(e) // a connection problem is not «not found»
+            }
             if (!order) {
               return query.phone
                 ? 'لم نجد طلباً بهذا الرقم خلال آخر 3 أيام.'

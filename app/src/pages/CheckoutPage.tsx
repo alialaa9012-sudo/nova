@@ -40,12 +40,20 @@ export function CheckoutPage() {
   const now = useNow()
   const { lines, dispatch } = useCart()
   const [zones, setZones] = useState<DeliveryZone[]>([])
+  const [zonesStatus, setZonesStatus] = useState<'loading' | 'ready' | 'error'>('loading')
+  const [zonesTry, setZonesTry] = useState(0)
   useEffect(() => recordStep('checkout', branch.id), [branch.id])
   useEffect(() => {
     let alive = true
     const load = async () => {
-      const list = await api.listZones(branch.id)
-      if (alive) setZones(list)
+      try {
+        const list = await api.listZones(branch.id)
+        if (!alive) return
+        setZones(list)
+        setZonesStatus('ready')
+      } catch {
+        if (alive) setZonesStatus('error') // the list keeps what it had; the next minute tries again
+      }
     }
     void load()
     // Zones rarely change; a minute is soon enough for one the call center just added.
@@ -54,7 +62,7 @@ export function CheckoutPage() {
       alive = false
       stop()
     }
-  }, [branch.id])
+  }, [branch.id, zonesTry])
   const [form, setForm] = useState<CheckoutForm>(() => loadDraft(branch.id))
   const [zoneOpen, setZoneOpen] = useState(false)
   useEffect(() => saveDraft(branch.id, form), [branch.id, form])
@@ -207,7 +215,7 @@ export function CheckoutPage() {
                 </h2>
                 <div className={fieldGroup}>
                   <IconField id="zoneId" label="المنطقة" icon={MapPin} error={errors.zoneId}>
-                    <ZoneCombobox id="zoneId" zones={zones} value={zoneId} onChange={(id) => set('zoneId', id)} onOpenChange={setZoneOpen} error={errors.zoneId} bare />
+                    <ZoneCombobox id="zoneId" zones={zones} status={zonesStatus} onRetry={() => { setZonesStatus('loading'); setZonesTry((n) => n + 1) }} value={zoneId} onChange={(id) => set('zoneId', id)} onOpenChange={setZoneOpen} error={errors.zoneId} bare />
                   </IconField>
                   <IconField id="street" label="الشارع" icon={Navigation} error={errors.street}>
                     <input {...fieldProps('street', errors.street)} autoComplete="address-line1" value={form.street} onChange={(e) => set('street', e.target.value)} className={rowInput} />

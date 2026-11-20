@@ -130,13 +130,17 @@ const POLL_MS = 15_000
 export function createSupabaseApi(client: SupabaseClient): OrdersApi {
   // The menu on screen comes from the app's files; the database has its own ids. A line is matched
   // by branch, category, item name and size label, which the seed copies from the same files.
-  let sizeIds: Promise<Map<string, number>> | undefined
-  const loadSizeIds = () => {
-    sizeIds ??= (async () => {
+  // Only the ordering branch's sizes are fetched (about a third of the table), once per branch.
+  const sizeIds = new Map<string, Promise<Map<string, number>>>()
+  const loadSizeIds = (branchId: string) => {
+    let pending = sizeIds.get(branchId)
+    if (pending) return pending
+    pending = (async () => {
       const rows = check(
         await client
           .from('menu_item_sizes')
-          .select('id, label, menu_items!inner(name_ar, branch_id, menu_categories!inner(name_ar))'),
+          .select('id, label, menu_items!inner(name_ar, branch_id, menu_categories!inner(name_ar))')
+          .eq('menu_items.branch_id', branchId),
       ) as unknown as { id: number; label: string; menu_items: { name_ar: string; branch_id: string; menu_categories: { name_ar: string } } }[]
       return new Map(
         rows.map((r) => [
@@ -145,10 +149,11 @@ export function createSupabaseApi(client: SupabaseClient): OrdersApi {
         ]),
       )
     })().catch((e) => {
-      sizeIds = undefined
+      sizeIds.delete(branchId)
       throw e
     })
-    return sizeIds
+    sizeIds.set(branchId, pending)
+    return pending
   }
 
   const toZone = (r: Row): DeliveryZone => ({
@@ -208,7 +213,7 @@ export function createSupabaseApi(client: SupabaseClient): OrdersApi {
       if (!branch) throw new ApiError('BRANCH_NOT_FOUND')
       const phone = normalizeEgyptianMobile(input.phone)
       if (!phone) throw new ApiError('INVALID_PHONE')
-      const ids = await loadSizeIds()
+      const ids = await loadSizeIds(branch.id)
       const items = input.lines.map((line) => {
         const found = findSize(branch.id, line.sizeId)
         const id = found ? ids.get(`${branch.id}|${found.item.category}|${found.item.name}|${found.size.label}`) : undefined

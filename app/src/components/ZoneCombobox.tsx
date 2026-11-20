@@ -23,6 +23,8 @@ export function ZoneCombobox({
   onOpenChange,
   error,
   bare = false,
+  status = 'ready',
+  onRetry,
 }: {
   id: string
   zones: DeliveryZone[]
@@ -33,6 +35,10 @@ export function ZoneCombobox({
   error?: string
   /** Inside a row of fields: no box of its own and no search icon (the row has its icon). */
   bare?: boolean
+  /** Whether the branch's zones are still loading or could not be loaded, so an empty list is not
+   *  mistaken for «no zone with this name». */
+  status?: 'loading' | 'ready' | 'error'
+  onRetry?: () => void
 }) {
   const listId = useId()
   const box = useRef<HTMLDivElement>(null)
@@ -143,9 +149,27 @@ export function ZoneCombobox({
         </ul>
       ) : null}
       {open && matches.length === 0 ? (
-        <p role="status" className="absolute inset-x-0 top-full z-40 mt-1 rounded-2xl bg-surface p-4 text-sm text-muted-foreground shadow-nav">
-          لا توجد منطقة بهذا الاسم.
-        </p>
+        <div role="status" className="absolute inset-x-0 top-full z-40 mt-1 grid gap-2 rounded-2xl bg-surface p-4 text-sm text-muted-foreground shadow-nav">
+          {status === 'error' && zones.length === 0 ? (
+            <>
+              <p className="font-semibold text-danger">تعذّر تحميل مناطق التوصيل. تأكد من الإنترنت.</p>
+              {onRetry ? (
+                <button
+                  type="button"
+                  onMouseDown={(e) => e.preventDefault()}
+                  onClick={onRetry}
+                  className="min-h-11 justify-self-start rounded-full bg-brand px-4 font-bold text-band-ink outline-none focus-visible:ring-3 focus-visible:ring-gold/60"
+                >
+                  حاول مرة أخرى
+                </button>
+              ) : null}
+            </>
+          ) : status === 'loading' && zones.length === 0 ? (
+            <p aria-busy="true">جاري تحميل المناطق…</p>
+          ) : (
+            <p>لا توجد منطقة بهذا الاسم.</p>
+          )}
+        </div>
       ) : null}
     </div>
   )
