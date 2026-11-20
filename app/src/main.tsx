@@ -20,15 +20,12 @@ createRoot(document.getElementById('root')!).render(
   </StrictMode>,
 )
 
-// The opening screen (index.html) fades out once the first screen has drawn. It stays at least
-// 0.9 s from the page's start so the logo animation is seen rather than flashing past (not for
-// automated test browsers, which load hundreds of pages).
+// The opening screen (index.html) goes as soon as the first screen has drawn, with no minimum time:
+// the owner chose a still logo over an animation that would hold the site back.
 const splash = document.getElementById('splash')
 if (splash) {
-  const hide = () => {
+  requestAnimationFrame(() => {
     splash.classList.add('done')
-    setTimeout(() => splash.remove(), 600)
-  }
-  if (navigator.webdriver) splash.remove()
-  else requestAnimationFrame(() => setTimeout(hide, Math.max(0, 900 - performance.now())))
+    setTimeout(() => splash.remove(), 250)
+  })
 }
