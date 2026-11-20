@@ -1,1 +1,8 @@
-/* /index.html 200
+# The app's own pages are served by the app (the target «/» is its page; «/index.html» must not be
+# used here: Cloudflare redirects that to the home page). Any other address gets 404.html, the same
+# app showing «الصفحة غير موجودة», with a real 404 status. Checked with `wrangler pages dev`.
+/branch/*  /  200
+/order/*   /  200
+/track     /  200
+/admin     /  200
+/admin/*   /  200
