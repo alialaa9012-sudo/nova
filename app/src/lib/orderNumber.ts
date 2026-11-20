@@ -6,7 +6,11 @@ export function orderLabel(number: string): string {
   return /^\d+$/.test(number) ? `#${number}` : number
 }
 
-/** What a person typed as an order number, ready to look up: no «#», no spaces, upper case. */
+/**
+ * What a person typed as an order number, ready to look up: no «#», no spaces, upper case, and
+ * digits written as stored (two at least), so «1», «#1» and «001» all find #01.
+ */
 export function cleanOrderNumber(typed: string): string {
-  return typed.replace(/[#\s]/g, '').toUpperCase()
+  const n = typed.replace(/[#\s]/g, '').toUpperCase()
+  return /^\d+$/.test(n) ? String(Number(n)).padStart(2, '0') : n
 }

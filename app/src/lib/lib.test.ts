@@ -246,3 +246,13 @@ describe('Arabic dates', async () => {
     expect(formatDateAr('')).toBe('')
   })
 })
+
+describe('order numbers', () => {
+  it('finds #01 however the customer types it, and keeps older numbers as they were', async () => {
+    const { cleanOrderNumber, orderLabel } = await import('./orderNumber')
+    expect(['1', '#1', '01', '#01', ' 001 ', '١'].map((n) => cleanOrderNumber(n.replace('١', '1')))).toEqual(['01', '01', '01', '01', '01', '01'])
+    expect(cleanOrderNumber('123')).toBe('123')
+    expect(cleanOrderNumber('a-0012')).toBe('A-0012')
+    expect([orderLabel('07'), orderLabel('A-0012')]).toEqual(['#07', 'A-0012'])
+  })
+})
